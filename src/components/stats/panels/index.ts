@@ -1,0 +1,12 @@
+﻿export { WordCountingPanel } from './WordCountingPanel';
+export { CharacterPanel } from './CharacterPanel';
+export { SentencePanel } from './SentencePanel';
+export { ParagraphPanel } from './ParagraphPanel';
+export { ReadabilityPanel } from './ReadabilityPanel';
+export { KeywordPanel } from './KeywordPanel';
+export { SyllablePanel } from './SyllablePanel';
+export { ReadingTimePanel } from './ReadingTimePanel';
+export { SpeakingTimePanel } from './SpeakingTimePanel';
+export { UniqueWordPanel } from './UniqueWordPanel';
+export { LinePanel } from './LinePanel';
+export { PagePanel } from './PagePanel';

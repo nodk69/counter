@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Words-to-pages -->
+  <url><loc>https://counter.io/100-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/250-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/500-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/750-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/1000-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/1500-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/2000-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/2500-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/3000-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/4000-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/5000-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/7500-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/10000-words-is-how-many-pages</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+
+  <!-- Speech word count -->
+  <url><loc>https://counter.io/5-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/10-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/15-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/20-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/30-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/45-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.65</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/60-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.7</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/90-minute-speech-word-count</loc><changefreq>yearly</changefreq><priority>0.65</priority><lastmod>2026-07-09</lastmod></url>
+
+  <!-- Social media character limits -->
+  <url><loc>https://counter.io/twitter-character-limit</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/instagram-character-limit</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/facebook-character-limit</loc><changefreq>monthly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/linkedin-character-limit</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/youtube-description-limit</loc><changefreq>monthly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/tiktok-character-limit</loc><changefreq>monthly</changefreq><priority>0.75</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/meta-description-limit</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://counter.io/seo-title-tag-limit</loc><changefreq>monthly</changefreq><priority>0.8</priority><lastmod>2026-07-09</lastmod></url>
+
+</urlset>

@@ -1,0 +1,32 @@
+{
+  "hero": {
+    "badge1": "100% Private",
+    "badge2": "Real-Time",
+    "badge3": "20+ Tools",
+    "headline": "Write Better. Count Everything.",
+    "subheadline": "Professional word counter with 20+ writing tools. Real-time stats, readability analysis, and SEO optimization — all free, all private.",
+    "cta": "Start Counting Free",
+    "exploreTools": "Explore All Tools",
+    "trustLine": "Trusted by 50,000+ writers worldwide · No account required · No data stored"
+  },
+  "stats": {
+    "title": "Statistics",
+    "characters": "Characters (spaces)",
+    "charactersNoSpaces": "Characters (no spaces)",
+    "words": "Words",
+    "sentences": "Sentences",
+    "paragraphs": "Paragraphs",
+    "readingTime": "Reading Time",
+    "speakingTime": "Speaking Time"
+  },
+  "sections": {
+    "toolCategories": "Tools for Every Writing Need",
+    "featuredTools": "Featured Writing Tools",
+    "whyCounter": "Why Writers Choose counter.io",
+    "latestBlog": "Latest from the Blog",
+    "testimonials": "What Writers Say",
+    "faq": "Frequently Asked Questions",
+    "newsletter": "Get Writing Tips in Your Inbox",
+    "wordCountConversions": "Word Count References"
+  }
+}

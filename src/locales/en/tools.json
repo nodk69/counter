@@ -1,0 +1,44 @@
+{
+  "categories": {
+    "counting":  { "label": "Counting Tools",  "description": "Precise counting for any writing metric" },
+    "analysis":  { "label": "Analysis Tools",  "description": "Deep insights into your writing quality" },
+    "time":      { "label": "Time Tools",      "description": "Reading and speaking time estimates" },
+    "advanced":  { "label": "Advanced Tools",  "description": "AI-powered writing optimization" }
+  },
+  "ui": {
+    "exampleText": "Try an example",
+    "clearText": "Clear text",
+    "copyText": "Copy text",
+    "downloadReport": "Download Analysis Report (PDF)",
+    "downloadTxt": "TXT",
+    "downloadMd": "Markdown",
+    "downloadDoc": "Word (.doc)",
+    "downloadJson": "JSON",
+    "findReplace": "Find & Replace",
+    "importFile": "Import file",
+    "exportFile": "Export as TXT",
+    "undo": "Undo",
+    "redo": "Redo",
+    "recentDocs": "Recent documents",
+    "writingGoal": "Writing Goal",
+    "setGoal": "Set Goal"
+  },
+  "tabs": {
+    "wordDensity": "Word Density",
+    "readability": "Readability",
+    "textStats": "Text Stats",
+    "export": "Export",
+    "writingAssistant": "Writing Assistant"
+  },
+  "writingModes": {
+    "general": "General Writing",
+    "academic": "Academic",
+    "seo": "SEO Content",
+    "creative": "Creative",
+    "business": "Business"
+  },
+  "benchmarks": {
+    "title": "Word Count Benchmarks",
+    "yourText": "Your text"
+  }
+}

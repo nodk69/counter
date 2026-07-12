@@ -1,0 +1,38 @@
+{
+  "home": {
+    "title": "Free Word Counter Online — Count Words, Characters & More",
+    "description": "Free online word counter with 20+ writing tools. Count words, characters, sentences in real time. Readability analysis, content scoring, and PDF export. No signup needed."
+  },
+  "tools": {
+    "title": "All Writing Tools — 20+ Free Online Writing Utilities",
+    "description": "Browse 20+ free online writing tools: word counter, character counter, readability checker, keyword density analyzer, and more. All instant, all free."
+  },
+  "blog": {
+    "title": "Writing Blog — Tips, Guides & Insights | counter.io",
+    "description": "Expert writing tips, SEO content guides, and readability insights from the counter.io team. Improve your writing craft with free, actionable advice."
+  },
+  "guides": {
+    "title": "Writing Guides — Step-by-Step Tutorials | counter.io",
+    "description": "In-depth writing guides covering SEO, readability, content strategy, and tool tutorials. Beginner to advanced — all free."
+  },
+  "about": {
+    "title": "About counter.io — Free Writing Tools for Everyone",
+    "description": "counter.io builds free, private writing tools for writers, students, and SEO professionals. No accounts, no data collection, no ads."
+  },
+  "contact": {
+    "title": "Contact counter.io — Get in Touch",
+    "description": "Have a question, feature request, or feedback? Get in touch with the counter.io team."
+  },
+  "privacy": {
+    "title": "Privacy Policy | counter.io",
+    "description": "counter.io privacy policy. We don't collect your text, store personal data, or sell information. Read how we protect your privacy."
+  },
+  "terms": {
+    "title": "Terms of Service | counter.io",
+    "description": "Terms of service for counter.io. Read the terms governing your use of our free writing tools."
+  },
+  "metaDescriptionGenerator": {
+    "title": "Free Meta Description Generator — 5 Scored Variants | counter.io",
+    "description": "Generate 5 optimized meta descriptions instantly. Each variant is scored for keyword usage, length (150-160 chars), and click-through potential. Free, no signup."
+  }
+}

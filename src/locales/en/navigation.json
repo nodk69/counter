@@ -1,0 +1,19 @@
+{
+  "home": "Home",
+  "tools": "Tools",
+  "blog": "Blog",
+  "guides": "Guides",
+  "resources": "Resources",
+  "about": "About",
+  "contact": "Contact",
+  "privacy": "Privacy Policy",
+  "terms": "Terms of Service",
+  "searchPlaceholder": "Search tools, articles, guides…",
+  "searchHint": "Press {{shortcut}} to search",
+  "viewAllTools": "View all 20+ tools →",
+  "popularTools": "Popular Tools",
+  "openMenu": "Open menu",
+  "closeMenu": "Close menu",
+  "toggleDarkMode": "Toggle dark mode",
+  "skipToContent": "Skip to main content"
+}
