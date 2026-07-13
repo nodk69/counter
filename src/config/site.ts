@@ -16,7 +16,7 @@ function resolveSiteUrl(): string {
     const env = (import.meta as Record<string, any>).env;
     if (env?.VITE_SITE_URL) return env.VITE_SITE_URL;
   } catch { /* not a Vite bundle */ }
-  return 'https://counter.io';
+  return 'https://counterio.vercel.app';
 }
 
 const siteUrl = resolveSiteUrl();
@@ -27,7 +27,7 @@ export const SITE_CONFIG = {
   tagline:        'Write Better. Count Everything.',
   description:    'Free online word counter with 20+ writing tools. Real-time stats, readability analysis, and SEO optimization — all free, all private.',
   twitterHandle:  '@counterio',
-  ogImage:        'https://counter.io/og-default.png',
+  ogImage:        'https://counterio.vercel.app/og-default.png',
   defaultLang:    'en',
   locale:         'en_US',
   themeColor:     '#b94040',

@@ -1,7 +1,7 @@
 import { BLOG_POSTS } from '@/data/blog';
 import { TOOLS } from '@/data/tools';
 
-const SITE_URL  = 'https://counter.io';
+const SITE_URL  = 'https://counterio.vercel.app';
 const SITE_NAME = 'counter.io';
 
 type SchemaType = 'home' | 'tool' | 'article' | 'blog' | 'tools' | 'page';

@@ -8,7 +8,7 @@ import RssLink from '@/components/RssLink';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import { BLOG_POSTS, BLOG_CATEGORIES, getBlogsByCategory } from '@/data/blog';
 
-const FEED_URL = 'https://counter.io/feed.xml';
+const FEED_URL = 'https://counterio.vercel.app/feed.xml';
 
 const RSS_ICON = (
   <svg className="w-3.5 h-3.5 fill-current flex-shrink-0" viewBox="0 0 24 24" aria-hidden="true">

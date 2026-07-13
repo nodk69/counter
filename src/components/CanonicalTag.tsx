@@ -5,7 +5,7 @@
  * every route change without touching individual page components.
  *
  * The canonical URL is always the root-language (English) path:
- *   https://counter.io/word-counter
+ *   https://counterio.vercel.app/word-counter
  *
  * When translated pages ship (e.g. /es/word-counter), they will each render
  * their own canonical pointing to their own URL — the English canonical

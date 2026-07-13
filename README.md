@@ -80,7 +80,7 @@ cp .env.example packages/word-counter/.env
 
 | Variable | Required | Description |
 |---|---|---|
-| `VITE_SITE_URL` | No | Public URL of the deployed site. Defaults to `https://counter.io`. Used for canonical tags, Open Graph URLs, and sitemap. |
+| `VITE_SITE_URL` | No | Public URL of the deployed site. Defaults to `https://counterio.vercel.app`. Used for canonical tags, Open Graph URLs, and sitemap. |
 | `VITE_GOOGLE_SITE_VERIFICATION` | No | Google Search Console HTML-tag verification code. |
 | `VITE_GA_ID` | No | Google Analytics 4 measurement ID (e.g. `G-XXXXXXXXXX`). |
 | `VITE_CLARITY_ID` | No | Microsoft Clarity project ID. |
