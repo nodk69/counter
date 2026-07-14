@@ -19,6 +19,11 @@ function resolveSiteUrl(): string {
   return 'https://counterio.vercel.app';
 }
 
+// Build-time assertion that fails the build if VITE_SITE_URL is unset in production.
+if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production' && !process.env?.VITE_SITE_URL) {
+  throw new Error('Build-time assertion failed: VITE_SITE_URL is unset. This environment variable is required in production.');
+}
+
 const siteUrl = resolveSiteUrl();
 
 export const SITE_CONFIG = {
@@ -27,7 +32,7 @@ export const SITE_CONFIG = {
   tagline:        'Write Better. Count Everything.',
   description:    'Free online word counter with 20+ writing tools. Real-time stats, readability analysis, and SEO optimization — all free, all private.',
   twitterHandle:  '@counterio',
-  ogImage:        'https://counterio.vercel.app/og-default.png',
+  ogImage:        `${siteUrl}/og-default.png`,
   defaultLang:    'en',
   locale:         'en_US',
   themeColor:     '#b94040',

@@ -10,6 +10,14 @@ import CanonicalTag from '@/components/CanonicalTag';
 import LanguageBanner from '@/components/LanguageBanner';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ErrorFallback from '@/components/ErrorFallback';
+import {
+  TOOL_SLUGS,
+  WORDS_TO_PAGES_SLUGS,
+  SPEECH_SLUGS,
+  SOCIAL_SLUGS,
+  LANDING_SLUGS,
+  COMPARISON_SLUGS,
+} from '@/config/routes';
 
 // Pages
 import Home from '@/pages/Home';
@@ -34,56 +42,6 @@ import MetaDescriptionGeneratorPage from '@/pages/MetaDescriptionGeneratorPage';
 
 const queryClient = new QueryClient();
 
-// All 20 tool slugs
-const TOOL_SLUGS = [
-  'word-counter', 'character-counter', 'sentence-counter', 'paragraph-counter',
-  'readability-checker', 'keyword-density-checker', 'syllable-counter',
-  'reading-time-calculator', 'speaking-time-calculator', 'unique-word-counter',
-  'line-counter', 'page-counter', 'letter-counter', 'word-frequency-counter',
-  'character-frequency-counter', 'sentence-length-analyzer', 'paragraph-length-analyzer',
-  'complexity-analyzer', 'word-density-analyzer', 'text-summarizer',
-];
-
-// Programmatic: words-to-pages slugs
-const WORDS_TO_PAGES_SLUGS = [
-  '100-words-is-how-many-pages', '250-words-is-how-many-pages',
-  '500-words-is-how-many-pages', '750-words-is-how-many-pages',
-  '1000-words-is-how-many-pages', '1500-words-is-how-many-pages',
-  '2000-words-is-how-many-pages', '2500-words-is-how-many-pages',
-  '3000-words-is-how-many-pages', '4000-words-is-how-many-pages',
-  '5000-words-is-how-many-pages', '7500-words-is-how-many-pages',
-  '10000-words-is-how-many-pages',
-];
-
-// Speech time slugs
-const SPEECH_SLUGS = [
-  '5-minute-speech-word-count', '10-minute-speech-word-count',
-  '15-minute-speech-word-count', '20-minute-speech-word-count',
-  '30-minute-speech-word-count', '45-minute-speech-word-count',
-  '60-minute-speech-word-count', '90-minute-speech-word-count',
-];
-
-// Social media limit slugs
-const SOCIAL_SLUGS = [
-  'twitter-character-limit', 'instagram-character-limit', 'facebook-character-limit',
-  'linkedin-character-limit', 'youtube-description-limit', 'tiktok-character-limit',
-  'meta-description-limit', 'seo-title-tag-limit',
-];
-
-// Audience landing page slugs
-const LANDING_SLUGS = [
-  'word-counter-for-students', 'word-counter-for-essay', 'word-counter-for-book-writing',
-  'word-counter-for-seo', 'word-counter-for-bloggers', 'word-counter-for-writers',
-  'word-counter-for-copywriters', 'word-counter-for-social-media',
-  'word-counter-for-academics', 'word-counter-for-professionals',
-];
-
-// Comparison slugs
-const COMPARISON_SLUGS = [
-  'word-counter-vs-character-counter', 'reading-time-vs-speaking-time',
-  'flesch-score-vs-fk-grade', 'word-counter-vs-sentence-counter',
-  'paragraph-counter-vs-line-counter',
-];
 
 /**
  * Wraps a component with an error boundary for graceful error handling.

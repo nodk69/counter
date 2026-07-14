@@ -15,13 +15,18 @@ export const MAIN_NAV: NavLink[] = [
   { href: '/about',   label: 'About' },
 ];
 
-/** Resources dropdown items */
+/**
+ * Resources dropdown items.
+ * Each entry deep-links to its matching <section id="..."> in
+ * ResourcesPage.tsx (templates / checklists / cheatsheets / calculators)
+ * rather than all pointing at the bare /resources URL.
+ */
 export const RESOURCES_LINKS: NavLink[] = [
-  { href: '/resources', label: 'Templates',   icon: '📄' },
-  { href: '/resources', label: 'Checklists',  icon: '✅' },
-  { href: '/resources', label: 'Cheatsheets', icon: '📋' },
-  { href: '/guides',    label: 'Guides',      icon: '📖' },
-  { href: '/resources', label: 'Calculators', icon: '🧮' },
+  { href: '/resources#templates',   label: 'Templates',   icon: '📄' },
+  { href: '/resources#checklists',  label: 'Checklists',  icon: '✅' },
+  { href: '/resources#cheatsheets', label: 'Cheatsheets', icon: '📋' },
+  { href: '/resources#calculators', label: 'Calculators', icon: '🧮' },
+  { href: '/guides',                label: 'Guides',      icon: '📖' },
 ];
 
 /** Mobile navigation links */

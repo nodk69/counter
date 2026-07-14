@@ -3,6 +3,8 @@ import { Link } from 'wouter';
 import { FileText, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { WORDS_TO_PAGES } from '@/data/seoData';
 
 const WORDS_MAP: Record<string, { words: number; pages: number; pagesSingle: number; readTime: number; speechTime: number }> = {
@@ -50,9 +52,23 @@ export default function WordsToPagesPage({ slug }: { slug: string }) {
   }
 
   const { words, pages, pagesSingle, readTime, speechTime } = data;
+  const pageTitle = `${words.toLocaleString()} Words Is How Many Pages? — Page Count Calculator`;
+  const pageDesc = `How many pages is ${words.toLocaleString()} words? Approximately ${formatPages(pages)} double-spaced. See formatting breakdowns, reading time, and speaking time.`;
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <MetaTags
+        title={pageTitle}
+        description={pageDesc}
+      />
+      <SchemaMarkup
+        type="page"
+        data={{
+          name: `${words.toLocaleString()} Words Is How Many Pages?`,
+          description: pageDesc,
+          slug,
+        }}
+      />
       <Header />
       <main className="flex-1">
         {/* Hero */}

@@ -3,6 +3,8 @@ import { Link } from 'wouter';
 import { Mic } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { SPEECH_TIMES } from '@/data/seoData';
 
 const SPEECH_MAP: Record<string, typeof SPEECH_TIMES[0]> = {
@@ -45,9 +47,23 @@ export default function SpeechWordCountPage({ slug }: { slug: string }) {
   }
 
   const { minutes, words, description } = data;
+  const pageTitle = `${minutes}-Minute Speech Word Count — How Many Words?`;
+  const pageDesc = `A ${minutes}-minute speech needs approximately ${words.toLocaleString()} words at 130 WPM. See word counts at different speaking rates with tips for ${description}.`;
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <MetaTags
+        title={pageTitle}
+        description={pageDesc}
+      />
+      <SchemaMarkup
+        type="page"
+        data={{
+          name: `${minutes}-Minute Speech Word Count`,
+          description: pageDesc,
+          slug,
+        }}
+      />
       <Header />
       <main className="flex-1">
         <div className="bg-muted/30 border-b border-border py-12">

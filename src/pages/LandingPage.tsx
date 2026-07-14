@@ -3,6 +3,8 @@ import { Link } from 'wouter';
 import { Check, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { LANDING_PAGES } from '@/data/seoData';
 import { TOOLS } from '@/data/tools';
 
@@ -29,8 +31,23 @@ export default function LandingPage({ slug }: { slug: string }) {
   const { title, hero, audience, painPoints, benefits, useCases } = data;
   const relatedTools = TOOLS.slice(0, 4);
 
+  const pageTitle = `${title} — Free Online Tool`;
+  const pageDesc = `Free word counter built for ${audience}. ${benefits[0] || ''} No signup, 100% private.`;
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <MetaTags
+        title={pageTitle}
+        description={pageDesc}
+      />
+      <SchemaMarkup
+        type="page"
+        data={{
+          name: title,
+          description: pageDesc,
+          slug,
+        }}
+      />
       <Header />
       <main className="flex-1">
         {/* Hero */}

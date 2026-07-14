@@ -1,4 +1,5 @@
-import { Link } from 'wouter';
+import { useEffect } from 'react';
+import { Link, useLocation } from 'wouter';
 import { Download, FileText, CheckSquare, List, BookOpen, Calculator } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -42,7 +43,55 @@ function DownloadButton({ label = 'Download Free' }: { label?: string }) {
   );
 }
 
-export default function ResourcesPage() {
+// Define valid category IDs
+const VALID_CATEGORIES = ['templates', 'checklists', 'cheatsheets', 'calculators'] as const;
+type Category = typeof VALID_CATEGORIES[number];
+
+// ✅ Add props interface
+interface ResourcesPageProps {
+  category?: string;  // Optional category from route param
+}
+
+export default function ResourcesPage({ category }: ResourcesPageProps) {
+  const [location] = useLocation();
+
+  // Handle both hash-based navigation (e.g., /resources#templates)
+  // and path-based navigation (e.g., /resources/templates)
+  useEffect(() => {
+    // Determine which category to scroll to
+    let targetCategory: string | null = null;
+
+    // 1. Check if category prop was passed from route
+    if (category && VALID_CATEGORIES.includes(category as Category)) {
+      targetCategory = category;
+    }
+
+    // 2. Check for hash in URL (overrides category prop)
+    const hash = location.split('#')[1];
+    if (hash && VALID_CATEGORIES.includes(hash as Category)) {
+      targetCategory = hash;
+    }
+
+    // 3. If no hash, check if the path contains a category
+    if (!targetCategory) {
+      const pathSegments = location.split('/').filter(Boolean);
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      if (lastSegment && lastSegment !== 'resources' && VALID_CATEGORIES.includes(lastSegment as Category)) {
+        targetCategory = lastSegment;
+      }
+    }
+
+    // Scroll to the target category if found
+    if (targetCategory) {
+      const element = document.getElementById(targetCategory);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [location, category]);
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Header />
@@ -59,7 +108,7 @@ export default function ResourcesPage() {
 
         <div className="container mx-auto px-4 max-w-6xl py-12 space-y-16">
           {/* Templates */}
-          <section>
+          <section id="templates">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-primary/10 text-primary"><FileText className="w-5 h-5" /></div>
               <div>
@@ -87,7 +136,7 @@ export default function ResourcesPage() {
           </section>
 
           {/* Checklists */}
-          <section>
+          <section id="checklists">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-400"><CheckSquare className="w-5 h-5" /></div>
               <div>
@@ -113,7 +162,7 @@ export default function ResourcesPage() {
           </section>
 
           {/* Cheatsheets */}
-          <section>
+          <section id="cheatsheets">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-400"><List className="w-5 h-5" /></div>
               <div>
@@ -138,7 +187,7 @@ export default function ResourcesPage() {
           </section>
 
           {/* Calculators */}
-          <section>
+          <section id="calculators">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400"><Calculator className="w-5 h-5" /></div>
               <div>

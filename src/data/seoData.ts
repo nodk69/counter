@@ -16,17 +16,6 @@ export const WORDS_TO_PAGES = [
   { words: 10000, pages: 20, pagesSingle: 20, readTime: 42, speechTime: 77 },
 ];
 
-export const WORDS_TO_PAGES_SLUGS = [
-  '100-words-is-how-many-pages',
-  '500-words-is-how-many-pages',
-  '1000-words-is-how-many-pages',
-  '1500-words-is-how-many-pages',
-  '2000-words-is-how-many-pages',
-  '3000-words-is-how-many-pages',
-  '5000-words-is-how-many-pages',
-  '10000-words-is-how-many-pages',
-];
-
 export const SPEECH_TIMES = [
   { minutes: 5, words: 650, wpm: 130, description: 'short talk, elevator pitch, or toast' },
   { minutes: 10, words: 1300, wpm: 130, description: 'conference talk, class presentation, or team update' },

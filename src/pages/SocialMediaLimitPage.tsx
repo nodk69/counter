@@ -3,6 +3,8 @@ import { Link } from 'wouter';
 import { Check } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { SOCIAL_MEDIA_LIMITS } from '@/data/seoData';
 
 export default function SocialMediaLimitPage({ slug }: { slug: string }) {
@@ -26,9 +28,23 @@ export default function SocialMediaLimitPage({ slug }: { slug: string }) {
   }
 
   const { platform, limit, tips, examples } = data;
+  const pageTitle = `${platform} Character Limit (2026) — Complete Guide`;
+  const pageDesc = `The ${platform} character limit is ${limit.toLocaleString()} characters. See limit breakdowns for all content types, optimization tips, and check your text in real time.`;
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <MetaTags
+        title={pageTitle}
+        description={pageDesc}
+      />
+      <SchemaMarkup
+        type="page"
+        data={{
+          name: `${platform} Character Limit`,
+          description: pageDesc,
+          slug,
+        }}
+      />
       <Header />
       <main className="flex-1">
         <div className="bg-muted/30 border-b border-border py-12">

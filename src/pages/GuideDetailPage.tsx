@@ -4,6 +4,7 @@ import { Clock, CheckCircle, ArrowLeft, ChevronRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { getGuideBySlug, GUIDES } from '@/data/guides';
 
 const DIFFICULTY_COLORS: Record<string, string> = {
@@ -39,6 +40,15 @@ export default function GuideDetailPage({ slug }: { slug: string }) {
       <MetaTags
         title={guide.title}
         description={guide.excerpt}
+      />
+      <SchemaMarkup
+        type="guide"
+        data={{
+          name: guide.title,
+          description: guide.excerpt,
+          slug: guide.slug,
+          steps: guide.steps,
+        }}
       />
       <Header />
       <main className="flex-1">

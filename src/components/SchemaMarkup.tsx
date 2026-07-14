@@ -1,10 +1,11 @@
 import { BLOG_POSTS } from '@/data/blog';
 import { TOOLS } from '@/data/tools';
+import { SITE_CONFIG } from '@/config/site';
 
-const SITE_URL  = 'https://counterio.vercel.app';
-const SITE_NAME = 'counter.io';
+const SITE_URL  = SITE_CONFIG.url.replace(/\/$/, '');
+const SITE_NAME = SITE_CONFIG.name;
 
-type SchemaType = 'home' | 'tool' | 'article' | 'blog' | 'tools' | 'page';
+type SchemaType = 'home' | 'tool' | 'article' | 'blog' | 'tools' | 'page' | 'guide';
 
 interface Props {
   type: SchemaType;
@@ -15,6 +16,7 @@ interface Props {
     datePublished?: string;
     author?: string;
     faqItems?: Array<{ question: string; answer: string }>;
+    steps?: Array<{ title: string; content: string }>;
   };
 }
 
@@ -229,6 +231,33 @@ export default function SchemaMarkup({ type, data = {} }: Props) {
         }} />
       </>
     );
+  }
+
+  if (type === 'guide' && data.name) {
+    const schemas: object[] = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: data.name,
+        description: data.description || '',
+        step: (data.steps || []).map((s, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: s.title,
+          text: s.content,
+        })),
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: 'Guides', item: `${SITE_URL}/guides` },
+          { '@type': 'ListItem', position: 3, name: data.name, item: `${SITE_URL}/guides/${data.slug || ''}` },
+        ],
+      },
+    ];
+    return <>{schemas.map((s, i) => <Script key={i} schema={s} />)}</>;
   }
 
   return (

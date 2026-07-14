@@ -3,6 +3,8 @@ import { Link } from 'wouter';
 import { Check, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { COMPARISON_PAGES } from '@/data/seoData';
 
 export default function ComparisonPage({ slug }: { slug: string }) {
@@ -26,9 +28,23 @@ export default function ComparisonPage({ slug }: { slug: string }) {
   }
 
   const { title, intro, tool1, tool2, verdict } = data;
+  const pageTitle = title;
+  const pageDesc = intro.length > 155 ? `${intro.slice(0, 152)}...` : intro;
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <MetaTags
+        title={pageTitle}
+        description={pageDesc}
+      />
+      <SchemaMarkup
+        type="page"
+        data={{
+          name: title,
+          description: pageDesc,
+          slug,
+        }}
+      />
       <Header />
       <main className="flex-1">
         <div className="bg-muted/30 border-b border-border py-12">

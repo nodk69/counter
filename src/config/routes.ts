@@ -1,7 +1,13 @@
 /**
  * Single source of truth for all route slugs.
  * Import from here — never hardcode slug arrays in components.
+ *
+ * Blog and guide slugs are derived from their data files
+ * so they can never drift out of sync.
  */
+
+import { BLOG_POSTS } from '../data/blog';
+import { GUIDES } from '../data/guides';
 
 /** 20 individual tool slugs (must match src/data/tools.ts) */
 export const TOOL_SLUGS = [
@@ -54,24 +60,11 @@ export const COMPARISON_SLUGS = [
   'paragraph-counter-vs-line-counter',
 ] as const;
 
-/** Blog post slugs (must match src/data/blog.ts) */
-export const BLOG_SLUGS = [
-  'how-to-write-seo-content-that-ranks', '10-common-grammar-mistakes',
-  'the-science-of-readability',          'keyword-density-guide',
-  'writing-goals-productivity',          'perfect-blog-post-length',
-  'social-media-character-limits-guide', 'flesch-kincaid-explained',
-  'auto-save-writing-workflow',          'writing-for-web-vs-print',
-  'word-count-for-every-format',         'passive-voice-guide',
-] as const;
+/** Blog post slugs — derived from src/data/blog.ts */
+export const BLOG_SLUGS = BLOG_POSTS.map(p => p.slug);
 
-/** Guide slugs (must match src/data/guides.ts) */
-export const GUIDE_SLUGS = [
-  'how-to-use-word-counter',   'understanding-statistics',
-  'seo-writing-fundamentals',  'keyboard-shortcuts',
-  'export-import-guide',       'setting-writing-goals',
-  'readability-optimization',  'keyword-research-guide',
-  'content-planning-template', 'advanced-analytics',
-] as const;
+/** Guide slugs — derived from src/data/guides.ts */
+export const GUIDE_SLUGS = GUIDES.map(g => g.slug);
 
 /** Static page paths for sitemap and SEO */
 export const STATIC_PATHS = [

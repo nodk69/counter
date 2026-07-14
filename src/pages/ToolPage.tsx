@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'wouter';
 import Header from '@/components/Header';
 import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import Editor from '@/components/Editor';
 import { StatsPanel } from '@/components/stats';
 import ToolsSection from '@/components/ToolsSection';
@@ -86,6 +87,15 @@ export default function ToolPage({ slug }: { slug: string }) {
       <MetaTags
         title={`${tool.name} — Free Online Tool`}
         description={tool.description}
+      />
+      <SchemaMarkup
+        type="tool"
+        data={{
+          name: tool.name,
+          description: tool.description,
+          slug: tool.slug,
+          faqItems: (tool.faqs || []).map(f => ({ question: f.q, answer: f.a })),
+        }}
       />
       <Header />
       <main className="flex-1">

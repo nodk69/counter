@@ -13,9 +13,57 @@ import {
 import { BLOG_POSTS } from './src/data/blog.ts';
 
 // ---------------------------------------------------------------------------
-// Sitemap helpers (mirrors src/utils/sitemap.ts but runs in Node context)
+// ✅ Environment Configuration - FIXED
 // ---------------------------------------------------------------------------
-const BASE_URL = SITE_CONFIG.url.replace(/\/$/, '');
+
+/**
+ * Get the site URL based on environment
+ * - Development: http://localhost:5173 (or custom port)
+ * - Production: From VITE_SITE_URL environment variable
+ */
+function getSiteUrl(): string {
+  const isDev = process.env.NODE_ENV === 'development';
+  const isProd = process.env.NODE_ENV === 'production';
+  
+  // Check if VITE_SITE_URL is set
+  const customUrl = process.env.VITE_SITE_URL;
+  
+  // Development fallback - allow building without VITE_SITE_URL
+  if (isDev && !customUrl) {
+    const devPort = process.env.PORT || '5173';
+    console.log(`⚠️  VITE_SITE_URL not set, using http://localhost:${devPort} for development`);
+    return `http://localhost:${devPort}`;
+  }
+  
+  // Production requires the variable
+  if (isProd && !customUrl) {
+    throw new Error(
+      '❌ Build-time assertion failed: VITE_SITE_URL is unset.\n' +
+      '   This environment variable is required in production.\n' +
+      '   Create a .env file with: VITE_SITE_URL=https://yourdomain.com'
+    );
+  }
+  
+  // Use custom URL if provided (works for both dev and prod)
+  if (customUrl) {
+    return customUrl;
+  }
+  
+  // Final fallback for when NODE_ENV is not set (e.g., just running vite build)
+  if (!customUrl) {
+    console.warn('⚠️  NODE_ENV not set and VITE_SITE_URL not set, using http://localhost:5173');
+    return 'http://localhost:5173';
+  }
+  
+  return 'http://localhost:5173';
+}
+
+// Override SITE_CONFIG.url with environment value
+const BASE_URL = getSiteUrl().replace(/\/$/, '');
+
+// ---------------------------------------------------------------------------
+// Sitemap helpers
+// ---------------------------------------------------------------------------
 const AVAILABLE = LANGUAGES.filter(l => l.available);
 
 function buildAlternates(path: string): Record<string, string> {
@@ -80,7 +128,7 @@ ${urlBlocks.join('\n')}
 }
 
 // ---------------------------------------------------------------------------
-// RSS 2.0 feed — all blog posts, newest first
+// RSS 2.0 feed
 // ---------------------------------------------------------------------------
 function escapeXml(str: string): string {
   return str
@@ -98,7 +146,6 @@ function buildRssFeed(): string {
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
     .map(post => {
       const url = `${BASE_URL}/blog/${post.slug}`;
-      // Best-effort RFC-822 date (e.g. "July 2, 2026" → JS Date)
       const pubDate = new Date(post.date).toUTCString();
       return `    <item>
       <title>${escapeXml(post.title)}</title>
@@ -151,7 +198,7 @@ function buildRobotsTxt(): string {
 }
 
 // ---------------------------------------------------------------------------
-// Vite plugin — serves /sitemap.xml, /robots.txt, and /feed.xml
+// Vite plugin
 // ---------------------------------------------------------------------------
 function sitemapPlugin(): Plugin {
   return {

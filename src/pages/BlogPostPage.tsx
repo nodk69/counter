@@ -4,6 +4,7 @@ import { Clock, Calendar, Twitter, Linkedin, Facebook, ArrowLeft } from 'lucide-
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { getBlogBySlug, BLOG_POSTS } from '@/data/blog';
 
 function TableOfContents({ content }: { content: string }) {
@@ -145,6 +146,16 @@ export default function BlogPostPage({ slug }: { slug: string }) {
         type="article"
         publishedTime={post.date}
         author={post.author}
+      />
+      <SchemaMarkup
+        type="article"
+        data={{
+          name: post.title,
+          description: post.excerpt,
+          slug: post.slug,
+          datePublished: new Date(post.date).toISOString(),
+          author: post.author,
+        }}
       />
       <Header />
       <main className="flex-1">
