@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -42,7 +43,6 @@ import MetaDescriptionGeneratorPage from '@/pages/MetaDescriptionGeneratorPage';
 
 const queryClient = new QueryClient();
 
-
 /**
  * Wraps a component with an error boundary for graceful error handling.
  * @param Component The component to wrap
@@ -79,6 +79,21 @@ const withErrorBoundaryFn = (ComponentFn: (props: any) => JSX.Element) => {
   );
 };
 
+// Pre-wrap page components at module level so their references are stable across renders.
+// Calling withErrorBoundary() inline in JSX creates a new component function every render,
+// which causes React to unmount/remount the entire subtree — losing textarea focus on mobile.
+const SafeHome = withErrorBoundary(Home);
+const SafeToolsPage = withErrorBoundary(ToolsPage);
+const SafeBlogPage = withErrorBoundary(BlogPage);
+const SafeGuidesPage = withErrorBoundary(GuidesPage);
+const SafeAboutPage = withErrorBoundary(AboutPage);
+const SafeResourcesPage = withErrorBoundary(ResourcesPage);
+const SafeContactPage = withErrorBoundary(ContactPage);
+const SafePrivacyPage = withErrorBoundary(PrivacyPage);
+const SafeTermsPage = withErrorBoundary(TermsPage);
+const SafeMetaDescriptionGeneratorPage = withErrorBoundary(MetaDescriptionGeneratorPage);
+const SafeNotFound = withErrorBoundary(NotFound);
+
 function GlobalMeta() {
   const [location] = useLocation();
   return (
@@ -96,32 +111,32 @@ function Router() {
       <GlobalMeta />
       <Switch>
         {/* Home */}
-        <Route path="/" component={withErrorBoundary(Home)} />
+        <Route path="/" component={SafeHome} />
 
         {/* Tools index */}
-        <Route path="/tools" component={withErrorBoundary(ToolsPage)} />
+        <Route path="/tools" component={SafeToolsPage} />
 
         {/* Blog */}
-        <Route path="/blog" component={withErrorBoundary(BlogPage)} />
+        <Route path="/blog" component={SafeBlogPage} />
         <Route path="/blog/:slug">
-          {withErrorBoundaryFn(({ params }) => <BlogPostPage slug={params.slug} />)}
+          {withErrorBoundaryFn((params) => <BlogPostPage slug={params.slug} />)}
         </Route>
 
         {/* Guides */}
-        <Route path="/guides" component={withErrorBoundary(GuidesPage)} />
+        <Route path="/guides" component={SafeGuidesPage} />
         <Route path="/guides/:slug">
-          {withErrorBoundaryFn(({ params }) => <GuideDetailPage slug={params.slug} />)}
+          {withErrorBoundaryFn((params) => <GuideDetailPage slug={params.slug} />)}
         </Route>
 
         {/* Static pages */}
-        <Route path="/about" component={withErrorBoundary(AboutPage)} />
-        <Route path="/resources" component={withErrorBoundary(ResourcesPage)} />
+        <Route path="/about" component={SafeAboutPage} />
+        <Route path="/resources" component={SafeResourcesPage} />
         <Route path="/resources/:category">
-          {withErrorBoundaryFn(({ params }) => <ResourcesPage category={params.category} />)}
+          {withErrorBoundaryFn((params) => <ResourcesPage category={params.category} />)}
         </Route>
-        <Route path="/contact" component={withErrorBoundary(ContactPage)} />
-        <Route path="/privacy" component={withErrorBoundary(PrivacyPage)} />
-        <Route path="/terms" component={withErrorBoundary(TermsPage)} />
+        <Route path="/contact" component={SafeContactPage} />
+        <Route path="/privacy" component={SafePrivacyPage} />
+        <Route path="/terms" component={SafeTermsPage} />
 
         {/* Tool pages (20 individual routes) */}
         {TOOL_SLUGS.map(slug => (
@@ -166,10 +181,10 @@ function Router() {
         ))}
 
         {/* Special tools */}
-        <Route path="/meta-description-generator" component={withErrorBoundary(MetaDescriptionGeneratorPage)} />
+        <Route path="/meta-description-generator" component={SafeMetaDescriptionGeneratorPage} />
 
         {/* 404 */}
-        <Route component={withErrorBoundary(NotFound)} />
+        <Route component={SafeNotFound} />
       </Switch>
     </>
   );
@@ -178,8 +193,15 @@ function Router() {
 function AppContent() {
   const { text, setText, undo, redo, canUndo, canRedo, reset } = useUndoRedo('');
 
+  // Memoize context value so consumers only re-render when values actually change,
+  // not on every parent render. setText/undo/redo/reset are already stable (useCallback).
+  const contextValue = useMemo(
+    () => ({ text, setText, undo, redo, canUndo, canRedo, reset }),
+    [text, setText, undo, redo, canUndo, canRedo, reset]
+  );
+
   return (
-    <TextContext.Provider value={{ text, setText, undo, redo, canUndo, canRedo, reset }}>
+    <TextContext.Provider value={contextValue}>
       <TooltipProvider delayDuration={300}>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
           <Router />
