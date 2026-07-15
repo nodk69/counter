@@ -77,7 +77,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
   }
 
-  private hasResetKeysChanged(newKeys: any[], prevKeys: any[] | undefined): boolean {
+  private hasResetKeysChanged(newKeys: any[], _prevKeys: any[] | undefined): boolean {
     if (!this.prevResetKeys) return true;
     if (newKeys.length !== this.prevResetKeys.length) return true;
 
@@ -103,7 +103,6 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   public render() {
     if (this.state.hasError && this.state.error) {
       const FallbackComponent = this.props.fallback;
-      const shouldShowDetails = this.props.showErrorDetails ?? import.meta.env?.DEV ?? true;
 
       return (
         <FallbackComponent

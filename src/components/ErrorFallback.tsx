@@ -19,7 +19,7 @@ interface ErrorFallbackProps {
  * Generic fallback UI for error boundaries
  */
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({
-  error,
+  error: _error,
   resetError,
   title = 'Something went wrong',
   description = 'Please try again later or reload the page.',

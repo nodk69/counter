@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 import Header from '@/components/Header';
 import MetaTags from '@/components/MetaTags';
 import SchemaMarkup from '@/components/SchemaMarkup';
-import Editor from '@/components/Editor';
+import Editor from '@/components/editor/Editor';
 import { StatsPanel } from '@/components/stats';
 import ToolsSection from '@/components/ToolsSection';
 import Footer from '@/components/Footer';

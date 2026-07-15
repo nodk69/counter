@@ -1,7 +1,7 @@
 import { Link } from 'wouter';
 import { ArrowRight } from 'lucide-react';
 import { TOOLS } from '@/data/tools';
-import type { ContentAnalysis, WritingMode, MODE_CONFIGS } from '@/hooks/useContentAnalysis';
+import type { ContentAnalysis, WritingMode } from '@/hooks/useContentAnalysis';
 import type { TextStats } from '@/hooks/useTextStats';
 
 interface Rec {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, X, ArrowRight, FileText, BookOpen, Wrench } from 'lucide-react';
 import { Link } from 'wouter';
 import { TOOLS } from '@/data/tools';

@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { useUndoRedo } from '@/hooks/useUndoRedo';
+import { useEditorState } from '@/hooks/useEditorState';
 import { TextContext } from '@/context/TextContext';
 import HreflangTags from '@/components/HreflangTags';
 import CanonicalTag from '@/components/CanonicalTag';
@@ -191,13 +191,20 @@ function Router() {
 }
 
 function AppContent() {
-  const { text, setText, undo, redo, canUndo, canRedo, reset } = useUndoRedo('');
+  const {
+    editor, text, setText, htmlContent,
+    canUndo, canRedo, undo, redo, reset,
+    saveStatus, versions, restoreVersion, clearVersions,
+  } = useEditorState();
 
-  // Memoize context value so consumers only re-render when values actually change,
-  // not on every parent render. setText/undo/redo/reset are already stable (useCallback).
   const contextValue = useMemo(
-    () => ({ text, setText, undo, redo, canUndo, canRedo, reset }),
-    [text, setText, undo, redo, canUndo, canRedo, reset]
+    () => ({
+      text, setText, htmlContent, editor,
+      undo, redo, canUndo, canRedo, reset,
+      saveStatus, versions, restoreVersion, clearVersions,
+    }),
+    [text, setText, htmlContent, editor, undo, redo, canUndo, canRedo, reset,
+     saveStatus, versions, restoreVersion, clearVersions]
   );
 
   return (

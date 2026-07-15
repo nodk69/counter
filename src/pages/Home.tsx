@@ -1,6 +1,6 @@
 import MetaTags from '@/components/MetaTags';
 import Header from '@/components/Header';
-import Editor from '@/components/Editor';
+import Editor from '@/components/editor/Editor';
 import { StatsPanel } from '@/components/stats';
 import ToolsSection from '@/components/ToolsSection';
 import SchemaMarkup from '@/components/SchemaMarkup';

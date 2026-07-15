@@ -37,7 +37,7 @@ interface RelatedContentProps {
 
 export default function RelatedContent({
   currentSlug,
-  type,
+  type: _type,
   category,
   tags         = [],
   relatedSlugs = [],
