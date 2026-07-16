@@ -1,6 +1,6 @@
 [build]
   command       = "pnpm build"
-  publish       = "packages/word-counter/dist/public"
+  publish       = "dist/public"
 
 [build.environment]
   NODE_VERSION  = "20"
