@@ -5,9 +5,10 @@ import {
   WritingMode,
   MODE_CONFIGS,
   BENCHMARKS,
+  type ContentAnalysis,
 } from '@/hooks/useContentAnalysis';
 import { useTextContext } from '@/context/TextContext';
-import { useTextStats } from '@/hooks/useTextStats';
+import { useTextStats, type TextStats } from '@/hooks/useTextStats';
 import ToolRecommendations from '@/components/ToolRecommendations';
 
 // ─── Score ring ──────────────────────────────────────────────────────────────
@@ -42,9 +43,9 @@ function ScoreRing({ score, label }: { score: number; label: string }) {
 // ─── Status icon ─────────────────────────────────────────────────────────────
 
 function StatusIcon({ status }: { status: 'good' | 'warn' | 'bad' }) {
-  if (status === 'good') return <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />;
-  if (status === 'warn') return <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />;
-  return <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />;
+  if (status === 'good') return <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" aria-hidden="true" />;
+  if (status === 'warn') return <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" aria-hidden="true" />;
+  return <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" aria-hidden="true" />;
 }
 
 // ─── Collapsible section ──────────────────────────────────────────────────────
@@ -57,13 +58,19 @@ function Section({ title, badge, children, defaultOpen = false }: {
     <div className="border border-border rounded-xl overflow-hidden">
       <button
         onClick={() => setOpen(o => !o)}
+        // aria-expanded lets screen readers announce whether the section
+        // is currently open — without it, a collapsible region built out
+        // of a plain <button>/<div> pair reads identically in either
+        // state, which is a real accessibility gap for anyone not
+        // looking at the chevron icon.
+        aria-expanded={open}
         className="w-full flex items-center justify-between px-4 py-3 bg-muted/30 hover:bg-muted/50 transition-colors"
       >
         <div className="flex items-center gap-2">
           <span className="font-sans font-medium text-sm text-foreground">{title}</span>
           {badge}
         </div>
-        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" aria-hidden="true" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" aria-hidden="true" />}
       </button>
       {open && <div className="p-4 bg-card">{children}</div>}
     </div>
@@ -75,19 +82,29 @@ function Section({ title, badge, children, defaultOpen = false }: {
 interface Props {
   mode: WritingMode;
   setMode: (m: WritingMode) => void;
+  // Optional precomputed values. When a parent (e.g. ToolsSection) has
+  // already run useTextStats/useContentAnalysis for the same text and
+  // mode, passing them in here avoids re-running the full content-scan
+  // (filler words, passive voice, tokenization) a second time on every
+  // keystroke. If omitted, this component computes them itself so it
+  // still works as a fully standalone drop-in, exactly as before.
+  stats?: TextStats;
+  analysis?: ContentAnalysis;
 }
 
-export default function WritingAssistantTab({ mode, setMode }: Props) {
+export default function WritingAssistantTab({ mode, setMode, stats: statsProp, analysis: analysisProp }: Props) {
   const { text } = useTextContext();
-  const stats = useTextStats(text);
-  const analysis = useContentAnalysis(
-    text,
+  const computedStats = useTextStats(statsProp ? '' : text);
+  const stats = statsProp ?? computedStats;
+  const computedAnalysis = useContentAnalysis(
+    analysisProp ? '' : text,
     stats.fleschKincaid,
     stats.words,
     stats.sentences,
     stats.uniqueWords,
     mode
   );
+  const analysis = analysisProp ?? computedAnalysis;
 
   const empty = stats.words < 30;
 
@@ -101,11 +118,12 @@ export default function WritingAssistantTab({ mode, setMode }: Props) {
           {/* Mode selector */}
           <div>
             <div className="text-xs font-medium text-muted-foreground font-sans mb-1.5 uppercase tracking-wider">Writing Mode</div>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5" role="group" aria-label="Writing mode">
               {(Object.keys(MODE_CONFIGS) as WritingMode[]).map(m => (
                 <button
                   key={m}
                   onClick={() => setMode(m)}
+                  aria-pressed={mode === m}
                   className={`px-3 py-1 rounded-full text-xs font-medium font-sans transition-colors ${
                     mode === m ? 'bg-primary text-white' : 'border border-border bg-transparent text-muted-foreground hover:border-primary/40 hover:text-foreground'
                   }`}
@@ -297,7 +315,7 @@ export default function WritingAssistantTab({ mode, setMode }: Props) {
         <Section title="Reading Audience">
           <div className="space-y-2">
             <div className="flex items-start gap-2">
-              <span className="text-lg">🎯</span>
+              <span className="text-lg" aria-hidden="true">🎯</span>
               <div>
                 <div className="font-sans font-semibold text-sm text-foreground">{analysis.audienceLabel}</div>
                 <div className="text-xs text-muted-foreground font-sans">{analysis.audienceNote}</div>

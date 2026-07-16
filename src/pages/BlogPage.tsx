@@ -87,8 +87,14 @@ function PostCard({ post }: { post: typeof BLOG_POSTS[0] }) {
 
 export default function BlogPage() {
   const [category, setCategory] = useState('All');
+  const [currentPage, setCurrentPage] = useState(1);
   const featured = BLOG_POSTS.find(p => p.featured);
   const posts = getBlogsByCategory(category).filter(p => !p.featured || category !== 'All');
+
+  const POSTS_PER_PAGE = 6;
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+  const paginatedPosts = posts.slice(startIndex, startIndex + POSTS_PER_PAGE);
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -162,7 +168,10 @@ export default function BlogPage() {
             {BLOG_CATEGORIES.map(cat => (
               <button
                 key={cat}
-                onClick={() => setCategory(cat)}
+                onClick={() => {
+                  setCategory(cat);
+                  setCurrentPage(1);
+                }}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium font-sans transition-colors ${
                   category === cat
                     ? 'bg-primary text-white'
@@ -176,12 +185,40 @@ export default function BlogPage() {
 
           {/* Posts grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {posts.map(post => (
+            {paginatedPosts.map(post => (
               <PostCard key={post.slug} post={post} />
             ))}
           </div>
 
-          {posts.length === 0 && (
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-10">
+              <button
+                onClick={() => {
+                  setCurrentPage(p => Math.max(1, p - 1));
+                  window.scrollTo({ top: 300, behavior: 'smooth' });
+                }}
+                disabled={currentPage === 1}
+                className="px-3 py-1.5 rounded-lg border border-border text-sm font-medium font-sans disabled:opacity-50 hover:bg-muted transition-colors"
+              >
+                Previous
+              </button>
+              <span className="text-sm font-sans text-muted-foreground mx-2">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => {
+                  setCurrentPage(p => Math.min(totalPages, p + 1));
+                  window.scrollTo({ top: 300, behavior: 'smooth' });
+                }}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1.5 rounded-lg border border-border text-sm font-medium font-sans disabled:opacity-50 hover:bg-muted transition-colors"
+              >
+                Next
+              </button>
+            </div>
+          )}
+
+          {paginatedPosts.length === 0 && (
             <div className="text-center py-16 text-muted-foreground font-sans">
               No posts in this category yet.
             </div>

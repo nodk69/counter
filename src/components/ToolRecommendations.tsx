@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Link } from 'wouter';
 import { ArrowRight } from 'lucide-react';
 import { TOOLS } from '@/data/tools';
@@ -11,6 +12,14 @@ interface Rec {
   reason: string;
 }
 
+// Built once at module load rather than inside every render/call of
+// getRecommendations. The original code called `TOOLS.find(t => t.slug
+// === slug)` up to ~15 times per invocation — an O(n) scan repeated
+// against the same array. For a small TOOLS list the cost is trivial
+// today, but it scales linearly with catalog size for no reason; a Map
+// lookup is O(1) regardless of how many tools exist.
+const TOOLS_BY_SLUG = new Map(TOOLS.map(t => [t.slug, t]));
+
 function getRecommendations(
   analysis: ContentAnalysis,
   stats: TextStats,
@@ -21,8 +30,17 @@ function getRecommendations(
 
   function add(slug: string, reason: string) {
     if (used.has(slug)) return;
-    const tool = TOOLS.find(t => t.slug === slug);
-    if (!tool) return;
+    const tool = TOOLS_BY_SLUG.get(slug);
+    if (!tool) {
+      // A recommendation referencing a slug that doesn't exist in TOOLS
+      // is a data/config bug (typo, renamed tool, etc.) that previously
+      // failed completely silently. Surfacing it in dev makes that
+      // mistake visible without affecting the user-facing UI.
+      if (process.env.NODE_ENV !== 'production') {
+        console.warn(`ToolRecommendations: no tool found for slug "${slug}"`);
+      }
+      return;
+    }
     used.add(slug);
     recs.push({ slug, name: tool.name, icon: tool.icon, reason });
   }
@@ -67,7 +85,8 @@ function getRecommendations(
 
   // Page count helpful for long texts
   if (stats.words > 500) {
-    add('page-counter', `${stats.words.toLocaleString()} words is about ${Math.round(stats.words / 275)} page${Math.round(stats.words / 275) !== 1 ? 's' : ''} — verify formatting requirements.`);
+    const pages = Math.round(stats.words / 275);
+    add('page-counter', `${stats.words.toLocaleString()} words is about ${pages} page${pages !== 1 ? 's' : ''} — verify formatting requirements.`);
   }
 
   // Reading & speaking time
@@ -112,7 +131,14 @@ export default function ToolRecommendations({
   stats: TextStats;
   mode: WritingMode;
 }) {
-  const recs = getRecommendations(analysis, stats, mode);
+  // Memoized so this fairly involved decision tree only re-runs when the
+  // inputs that actually feed it change, not on every parent re-render
+  // (e.g. a sibling section toggling open/closed).
+  const recs = useMemo(
+    () => getRecommendations(analysis, stats, mode),
+    [analysis, stats, mode]
+  );
+
   if (recs.length === 0) return null;
 
   return (

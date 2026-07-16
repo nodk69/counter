@@ -440,15 +440,9 @@
 
 @media (max-width: 768px) {
   .editor-toolbar {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    flex-wrap: wrap;              /* was: overflow-x: auto; flex-wrap: nowrap; */
+    overflow: visible;            /* let dropdowns escape the toolbar */
     padding: 0.25rem 0.375rem;
-  }
-
-  .editor-toolbar::-webkit-scrollbar {
-    display: none;
   }
 
   .editor-toolbar-btn {
@@ -458,4 +452,64 @@
   .editor-toolbar-select {
     flex-shrink: 0;
   }
+
+  /* Dropdowns can now overflow past the right edge on narrow screens —
+     clamp them back into the viewport */
+  .editor-dropdown {
+    max-width: calc(100vw - 1.5rem);
+  }
+}
+
+/* Task lists */
+.tiptap-editor ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0.25em;
+}
+
+.tiptap-editor ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
+.tiptap-editor ul[data-type="taskList"] li > label {
+  flex-shrink: 0;
+  margin-top: 0.3em;
+  user-select: none;
+}
+
+.tiptap-editor ul[data-type="taskList"] li > div {
+  flex: 1;
+}
+
+.tiptap-editor ul[data-type="taskList"] input[type="checkbox"] {
+  cursor: pointer;
+}
+
+/* Tables */
+.tiptap-editor table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.8em 0;
+  overflow: hidden;
+}
+
+.tiptap-editor table td,
+.tiptap-editor table th {
+  border: 1px solid hsl(var(--border));
+  padding: 0.5em 0.75em;
+  vertical-align: top;
+  position: relative;
+}
+
+.tiptap-editor table th {
+  background: hsl(var(--muted) / 0.5);
+  font-weight: 600;
+  text-align: left;
+}
+
+/* Superscript / Subscript */
+.tiptap-editor sup,
+.tiptap-editor sub {
+  font-size: 0.75em;
 }

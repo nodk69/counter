@@ -23,7 +23,7 @@ function EditorFooter({ saveStatus }: EditorFooterProps) {
         <div className="flex-1 min-w-0">
           <WritingGoal />
         </div>
-      </div>
+      </div> 
       <div className="flex items-center gap-1.5 text-primary/80 font-medium flex-shrink-0">
         <span className="w-1.5 h-1.5 rounded-full bg-primary/80 inline-block" />
         100% ad-free

@@ -7,7 +7,8 @@ import {
   Type, ChevronDown, Paintbrush, Highlighter, CaseSensitive,
   Heading1, Heading2, Heading3, Pilcrow, Search, Trash2,
   Upload, Download, ClipboardCopy, Scissors, MousePointerClick,
-  History,
+  History, Quote, Code2, Minus, Superscript as SuperscriptIcon, Subscript as SubscriptIcon,
+  CheckSquare, Table as TableIcon, IndentIncrease, IndentDecrease,
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { convertCase, type CaseType } from '@/utils/editor/caseConvert';
@@ -161,20 +162,40 @@ function EditorToolbar({
   const exportDropdown = useDropdown();
 
   // ── Copy / Cut / Select All ────────────────────────────────────────
+  const copyToClipboard = useCallback(async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Fallback for restricted contexts (iframes, some mobile webviews, non-HTTPS)
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+      } catch {
+        console.error('Copy failed: clipboard access unavailable');
+      }
+      document.body.removeChild(ta);
+    }
+  }, []);
+
   const handleCopy = useCallback(() => {
     const { from, to } = editor.state.selection;
     const text = editor.state.doc.textBetween(from, to, '\n');
-    if (text) navigator.clipboard.writeText(text);
-  }, [editor]);
+    if (text) copyToClipboard(text);
+  }, [editor, copyToClipboard]);
 
   const handleCut = useCallback(() => {
     const { from, to } = editor.state.selection;
     const text = editor.state.doc.textBetween(from, to, '\n');
     if (text) {
-      navigator.clipboard.writeText(text);
+      copyToClipboard(text);
       editor.commands.deleteSelection();
     }
-  }, [editor]);
+  }, [editor, copyToClipboard]);
 
   const handleSelectAll = useCallback(() => {
     editor.commands.selectAll();
@@ -210,6 +231,11 @@ function EditorToolbar({
     },
     [editor, caseDropdown]
   );
+
+  // ── Insert Table ───────────────────────────────────────────────────
+  const handleInsertTable = useCallback(() => {
+    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  }, [editor]);
 
   // ── Get current heading level label ────────────────────────────────
   const getHeadingLabel = () => {
@@ -302,6 +328,70 @@ function EditorToolbar({
       {/* ── Lists ───────────────────────────────────────────────────── */}
       <ToolbarButton icon={<List className="w-4 h-4" />} label="Bullet List" onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} />
       <ToolbarButton icon={<ListOrdered className="w-4 h-4" />} label="Numbered List" onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')} />
+
+      <Sep />
+
+      {/* ── Block Elements ─────────────────────────────────────────── */}
+      <ToolbarButton
+        icon={<Quote className="w-4 h-4" />}
+        label="Blockquote"
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        isActive={editor.isActive('blockquote')}
+      />
+      <ToolbarButton
+        icon={<Code2 className="w-4 h-4" />}
+        label="Code Block"
+        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+        isActive={editor.isActive('codeBlock')}
+      />
+      <ToolbarButton
+        icon={<Minus className="w-4 h-4" />}
+        label="Horizontal Rule"
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+      />
+      <ToolbarButton
+        icon={<CheckSquare className="w-4 h-4" />}
+        label="Task List"
+        onClick={() => editor.chain().focus().toggleTaskList().run()}
+        isActive={editor.isActive('taskList')}
+      />
+      <ToolbarButton
+        icon={<TableIcon className="w-4 h-4" />}
+        label="Insert Table"
+        onClick={handleInsertTable}
+      />
+
+      <Sep />
+
+      {/* ── Super / Subscript ──────────────────────────────────────── */}
+      <ToolbarButton
+        icon={<SuperscriptIcon className="w-4 h-4" />}
+        label="Superscript"
+        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+        isActive={editor.isActive('superscript')}
+      />
+      <ToolbarButton
+        icon={<SubscriptIcon className="w-4 h-4" />}
+        label="Subscript"
+        onClick={() => editor.chain().focus().toggleSubscript().run()}
+        isActive={editor.isActive('subscript')}
+      />
+
+      <Sep />
+
+      {/* ── Indent (lists only) ────────────────────────────────────── */}
+      <ToolbarButton
+        icon={<IndentIncrease className="w-4 h-4" />}
+        label="Indent"
+        onClick={() => editor.chain().focus().sinkListItem('listItem').run()}
+        disabled={!editor.can().sinkListItem('listItem')}
+      />
+      <ToolbarButton
+        icon={<IndentDecrease className="w-4 h-4" />}
+        label="Outdent"
+        onClick={() => editor.chain().focus().liftListItem('listItem').run()}
+        disabled={!editor.can().liftListItem('listItem')}
+      />
 
       <Sep />
 

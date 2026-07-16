@@ -1,11 +1,13 @@
 import { useWritingStreak } from '@/hooks/useWritingStreak';
 import { useTextContext } from '@/context/TextContext';
+import { useTextStats } from '@/hooks/useTextStats';
 import { Flame } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function WritingStreak() {
   const { text } = useTextContext();
-  const { streak, longestStreak, isStreakDay } = useWritingStreak(text);
+  const stats = useTextStats(text);
+  const { streak, longestStreak, isStreakDay } = useWritingStreak(stats.words);
 
   if (streak === 0) return null;
 

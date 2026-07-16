@@ -202,35 +202,47 @@ export default function SchemaMarkup({ type, data = {} }: Props) {
   }
 
   if (type === 'article' && data.name) {
-    return (
-      <>
-        <Script schema={{
-          '@context': 'https://schema.org',
-          '@type': 'Article',
-          headline: data.name,
-          author: { '@type': 'Person', name: data.author || 'counter.io Editorial Team' },
-          publisher: {
-            '@type': 'Organization',
-            name: SITE_NAME,
-            logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
-          },
-          datePublished: data.datePublished || new Date().toISOString(),
-          dateModified:  data.datePublished || new Date().toISOString(),
-          url: `${SITE_URL}/blog/${data.slug || ''}`,
-          mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${data.slug || ''}` },
-          description: data.description || '',
-        }} />
-        <Script schema={{
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-            { '@type': 'ListItem', position: 3, name: data.name, item: `${SITE_URL}/blog/${data.slug || ''}` },
-          ],
-        }} />
-      </>
-    );
+    const schemas: object[] = [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: data.name,
+        author: { '@type': 'Person', name: data.author || 'counter.io Editorial Team' },
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` },
+        },
+        datePublished: data.datePublished || new Date().toISOString(),
+        dateModified:  data.datePublished || new Date().toISOString(),
+        url: `${SITE_URL}/blog/${data.slug || ''}`,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}/blog/${data.slug || ''}` },
+        description: data.description || '',
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+          { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+          { '@type': 'ListItem', position: 3, name: data.name, item: `${SITE_URL}/blog/${data.slug || ''}` },
+        ],
+      }
+    ];
+
+    if (data.faqItems && data.faqItems.length > 0) {
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: data.faqItems.map(f => ({
+          '@type': 'Question',
+          name: f.question,
+          acceptedAnswer: { '@type': 'Answer', text: f.answer },
+        })),
+      });
+    }
+
+    return <>{schemas.map((s, i) => <Script key={i} schema={s} />)}</>;
   }
 
   if (type === 'guide' && data.name) {

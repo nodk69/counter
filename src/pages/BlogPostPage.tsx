@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
 import SchemaMarkup from '@/components/SchemaMarkup';
-import { getBlogBySlug, BLOG_POSTS } from '@/data/blog';
+import { getBlogBySlug, BLOG_POSTS, BlogPost } from '@/data/blog';
 
 function TableOfContents({ content }: { content: string }) {
   const headers = content.match(/^## .+/gm)?.map(h => h.replace('## ', '')) ?? [];
@@ -98,6 +98,20 @@ function ContentRenderer({ content }: { content: string }) {
       );
       continue;
     } else if (line.trim() !== '') {
+      if (line.startsWith('![')) {
+        const match = line.match(/!\[([^\]]*)\]\(([^)]+)\)/);
+        if (match) {
+          const alt = match[1];
+          const src = match[2];
+          elements.push(
+            <div key={i} className="my-6">
+              <img src={src} alt={alt} className="rounded-xl border border-border w-full aspect-[16/9] object-cover" />
+            </div>
+          );
+          i++;
+          continue;
+        }
+      }
       elements.push(
         <p key={i} className="text-foreground/80 font-sans text-base leading-relaxed mb-4"
           dangerouslySetInnerHTML={{ __html: renderInline(line) }}
@@ -119,7 +133,10 @@ function renderInline(text: string): string {
 
 export default function BlogPostPage({ slug }: { slug: string }) {
   const post = getBlogBySlug(slug);
-  const relatedPosts = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 3);
+  
+  const relatedPosts = post?.relatedSlugs
+    ? post.relatedSlugs.map(s => getBlogBySlug(s)).filter((p): p is BlogPost => !!p)
+    : BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 3);
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
 
@@ -141,20 +158,21 @@ export default function BlogPostPage({ slug }: { slug: string }) {
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <MetaTags
-        title={post.title}
-        description={post.excerpt}
+        title={post.titleTag || post.title}
+        description={post.metaDescription || post.excerpt}
         type="article"
         publishedTime={post.date}
         author={post.author}
       />
       <SchemaMarkup
-        type="article"
+        type={post.schemaType === 'HowTo' ? 'guide' : 'article'}
         data={{
           name: post.title,
-          description: post.excerpt,
+          description: post.metaDescription || post.excerpt,
           slug: post.slug,
           datePublished: new Date(post.date).toISOString(),
           author: post.author,
+          faqItems: post.faq,
         }}
       />
       <Header />
@@ -232,6 +250,21 @@ export default function BlogPostPage({ slug }: { slug: string }) {
             <ContentRenderer content={post.content} />
           </div>
 
+          {/* FAQ Section */}
+          {post.faq && post.faq.length > 0 && (
+            <div className="mb-12 border-t border-border pt-10">
+              <h2 className="font-serif text-2xl font-bold text-foreground mb-6">Frequently Asked Questions</h2>
+              <div className="space-y-6">
+                {post.faq.map((item, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <h4 className="font-serif text-lg font-semibold text-foreground">{item.question}</h4>
+                    <p className="text-foreground/80 font-sans text-base leading-relaxed">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Author box */}
           <div className="mb-12 p-6 rounded-xl border border-border bg-muted/30">
             <div className="flex items-center gap-4">
@@ -252,20 +285,22 @@ export default function BlogPostPage({ slug }: { slug: string }) {
           </Link>
 
           {/* Related posts */}
-          <div>
-            <h2 className="font-serif text-2xl font-bold text-foreground mb-5">Related Posts</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {relatedPosts.map(p => (
-                <Link key={p.slug} href={`/blog/${p.slug}`}>
-                  <div className="group border border-border rounded-xl bg-card p-4 hover:border-primary/30 hover:shadow-sm transition-all cursor-pointer">
-                    <span className="text-xs font-sans px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium mb-2 inline-block">{p.category}</span>
-                    <h3 className="font-serif text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">{p.title}</h3>
-                    <div className="mt-2 text-xs text-muted-foreground font-sans">{p.readTime} min read</div>
-                  </div>
-                </Link>
-              ))}
+          {relatedPosts.length > 0 && (
+            <div>
+              <h2 className="font-serif text-2xl font-bold text-foreground mb-5">Related Posts</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {relatedPosts.map(p => (
+                  <Link key={p.slug} href={`/blog/${p.slug}`}>
+                    <div className="group border border-border rounded-xl bg-card p-4 hover:border-primary/30 hover:shadow-sm transition-all cursor-pointer">
+                      <span className="text-xs font-sans px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium mb-2 inline-block">{p.category}</span>
+                      <h3 className="font-serif text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">{p.title}</h3>
+                      <div className="mt-2 text-xs text-muted-foreground font-sans">{p.readTime} min read</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </main>
       <Footer />

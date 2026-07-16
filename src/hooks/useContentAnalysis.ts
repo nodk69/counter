@@ -9,12 +9,26 @@ const FILLER_WORDS = [
   'essentially', 'generally', 'usually', 'needless', 'indeed', 'surely',
 ];
 
+// Precompile filler-word regexes once at module load instead of on every
+// analysis run — FILLER_WORDS is static, so there's no reason to pay the
+// RegExp-construction cost inside the hook on every keystroke.
+const FILLER_REGEXES: Array<{ word: string; re: RegExp }> = FILLER_WORDS.map((fw) => ({
+  word: fw,
+  re: new RegExp(`\\b${fw}\\b`, 'gi'),
+}));
+
 const PASSIVE_AUX = ['am', 'is', 'are', 'was', 'were', 'be', 'been', 'being'];
-// Regex: auxiliary verb + optional "being" + past participle (-ed or irregular -en/-n)
-const PASSIVE_RE = new RegExp(
-  `\\b(${PASSIVE_AUX.join('|')})\\s+(being\\s+)?\\w+(ed|en|n)\\b`,
-  'gi'
-);
+// NOTE: this pattern is built fresh inside the hook (see buildPassiveRegex)
+// rather than as a shared module-level `g` RegExp. A shared global RegExp
+// carries mutable `lastIndex` state; if two analyses ever interleave
+// (e.g. this hook is invoked recursively, or an exception aborts a loop
+// mid-scan and skips the lastIndex reset), matches silently start from the
+// wrong offset. A fresh instance per call sidesteps that entirely.
+function buildPassiveRegex(): RegExp {
+  return new RegExp(`\\b(${PASSIVE_AUX.join('|')})\\s+(being\\s+)?\\w+(ed|en|n)\\b`, 'gi');
+}
+
+const PARAGRAPH_SPLIT_RE = /\n\s*\n+/;
 
 export type WritingMode = 'general' | 'academic' | 'seo' | 'business' | 'social';
 
@@ -105,6 +119,21 @@ export interface ContentAnalysis {
 
 function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
 
+/**
+ * Divides `numerator / denominator`, returning `fallback` (default 0)
+ * instead of Infinity/NaN when denominator is zero or non-finite.
+ * The original scoring formulas divided by expressions like
+ * `(100 - cfg.passiveMax)` or `(5 - cfg.fillerMax)` — safe today because
+ * current configs never hit those exact values, but a future config
+ * edit (e.g. passiveMax: 100, or fillerMax: 5) would silently produce
+ * NaN scores with no error. This makes that failure mode impossible.
+ */
+function safeDiv(numerator: number, denominator: number, fallback = 0): number {
+  if (!Number.isFinite(denominator) || denominator === 0) return fallback;
+  const result = numerator / denominator;
+  return Number.isFinite(result) ? result : fallback;
+}
+
 function scoreLabel(n: number): string {
   if (n >= 85) return 'Excellent';
   if (n >= 70) return 'Good';
@@ -129,6 +158,11 @@ function audienceInfo(fk: number): { label: string; note: string } {
   return          { label: 'Graduate / Expert',                  note: 'Very complex. Limit to highly technical fields.' };
 }
 
+const IGNORED_REPEAT_WORDS = new Set([
+  'that', 'with', 'this', 'from', 'have', 'been', 'were', 'they', 'them',
+  'their', 'would', 'could', 'should',
+]);
+
 // ─── Main hook ──────────────────────────────────────────────────────────────
 
 export function useContentAnalysis(
@@ -148,10 +182,10 @@ export function useContentAnalysis(
 
     // ── Filler words ──
     const fillerResults: FillerWordResult[] = [];
-    for (const fw of FILLER_WORDS) {
-      const re = new RegExp(`\\b${fw}\\b`, 'gi');
+    for (const { word, re } of FILLER_REGEXES) {
+      re.lastIndex = 0; // these ARE shared module-level `g` regexes, so reset explicitly before each use
       const count = (text.match(re) || []).length;
-      if (count > 0) fillerResults.push({ word: fw, count });
+      if (count > 0) fillerResults.push({ word, count });
     }
     fillerResults.sort((a, b) => b.count - a.count);
     const totalFillers = fillerResults.reduce((s, f) => s + f.count, 0);
@@ -161,15 +195,16 @@ export function useContentAnalysis(
     const sentenceList = text.split(/(?<=[.!?])\s+/).filter(s => s.trim().length > 4);
     const passiveSamples: string[] = [];
     let passiveCount = 0;
+    const passiveRe = buildPassiveRegex(); // fresh instance — no cross-call lastIndex leakage
     for (const sent of sentenceList) {
-      if (PASSIVE_RE.test(sent)) {
+      passiveRe.lastIndex = 0;
+      if (passiveRe.test(sent)) {
         passiveCount++;
         if (passiveSamples.length < 5) {
           const trimmed = sent.trim().slice(0, 80);
           passiveSamples.push(trimmed.length < sent.trim().length ? trimmed + '…' : trimmed);
         }
       }
-      PASSIVE_RE.lastIndex = 0; // reset stateful regex
     }
     const passiveRate = sentenceList.length > 0 ? (passiveCount / sentenceList.length) * 100 : 0;
 
@@ -179,10 +214,13 @@ export function useContentAnalysis(
       const lw = w.toLowerCase();
       wordMap.set(lw, (wordMap.get(lw) || 0) + 1);
     }
-    const ttr = totalWords > 0 ? uniqueWords / totalWords : 0;
+    // Guard against uniqueWords being computed elsewhere (e.g. useTextStats,
+    // which tokenises alnum+underscore) with a different word set than the
+    // alpha-only tokens used here — clamp so ttr can never exceed 1.
+    const ttr = totalWords > 0 ? clamp(uniqueWords / totalWords, 0, 1) : 0;
     const ttrLabel = ttrToLabel(ttr);
     const repeatedWords = Array.from(wordMap.entries())
-      .filter(([w, c]) => c > 2 && w.length > 3 && !['that','with','this','from','have','been','were','they','them','their','would','could','should'].includes(w))
+      .filter(([w, c]) => c > 2 && w.length > 3 && !IGNORED_REPEAT_WORDS.has(w))
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([word, count]) => ({ word, count }));
@@ -201,8 +239,8 @@ export function useContentAnalysis(
     let readScore = 0;
     if (!empty) {
       if (fleschKincaid >= cfg.readabilityMin && fleschKincaid <= cfg.readabilityMax) readScore = 100;
-      else if (fleschKincaid < cfg.readabilityMin) readScore = clamp((fleschKincaid / cfg.readabilityMin) * 100, 0, 100);
-      else readScore = clamp(100 - ((fleschKincaid - cfg.readabilityMax) / (100 - cfg.readabilityMax)) * 100, 0, 100);
+      else if (fleschKincaid < cfg.readabilityMin) readScore = clamp(safeDiv(fleschKincaid, cfg.readabilityMin) * 100, 0, 100);
+      else readScore = clamp(100 - safeDiv(fleschKincaid - cfg.readabilityMax, 100 - cfg.readabilityMax) * 100, 0, 100);
     }
     const readStatus = readScore >= 70 ? 'good' : readScore >= 40 ? 'warn' : 'bad';
     const readTip = readScore >= 70 ? 'Readability is well-suited for your mode.' :
@@ -213,8 +251,8 @@ export function useContentAnalysis(
     let sentScore = 0;
     if (!empty && sentences > 0) {
       if (avgSentenceWords >= cfg.avgSentMin && avgSentenceWords <= cfg.avgSentMax) sentScore = 100;
-      else if (avgSentenceWords < cfg.avgSentMin) sentScore = clamp((avgSentenceWords / cfg.avgSentMin) * 80, 0, 100);
-      else sentScore = clamp(100 - ((avgSentenceWords - cfg.avgSentMax) / 15) * 100, 0, 100);
+      else if (avgSentenceWords < cfg.avgSentMin) sentScore = clamp(safeDiv(avgSentenceWords, cfg.avgSentMin) * 80, 0, 100);
+      else sentScore = clamp(100 - safeDiv(avgSentenceWords - cfg.avgSentMax, 15) * 100, 0, 100);
     }
     const sentStatus = sentScore >= 70 ? 'good' : sentScore >= 40 ? 'warn' : 'bad';
     const sentTip = sentScore >= 70 ? `Average sentence length (${avgSentenceWords.toFixed(0)} words) is on target.` :
@@ -230,7 +268,7 @@ export function useContentAnalysis(
     // 4. Passive voice (15pts)
     let passiveScore = 100;
     if (!empty && sentences > 0) {
-      passiveScore = clamp(100 - Math.max(0, passiveRate - cfg.passiveMax) * (100 / (100 - cfg.passiveMax)), 0, 100);
+      passiveScore = clamp(100 - Math.max(0, passiveRate - cfg.passiveMax) * safeDiv(100, 100 - cfg.passiveMax), 0, 100);
     }
     const passiveStatus = passiveScore >= 70 ? 'good' : passiveScore >= 40 ? 'warn' : 'bad';
     const passiveTip = passiveScore >= 70 ? `Passive voice is within range (${passiveRate.toFixed(0)}% of sentences).` :
@@ -239,14 +277,18 @@ export function useContentAnalysis(
     // 5. Filler words (10pts)
     let fillerScore = 100;
     if (!empty) {
-      fillerScore = clamp(100 - Math.max(0, fillerWordDensity - cfg.fillerMax) * (100 / (5 - cfg.fillerMax)), 0, 100);
+      fillerScore = clamp(100 - Math.max(0, fillerWordDensity - cfg.fillerMax) * safeDiv(100, 5 - cfg.fillerMax), 0, 100);
     }
     const fillerStatus = fillerScore >= 70 ? 'good' : fillerScore >= 40 ? 'warn' : 'bad';
     const fillerTip = fillerScore >= 70 ? 'Filler word usage is low — good writing discipline.' :
       `${totalFillers} filler words found (${fillerWordDensity.toFixed(1)}% of text). Remove weak intensifiers.`;
 
     // 6. Paragraph structure (10pts)
-    const avgSentsPerPara = sentences > 0 && words > 0 ? sentences / Math.max(1, text.split(/\n\n+/).filter(p => p.trim()).length) : 0;
+    // Uses the same blank-line paragraph definition as the rest of the app
+    // would ideally use everywhere (see useTextStats note) — a single blank
+    // line, not a bare newline, delimits a paragraph.
+    const paragraphCount = Math.max(1, text.split(PARAGRAPH_SPLIT_RE).filter(p => p.trim()).length);
+    const avgSentsPerPara = sentences > 0 && words > 0 ? sentences / paragraphCount : 0;
     const paraScore = empty ? 0 : avgSentsPerPara <= cfg.paragraphSentMax ? 100 : clamp(100 - ((avgSentsPerPara - cfg.paragraphSentMax) / 5) * 100, 0, 100);
     const paraStatus = paraScore >= 70 ? 'good' : paraScore >= 40 ? 'warn' : 'bad';
     const paraTip = paraScore >= 70 ? `Paragraph length looks good (avg ${avgSentsPerPara.toFixed(1)} sentences).` :
@@ -270,6 +312,8 @@ export function useContentAnalysis(
       .filter(b => words >= b.min && words <= b.max)
       .map(b => b.label);
 
+    const audience = audienceInfo(fleschKincaid);
+
     return {
       fillerWords: fillerResults,
       fillerWordDensity,
@@ -287,8 +331,8 @@ export function useContentAnalysis(
       dimensions,
       scoreLabel: scoreLabel(contentScore),
       matchingBenchmarks,
-      audienceLabel: audienceInfo(fleschKincaid).label,
-      audienceNote:  audienceInfo(fleschKincaid).note,
+      audienceLabel: audience.label,
+      audienceNote:  audience.note,
     };
   }, [text, fleschKincaid, words, sentences, uniqueWords, mode]);
 }
