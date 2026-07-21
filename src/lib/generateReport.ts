@@ -51,8 +51,8 @@ export function generateReportHTML(
     </tr>
   `).join('');
 
-  const fillerRows = analysis.fillerWords.length > 0
-    ? analysis.fillerWords.map(f => `
+  const fillerRows = analysis.weaselWords.length > 0
+    ? analysis.weaselWords.map(f => `
       <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;font-size:13px;margin:3px;">
         "${f.word}" <span style="font-family:monospace;color:#d97706;">×${f.count}</span>
       </span>`).join('')
@@ -63,13 +63,13 @@ export function generateReportHTML(
       <div style="padding:6px 12px;border-left:3px solid #fbbf24;font-style:italic;color:#6b7280;font-size:13px;margin:4px 0;">"${s.replace(/</g, '&lt;').replace(/>/g, '&gt;')}"</div>`).join('')
     : '';
 
-  const keywordRows = stats.wordDensity.slice(0, 10).map((w, i) => `
+  const keywordRows = (Array.isArray(stats.wordDensity) ? stats.wordDensity : []).slice(0, 10).map((w, i) => `
     <tr style="background:${i % 2 === 0 ? '#ffffff' : '#f9fafb'};">
       <td style="padding:6px 12px;font-family:monospace;">${w.word}</td>
       <td style="padding:6px 12px;text-align:center;">${w.count}</td>
       <td style="padding:6px 12px;">
         <div style="height:5px;background:#e5e7eb;border-radius:4px;overflow:hidden;">
-          <div style="height:100%;width:${(w.count / (stats.wordDensity[0]?.count || 1)) * 100}%;background:#7c3aed;border-radius:4px;"></div>
+          <div style="height:100%;width:${(w.count / ((Array.isArray(stats.wordDensity) && stats.wordDensity.length > 0 ? stats.wordDensity[0]?.count : 1) || 1)) * 100}%;background:#7c3aed;border-radius:4px;"></div>
         </div>
       </td>
       <td style="padding:6px 12px;text-align:right;font-size:12px;color:#6b7280;">${((w.count / stats.words) * 100).toFixed(1)}%</td>
@@ -162,7 +162,7 @@ export function generateReportHTML(
 
 <!-- Filler Words -->
 <div class="section">
-  <h2>Filler Words <span style="font-size:12px;font-weight:400;color:#6b7280;">(${analysis.fillerWords.reduce((s,f)=>s+f.count,0)} found)</span></h2>
+  <h2>Weasel Words <span style="font-size:12px;font-weight:400;color:#6b7280;">(${analysis.weaselWords.reduce((s,f)=>s+f.count,0)} found)</span></h2>
   <div style="padding:12px;">${fillerRows}</div>
 </div>
 
@@ -177,6 +177,27 @@ export function generateReportHTML(
       <span style="font-family:monospace;font-size:13px;color:#6b7280;">${analysis.passiveCount} sentences</span>
     </div>
     ${passiveSampleRows}
+  </div>
+</div>
+
+<!-- Advanced Insights -->
+<div class="section">
+  <h2>Advanced Insights</h2>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:4px 0 8px;">
+    <div style="padding:12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;margin-bottom:4px;">Sentence Variety</div>
+      <div style="font-family:monospace;font-size:20px;font-weight:700;color:#111827;">${analysis.sentenceVarietyScore.toFixed(0)}%</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:2px;">${analysis.sentenceVarietyLabel}</div>
+    </div>
+    <div style="padding:12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;margin-bottom:4px;">Proper Noun Density</div>
+      <div style="font-family:monospace;font-size:20px;font-weight:700;color:#111827;">${analysis.properNounDensity.toFixed(1)}%</div>
+      <div style="font-size:12px;color:#6b7280;margin-top:2px;">Names and organizations detected</div>
+    </div>
+  </div>
+  <div style="padding:12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:#9ca3af;margin-bottom:8px;">Repeated Phrases</div>
+    ${analysis.topPhrases.length > 0 ? analysis.topPhrases.map(phrase => `<span style="padding:3px 8px;background:#f3f4f6;border-radius:6px;font-size:12px;margin:2px;display:inline-block;">${phrase.phrase} <span style="font-family:monospace;color:#9ca3af;">×${phrase.count}</span></span>`).join('') : '<span style="color:#6b7280;font-size:13px;">No repeated phrases detected.</span>'}
   </div>
 </div>
 
@@ -204,7 +225,7 @@ export function generateReportHTML(
 </div>
 
 <!-- Top Keywords -->
-${stats.wordDensity.length > 0 ? `
+${(Array.isArray(stats.wordDensity) ? stats.wordDensity : []).length > 0 ? `
 <div class="section">
   <h2>Top Keywords</h2>
   <table>

@@ -5,8 +5,9 @@ import EditorToolbar from './EditorToolbar';
 import EditorSearchReplace from './EditorSearchReplace';
 import EditorVersionHistory from './EditorVersionHistory';
 import EditorFooter from './EditorFooter';
-import { importFile, ACCEPTED_IMPORT_TYPES } from '@/utils/editor/editorImport';
-import { exportAsTxt, exportAsHtml, exportAsMarkdown, exportAsPdf } from '@/utils/editor/editorExport';
+import { importFile } from '@/utils/editor/editorImport';
+import { exportDocument } from '@/lib/export/exportService';
+import { useTextStats } from '@/hooks/useTextStats';
 import './editor.css';
 
 function Editor() {
@@ -18,7 +19,6 @@ function Editor() {
   const [showSearch, setShowSearch] = useState(false);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const versionRef = useRef<HTMLDivElement>(null);
 
   // ── Import handler ──────────────────────────────────────────────────
@@ -41,14 +41,7 @@ function Editor() {
     [editor, text]
   );
 
-  const handleFileInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) handleFileImport(file);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    },
-    [handleFileImport]
-  );
+
 
   // ── Drag and drop ──────────────────────────────────────────────────
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -74,26 +67,111 @@ function Editor() {
     [handleFileImport]
   );
 
-  // ── Export handlers ────────────────────────────────────────────────
-  const handleExportTxt = useCallback(() => {
-    if (!text) return;
-    exportAsTxt(text);
-  }, [text]);
+  const stats = useTextStats(text);
 
-  const handleExportHtml = useCallback(() => {
-    if (!htmlContent) return;
-    exportAsHtml(htmlContent);
+  const getDocTitle = useCallback(() => {
+    if (!htmlContent) return 'Untitled Document';
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    const heading = doc.querySelector('h1, h2, h3')?.textContent;
+    return heading?.trim() || 'Untitled Document';
   }, [htmlContent]);
+
+  // ── Export handlers ────────────────────────────────────────────────
+  const handleExportTxt = useCallback(async () => {
+    if (!text) return;
+    const title = getDocTitle();
+    await exportDocument({
+      format: 'txt',
+      title,
+      html: htmlContent,
+      stats: {
+        words: stats.words,
+        characters: stats.charWithSpaces,
+        charactersNoSpaces: stats.charNoSpaces,
+        sentences: stats.sentences,
+        paragraphs: stats.paragraphs,
+        readingTime: stats.readingTime,
+        speakingTime: stats.speakingTime,
+      },
+    });
+  }, [text, htmlContent, stats, getDocTitle]);
+
+  const handleExportHtml = useCallback(async () => {
+    if (!htmlContent) return;
+    const title = getDocTitle();
+    await exportDocument({
+      format: 'html',
+      title,
+      html: htmlContent,
+      stats: {
+        words: stats.words,
+        characters: stats.charWithSpaces,
+        charactersNoSpaces: stats.charNoSpaces,
+        sentences: stats.sentences,
+        paragraphs: stats.paragraphs,
+        readingTime: stats.readingTime,
+        speakingTime: stats.speakingTime,
+      },
+    });
+  }, [htmlContent, stats, getDocTitle]);
+
+  const handleExportDocx = useCallback(async () => {
+    if (!htmlContent) return;
+    const title = getDocTitle();
+    await exportDocument({
+      format: 'docx',
+      title,
+      html: htmlContent,
+      stats: {
+        words: stats.words,
+        characters: stats.charWithSpaces,
+        charactersNoSpaces: stats.charNoSpaces,
+        sentences: stats.sentences,
+        paragraphs: stats.paragraphs,
+        readingTime: stats.readingTime,
+        speakingTime: stats.speakingTime,
+      },
+    });
+  }, [htmlContent, stats, getDocTitle]);
 
   const handleExportMd = useCallback(async () => {
     if (!htmlContent) return;
-    await exportAsMarkdown(htmlContent);
-  }, [htmlContent]);
+    const title = getDocTitle();
+    await exportDocument({
+      format: 'markdown',
+      title,
+      html: htmlContent,
+      stats: {
+        words: stats.words,
+        characters: stats.charWithSpaces,
+        charactersNoSpaces: stats.charNoSpaces,
+        sentences: stats.sentences,
+        paragraphs: stats.paragraphs,
+        readingTime: stats.readingTime,
+        speakingTime: stats.speakingTime,
+      },
+    });
+  }, [htmlContent, stats, getDocTitle]);
 
   const handleExportPdf = useCallback(async () => {
     if (!htmlContent) return;
-    await exportAsPdf(htmlContent);
-  }, [htmlContent]);
+    const title = getDocTitle();
+    await exportDocument({
+      format: 'pdf',
+      title,
+      html: htmlContent,
+      stats: {
+        words: stats.words,
+        characters: stats.charWithSpaces,
+        charactersNoSpaces: stats.charNoSpaces,
+        sentences: stats.sentences,
+        paragraphs: stats.paragraphs,
+        readingTime: stats.readingTime,
+        speakingTime: stats.speakingTime,
+      },
+    });
+  }, [htmlContent, stats, getDocTitle]);
 
   // ── Clear handler ──────────────────────────────────────────────────
   const handleClear = useCallback(() => {
@@ -124,23 +202,15 @@ function Editor() {
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
-      {/* Hidden file input */}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileInputChange}
-        accept={ACCEPTED_IMPORT_TYPES}
-        className="hidden"
-      />
-
       {/* Toolbar */}
       <EditorToolbar
         editor={editor}
         onToggleSearch={() => setShowSearch((s) => !s)}
         showSearch={showSearch}
-        onImport={() => fileInputRef.current?.click()}
+        onImportFile={handleFileImport}
         onExportTxt={handleExportTxt}
         onExportHtml={handleExportHtml}
+        onExportDocx={handleExportDocx}
         onExportMd={handleExportMd}
         onExportPdf={handleExportPdf}
         onClear={handleClear}

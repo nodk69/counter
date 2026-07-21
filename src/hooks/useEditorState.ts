@@ -20,6 +20,7 @@ import { Table } from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
+import Image from '@tiptap/extension-image';
 
 // ── Version History ─────────────────────────────────────────────────────
 export interface VersionEntry {
@@ -135,6 +136,7 @@ export type SaveStatus = 'saved' | 'saving' | 'unsaved';
 
 // ── Hook ────────────────────────────────────────────────────────────────
 export function useEditorState() {
+  const isMountedRef = useRef(true);
   const [text, setTextState] = useState('');
   const [htmlContent, setHtmlContent] = useState('');
   const [canUndo, setCanUndo] = useState(false);
@@ -146,12 +148,22 @@ export function useEditorState() {
   const isResettingRef = useRef(false);
   const lastSavedContentRef = useRef<string | null>(null);
 
+  // Track mount status
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         undoRedo: {
           depth: 100,
         },
+        link: false,
+        underline: false,
       }),
       Underline,
       TextAlign.configure({
@@ -184,6 +196,11 @@ export function useEditorState() {
       TableRow,
       TableCell,
       TableHeader,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'editor-image',
+        },
+      }),
     ],
     content: (() => {
       const stored = loadStoredContent();
@@ -239,22 +256,21 @@ export function useEditorState() {
       }
       saveTimerRef.current = setTimeout(() => {
         // The editor can be destroyed (component unmounted, navigation,
-        // fast-refresh in dev) while this timeout is in flight. Calling
-        // ed.getJSON()/getText() on a destroyed editor instance throws.
-        if (ed.isDestroyed) return;
+        // fast-refresh in dev) while this timeout is in flight.
+        if (ed.isDestroyed || !isMountedRef.current) return;
 
         const json = JSON.stringify(ed.getJSON());
         setSaveStatus('saving');
         const persisted = safeSetItem(STORAGE_KEY, json);
 
         // Skip writing a new version snapshot if content is identical to
-        // the last saved version (e.g. user typed then undid everything) —
-        // avoids burning through the 10-slot version history with no-ops.
+        // the last saved version
         if (persisted && json !== lastSavedContentRef.current) {
           lastSavedContentRef.current = json;
           const wordCount = (plainText.match(/\b[a-zA-Z0-9_]+\b/g) || []).length;
           if (wordCount > 0) {
             setVersions((prev) => {
+              if (!isMountedRef.current) return prev;
               const snippet = plainText.slice(0, 80);
               const newEntry: VersionEntry = {
                 id: makeVersionId(),
@@ -272,7 +288,11 @@ export function useEditorState() {
 
         // Brief "saving" state for UI feedback
         if (savingIndicatorTimerRef.current) clearTimeout(savingIndicatorTimerRef.current);
-        savingIndicatorTimerRef.current = setTimeout(() => setSaveStatus('saved'), 300);
+        savingIndicatorTimerRef.current = setTimeout(() => {
+          if (isMountedRef.current) {
+            setSaveStatus('saved');
+          }
+        }, 300);
       }, AUTOSAVE_DELAY);
     },
     onSelectionUpdate: ({ editor: ed }) => {
@@ -281,11 +301,17 @@ export function useEditorState() {
     },
   });
 
-  // Extract initial text on mount
+  // Extract initial text on mount and verify history settings
   useEffect(() => {
     if (editor && !editor.isDestroyed) {
       setTextState(editor.getText());
       setHtmlContent(editor.getHTML());
+
+      // Verify history configuration depth options
+      const historyExtension = editor.extensionManager.extensions.find(ext => ext.name === 'history' || ext.name === 'undoRedo');
+      if (historyExtension && historyExtension.options.depth !== 100) {
+        console.warn('⚠️ StarterKit history depth configuration not respected. Current depth is:', historyExtension.options.depth);
+      }
     }
   }, [editor]);
 

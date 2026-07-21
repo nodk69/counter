@@ -7,7 +7,6 @@ import WritingAssistantTab from '@/components/WritingAssistantTab';
 import { exportToPdf } from '@/lib/generateReport';
 import { exportDocx, exportJson } from '@/lib/exportFormats';
 import { useCallback, useState } from 'react';
-import type { WritingMode } from '@/hooks/useContentAnalysis';
 
 type ExportKind = 'pdf' | 'txt' | 'md' | 'docx' | 'json';
 
@@ -33,17 +32,9 @@ function downloadBlob(blob: Blob, filename: string) {
 }
 
 export default function ToolsSection() {
-  const { text } = useTextContext();
+  const { text, mode, setMode } = useTextContext();
   const stats = useTextStats(text);
-  const [mode, setMode] = useState<WritingMode>('general');
-  const analysis = useContentAnalysis(
-    text,
-    stats.fleschKincaid,
-    stats.words,
-    stats.sentences,
-    stats.uniqueWords,
-    mode
-  );
+  const analysis = useContentAnalysis(text, mode);
 
   // Tracks which export is currently running so buttons can show a busy
   // state and, more importantly, can't be double-fired — exportToPdf in
@@ -52,7 +43,8 @@ export default function ToolsSection() {
   const [pendingExport, setPendingExport] = useState<ExportKind | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
 
-  const maxDensity = stats.wordDensity.length > 0 ? stats.wordDensity[0].count : 1;
+  const densityItems = Array.isArray(stats.wordDensity) ? stats.wordDensity : [];
+  const maxDensity = densityItems.length > 0 ? (densityItems[0]?.count ?? 1) : 1;
 
   const getReadabilityLabel = (score: number) => {
     if (stats.words === 0) return "-";
@@ -117,8 +109,8 @@ export default function ToolsSection() {
 
         <TabsContent value="density" className="focus-visible:outline-none focus-visible:ring-0">
           <div className="space-y-3">
-            {stats.wordDensity.length > 0 ? (
-              stats.wordDensity.map((item, idx) => (
+            {densityItems.length > 0 ? (
+              densityItems.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-4">
                   <div className="w-24 font-mono text-sm truncate text-foreground/80">{item.word}</div>
                   <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">

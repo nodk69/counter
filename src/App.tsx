@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -197,14 +197,17 @@ function AppContent() {
     saveStatus, versions, restoreVersion, clearVersions,
   } = useEditorState();
 
+  const [mode, setMode] = useState<'general' | 'academic' | 'seo' | 'business' | 'social'>('general');
+
   const contextValue = useMemo(
     () => ({
       text, setText, htmlContent, editor,
       undo, redo, canUndo, canRedo, reset,
       saveStatus, versions, restoreVersion, clearVersions,
+      mode, setMode,
     }),
     [text, setText, htmlContent, editor, undo, redo, canUndo, canRedo, reset,
-     saveStatus, versions, restoreVersion, clearVersions]
+     saveStatus, versions, restoreVersion, clearVersions, mode]
   );
 
   return (

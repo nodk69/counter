@@ -1,3 +1,5 @@
+import type { Editor } from '@tiptap/core';
+
 /**
  * Case conversion utilities for the editor.
  * Each function transforms text according to a specific casing rule.
@@ -52,4 +54,28 @@ const CASE_CONVERTERS: Record<CaseType, (text: string) => string> = {
 /** Convert text using a named case type */
 export function convertCase(text: string, caseType: CaseType): string {
   return CASE_CONVERTERS[caseType](text);
+}
+
+/** Walk the document text nodes and convert their case in-place preserving formatting marks */
+export function convertDocumentCase(editor: Editor, caseType: CaseType): void {
+  const { tr, doc } = editor.state;
+  const steps: { from: number; to: number; text: string }[] = [];
+
+  doc.descendants((node, pos) => {
+    if (node.isText && node.text) {
+      const converted = convertCase(node.text, caseType);
+      if (converted !== node.text) {
+        steps.push({ from: pos, to: pos + node.nodeSize, text: converted });
+      }
+    }
+    return true;
+  });
+
+  // Apply changes in reverse order to preserve correct pos indices
+  for (let i = steps.length - 1; i >= 0; i--) {
+    const { from, to, text } = steps[i];
+    tr.insertText(text, from, to);
+  }
+
+  editor.view.dispatch(tr);
 }

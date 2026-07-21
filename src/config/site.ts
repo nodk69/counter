@@ -20,7 +20,7 @@ function resolveSiteUrl(): string {
 }
 
 // Build-time assertion that fails the build if VITE_SITE_URL is unset in production.
-if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'production' && !process.env?.VITE_SITE_URL) {
+if (typeof window === 'undefined' && typeof process !== 'undefined' && process.env?.NODE_ENV === 'production' && !process.env?.VITE_SITE_URL) {
   throw new Error('Build-time assertion failed: VITE_SITE_URL is unset. This environment variable is required in production.');
 }
 

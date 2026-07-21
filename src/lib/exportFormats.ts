@@ -88,14 +88,24 @@ export function exportJson(
       passiveVoiceRate:   Math.round(analysis.passiveRate * 10) / 10,
       passiveVoiceCount:  analysis.passiveCount,
       passiveSamples:     analysis.passiveSamples,
-      fillerWords:        analysis.fillerWords,
+      weaselWords:        analysis.weaselWords,
       vocabularyDiversity: {
         ttr:           Math.round(analysis.ttr * 1000) / 1000,
         label:         analysis.ttrLabel,
         repeatedWords: analysis.repeatedWords,
       },
     },
-    keywords:   stats.wordDensity.slice(0, 20),
+    advancedInsights: {
+      sentenceVarietyScore: analysis.sentenceVarietyScore,
+      sentenceVarietyLabel: analysis.sentenceVarietyLabel,
+      topPhrases: analysis.topPhrases,
+      properNounDensity: analysis.properNounDensity,
+      questionCount: analysis.questionCount,
+      exclamationCount: analysis.exclamationCount,
+      firstPersonRatio: analysis.firstPersonRatio,
+      secondPersonRatio: analysis.secondPersonRatio,
+    },
+    keywords:   (Array.isArray(stats.wordDensity) ? stats.wordDensity : []).slice(0, 20),
     benchmarks: analysis.matchingBenchmarks,
   };
 

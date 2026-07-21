@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { convertCase, type CaseType } from '@/utils/editor/caseConvert';
+import { ACCEPTED_IMPORT_TYPES } from '@/utils/editor/editorImport';
 
 // ── Constants ───────────────────────────────────────────────────────────
 
@@ -131,9 +132,10 @@ interface EditorToolbarProps {
   editor: Editor;
   onToggleSearch: () => void;
   showSearch: boolean;
-  onImport: () => void;
+  onImportFile: (file: File) => void;
   onExportTxt: () => void;
   onExportHtml: () => void;
+  onExportDocx: () => void;
   onExportMd: () => void;
   onExportPdf: () => void;
   onClear: () => void;
@@ -144,9 +146,10 @@ function EditorToolbar({
   editor,
   onToggleSearch,
   showSearch,
-  onImport,
+  onImportFile,
   onExportTxt,
   onExportHtml,
+  onExportDocx,
   onExportMd,
   onExportPdf,
   onClear,
@@ -160,6 +163,21 @@ function EditorToolbar({
   const highlightDropdown = useDropdown();
   const caseDropdown = useDropdown();
   const exportDropdown = useDropdown();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        onImportFile(file);
+      }
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    },
+    [onImportFile]
+  );
 
   // ── Copy / Cut / Select All ────────────────────────────────────────
   const copyToClipboard = useCallback(async (text: string) => {
@@ -645,7 +663,7 @@ function EditorToolbar({
         isActive={showSearch}
       />
       <ToolbarButton icon={<History className="w-4 h-4" />} label="Version History" onClick={onToggleVersionHistory} />
-      <ToolbarButton icon={<Upload className="w-4 h-4" />} label="Import File" onClick={onImport} />
+      <ToolbarButton icon={<Upload className="w-4 h-4" />} label="Import File" onClick={() => fileInputRef.current?.click()} />
 
       {/* ── Export Dropdown ───────────────────────────────────────────── */}
       <div className="relative" ref={exportDropdown.ref}>
@@ -671,6 +689,9 @@ function EditorToolbar({
             <button className="editor-dropdown-item" onClick={() => { onExportHtml(); exportDropdown.setOpen(false); }}>
               Export as HTML
             </button>
+            <button className="editor-dropdown-item" onClick={() => { onExportDocx(); exportDropdown.setOpen(false); }}>
+              Export as DOCX
+            </button>
             <button className="editor-dropdown-item" onClick={() => { onExportMd(); exportDropdown.setOpen(false); }}>
               Export as Markdown
             </button>
@@ -682,6 +703,13 @@ function EditorToolbar({
       </div>
 
       <ToolbarButton icon={<Trash2 className="w-4 h-4" />} label="Clear All" onClick={onClear} />
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileInputChange}
+        accept={ACCEPTED_IMPORT_TYPES}
+        className="hidden"
+      />
     </div>
   );
 }

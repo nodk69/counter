@@ -50,19 +50,20 @@ function countSyllables(word: string): number {
 
 export function useTextStats(text: string): TextStats {
   return useMemo(() => {
-    const charWithSpaces = text.length;
-    const charNoSpaces = text.replace(/\s+/g, '').length;
+    const safeText = typeof text === 'string' ? text : '';
+    const charWithSpaces = safeText.length;
+    const charNoSpaces = safeText.replace(/\s+/g, '').length;
 
     // Words
-    const wordMatches = text.match(WORD_RE) || [];
+    const wordMatches = safeText.match(WORD_RE) || [];
     const words = wordMatches.length;
 
     // Sentences
-    const sentenceMatches = text.split(SENTENCE_SPLIT_RE).filter(s => s.trim().length > 0);
+    const sentenceMatches = safeText.split(SENTENCE_SPLIT_RE).filter(s => s.trim().length > 0);
     const sentences = sentenceMatches.length || 0;
 
     // Paragraphs
-    const paragraphs = text.split(PARAGRAPH_SPLIT_RE).filter(p => p.trim().length > 0).length || 0;
+    const paragraphs = safeText.split(PARAGRAPH_SPLIT_RE).filter(p => p.trim().length > 0).length || 0;
 
     // Times
     const readingTime = words > 0 ? Math.ceil(words / 200) : 0;

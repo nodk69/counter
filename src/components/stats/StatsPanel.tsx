@@ -65,17 +65,11 @@ const SLUG_TO_PANEL: Record<string, PanelComponent> = {
 };
 
 export default function StatsPanel() {
-  const { text } = useTextContext();
+  const { text, mode } = useTextContext();
   const [location] = useLocation();
 
   const stats = useTextStats(text);
-  const analysis = useContentAnalysis(
-    text,
-    stats.fleschKincaid,
-    stats.words,
-    stats.sentences,
-    stats.uniqueWords
-  );
+  const analysis = useContentAnalysis(text, mode);
 
   const slug = useMemo(() => {
     const parts = location.replace(/^\//, '').split('/');

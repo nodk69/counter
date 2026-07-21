@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 import type { Editor } from '@tiptap/react';
 import type { SaveStatus, VersionEntry } from '@/hooks/useEditorState';
+import type { WritingMode } from '@/hooks/useContentAnalysis';
 
 export interface TextContextType {
   /** Plain text extracted from the editor (for stats, analysis, etc.) */
@@ -29,6 +30,10 @@ export interface TextContextType {
   restoreVersion: (v: VersionEntry) => void;
   /** Clear all versions */
   clearVersions: () => void;
+  /** Shared writing mode used by analysis surfaces */
+  mode: WritingMode;
+  /** Update the shared writing mode */
+  setMode: (mode: WritingMode) => void;
 }
 
 export const TextContext = createContext<TextContextType>({
@@ -45,6 +50,8 @@ export const TextContext = createContext<TextContextType>({
   versions: [],
   restoreVersion: () => {},
   clearVersions: () => {},
+  mode: 'general',
+  setMode: () => {},
 });
 
 export const useTextContext = () => useContext(TextContext);

@@ -96,14 +96,7 @@ export default function WritingAssistantTab({ mode, setMode, stats: statsProp, a
   const { text } = useTextContext();
   const computedStats = useTextStats(statsProp ? '' : text);
   const stats = statsProp ?? computedStats;
-  const computedAnalysis = useContentAnalysis(
-    analysisProp ? '' : text,
-    stats.fleschKincaid,
-    stats.words,
-    stats.sentences,
-    stats.uniqueWords,
-    mode
-  );
+  const computedAnalysis = useContentAnalysis(analysisProp ? '' : text, mode);
   const analysis = analysisProp ?? computedAnalysis;
 
   const empty = stats.words < 30;
@@ -182,12 +175,12 @@ export default function WritingAssistantTab({ mode, setMode, stats: statsProp, a
       <Section
         title="Filler Words"
         badge={
-          analysis.fillerWords.length > 0
-            ? <span className="text-xs px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-sans">{analysis.fillerWords.reduce((s, f) => s + f.count, 0)} found</span>
+          analysis.weaselWords.length > 0
+            ? <span className="text-xs px-1.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-sans">{analysis.weaselWords.reduce((s, f) => s + f.count, 0)} found</span>
             : <span className="text-xs px-1.5 py-0.5 rounded-md bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-400 font-sans">None</span>
         }
       >
-        {analysis.fillerWords.length === 0 ? (
+        {analysis.weaselWords.length === 0 ? (
           <p className="text-xs text-muted-foreground font-sans">No filler words found. Great writing discipline!</p>
         ) : (
           <div className="space-y-2">
@@ -195,7 +188,7 @@ export default function WritingAssistantTab({ mode, setMode, stats: statsProp, a
               These words weaken your writing. Cut or replace them where possible.
             </p>
             <div className="flex flex-wrap gap-2">
-              {analysis.fillerWords.map(f => (
+              {analysis.weaselWords.map(f => (
                 <span key={f.word} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 text-xs font-sans">
                   <span className="font-medium text-foreground">"{f.word}"</span>
                   <span className="text-amber-600 dark:text-amber-400 font-mono">×{f.count}</span>
@@ -204,6 +197,53 @@ export default function WritingAssistantTab({ mode, setMode, stats: statsProp, a
             </div>
           </div>
         )}
+      </Section>
+
+      <Section title="Advanced Insights" defaultOpen={false}>
+        <div className="space-y-4">
+          <div className="grid gap-3 md:grid-cols-2">
+            <div className="rounded-lg border border-border bg-muted/20 p-3">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Sentence Variety</div>
+              <div className="mt-1 font-mono text-xl text-foreground">{analysis.sentenceVarietyScore.toFixed(0)}%</div>
+              <div className="text-xs text-muted-foreground font-sans">{analysis.sentenceVarietyLabel}</div>
+            </div>
+            <div className="rounded-lg border border-border bg-muted/20 p-3">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Proper Noun Density</div>
+              <div className="mt-1 font-mono text-xl text-foreground">{analysis.properNounDensity.toFixed(1)}%</div>
+              <div className="text-xs text-muted-foreground font-sans">Names and entities in the text</div>
+            </div>
+          </div>
+          <div className="rounded-lg border border-border bg-muted/20 p-3">
+            <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Top Repeated Phrases</div>
+            {analysis.topPhrases.length > 0 ? (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {analysis.topPhrases.map(phrase => (
+                  <span key={phrase.phrase} className="inline-flex items-center gap-1 rounded-lg bg-background px-2.5 py-1 text-xs font-sans text-foreground border border-border">
+                    <span className="font-medium">{phrase.phrase}</span>
+                    <span className="font-mono text-muted-foreground">×{phrase.count}</span>
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-2 text-xs text-muted-foreground font-sans">No repeated phrases detected.</p>
+            )}
+          </div>
+          {(mode === 'business' || mode === 'social') && (
+            <div className="rounded-lg border border-border bg-muted/20 p-3">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tone Consistency</div>
+              <div className="mt-2 flex items-center justify-between gap-3">
+                <div>
+                  <div className="font-sans text-sm text-foreground">First-person ratio: {(analysis.firstPersonRatio).toFixed(1)}%</div>
+                  <div className="font-sans text-sm text-foreground">Second-person ratio: {(analysis.secondPersonRatio).toFixed(1)}%</div>
+                </div>
+                <div className="rounded-lg bg-primary/10 px-3 py-2 text-right">
+                  <div className="font-mono text-lg font-semibold text-primary">{analysis.dimensions.find(d => d.label === 'Tone Consistency')?.score ?? 0}</div>
+                  <div className="text-[11px] uppercase tracking-wider text-muted-foreground">Score</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </Section>
 
       {/* Passive voice */}

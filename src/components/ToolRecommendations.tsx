@@ -110,8 +110,8 @@ function getRecommendations(
     add('paragraph-length-analyzer', 'Your paragraphs may be too long — analyze and break them up.');
   }
 
-  // Filler words
-  if (analysis.fillerWords.length > 3) {
+  // Weasel words
+  if (analysis.weaselWords.length > 3) {
     add('word-density-analyzer', 'See which words dominate your text and where they cluster.');
   }
 
