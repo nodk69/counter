@@ -1,8 +1,21 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Download, FileText, CheckSquare, List, BookOpen, Calculator } from 'lucide-react';
+import { Download, FileText, CheckSquare, List, BookOpen, Calculator, Users, ArrowRightLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { LANDING_PAGES, COMPARISON_PAGES } from '@/data/seoData';
+
+const AUDIENCE_ENTRIES = Object.entries(LANDING_PAGES).map(([slug, data]) => ({
+  slug,
+  title: data.title,
+  audience: data.audience,
+}));
+
+const COMPARISON_ENTRIES = Object.entries(COMPARISON_PAGES).map(([slug, data]) => ({
+  slug,
+  title: data.title,
+  intro: data.intro,
+}));
 
 const TEMPLATES = [
   { icon: '📄', title: 'Blog Post Template', desc: 'Standard structure for SEO-optimized blog posts with H1, intro, body sections, and CTA.', type: 'TXT', free: true },
@@ -107,6 +120,48 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
         </div>
 
         <div className="container mx-auto px-4 max-w-6xl py-12 space-y-16">
+          {/* Audience Directory */}
+          <section id="audience">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-400"><Users className="w-5 h-5" /></div>
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-foreground">Word Counter for Every Audience</h2>
+                <p className="text-xs text-muted-foreground font-sans">Tailored writing workbench for your specific needs</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {AUDIENCE_ENTRIES.map(entry => (
+                <Link key={entry.slug} href={`/${entry.slug}`}>
+                  <div className="group p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
+                    <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors text-sm">{entry.title}</div>
+                    <div className="text-xs text-muted-foreground font-sans mt-1">Built for {entry.audience}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* Comparisons Directory */}
+          <section id="comparisons">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 rounded-lg bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-400"><ArrowRightLeft className="w-5 h-5" /></div>
+              <div>
+                <h2 className="font-serif text-2xl font-bold text-foreground">Tool Comparisons</h2>
+                <p className="text-xs text-muted-foreground font-sans">Understand the differences between similar writing tools</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {COMPARISON_ENTRIES.map(entry => (
+                <Link key={entry.slug} href={`/${entry.slug}`}>
+                  <div className="group p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
+                    <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors text-sm">{entry.title}</div>
+                    <div className="text-xs text-muted-foreground font-sans mt-1 line-clamp-2">{entry.intro}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           {/* Templates */}
           <section id="templates">
             <div className="flex items-center gap-3 mb-6">

@@ -1,4 +1,3 @@
-import { BLOG_POSTS } from '@/data/blog';
 import { TOOLS } from '@/data/tools';
 import { SITE_CONFIG } from '@/config/site';
 

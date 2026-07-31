@@ -9,9 +9,13 @@ import { SITE_CONFIG }    from './src/config/site.ts';
 import { LANGUAGES }      from './src/config/languages.ts';
 import {
   TOOL_SLUGS, WORDS_TO_PAGES_SLUGS, SPEECH_SLUGS, SOCIAL_SLUGS,
-  LANDING_SLUGS, COMPARISON_SLUGS, BLOG_SLUGS, GUIDE_SLUGS, STATIC_PATHS,
+  LANDING_SLUGS, COMPARISON_SLUGS, STATIC_PATHS,
 } from './src/config/routes.ts';
 import { BLOG_POSTS } from './src/data/blog.ts';
+import { GUIDES } from './src/data/guides.ts';
+
+const BLOG_SLUGS = BLOG_POSTS.map(p => p.slug);
+const GUIDE_SLUGS = GUIDES.map(g => g.slug);
 
 // ---------------------------------------------------------------------------
 // ✅ Environment Configuration - FIXED
@@ -267,6 +271,43 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, 'dist/public'),
     emptyOutDir: true,
+    modulePreload: {
+      resolveDependencies(filename, deps) {
+        // Only preload chunks that are critical for the initial homepage render.
+        // Defer NLP, export, and content-data chunks to on-demand loading.
+        const deferred = ['vendor-nlp', 'write-good', 'html2pdf', 'html-to-docx', 'content-blog', 'content-guides', 'content-seo', 'jszip', 'FileSaver'];
+        return deps.filter(dep => !deferred.some(d => dep.includes(d)));
+      }
+    },
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@tiptap') || id.includes('prosemirror')) {
+              return 'vendor-editor';
+            }
+            if (id.includes('compromise')) {
+              return 'vendor-nlp';
+            }
+            if (id.includes('lucide-react') || id.includes('@radix-ui') || id.includes('framer-motion') || id.includes('recharts')) {
+              return 'vendor-ui';
+            }
+            if (id.includes('react') || id.includes('wouter') || id.includes('@tanstack')) {
+              return 'vendor-core';
+            }
+          }
+          if (id.includes('/src/data/blog.ts')) {
+            return 'content-blog';
+          }
+          if (id.includes('/src/data/guides.ts')) {
+            return 'content-guides';
+          }
+          if (id.includes('/src/data/seoData.ts')) {
+            return 'content-seo';
+          }
+        },
+      },
+    },
   },
   server: {
     port,

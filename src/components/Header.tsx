@@ -17,6 +17,7 @@ const RESOURCES_LINKS = [
   { href: '/resources', label: '📋 Cheatsheets' },
   { href: '/guides', label: '📖 Guides' },
   { href: '/resources', label: '🧮 Calculators' },
+  { href: '/meta-description-generator', label: '🔍 Meta Description Generator' },
 ];
 
 function Dropdown({ label, children }: { label: string; children: React.ReactNode }) {

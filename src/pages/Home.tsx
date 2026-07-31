@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import MetaTags from '@/components/MetaTags';
 import Header from '@/components/Header';
 import Editor from '@/components/editor/Editor';
@@ -6,19 +7,27 @@ import ToolsSection from '@/components/ToolsSection';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import WritingStreak from '@/components/WritingStreak';
 import HeroSection from '@/components/sections/HeroSection';
-import SocialMediaLimits from '@/components/sections/SocialMediaLimits';
-import ToolCategories from '@/components/sections/ToolCategories';
-import FeaturedTools from '@/components/sections/FeaturedTools';
-import WhyCounter from '@/components/sections/WhyCounter';
-import BlogSection from '@/components/sections/BlogSection';
-// import Testimonials from '@/components/sections/Testimonials';
-import PeopleAlsoAsk from '@/components/sections/PeopleAlsoAsk';
-import WordCountConversions from '@/components/sections/WordCountConversions';
-import NewsletterSignup from '@/components/sections/NewsletterSignup';
-import FAQ from '@/components/sections/FAQ';
 import Footer from '@/components/Footer';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ErrorFallback from '@/components/ErrorFallback';
+
+// Lazy-load below-the-fold homepage sections to optimize initial load bundle size
+const SocialMediaLimits = lazy(() => import('@/components/sections/SocialMediaLimits'));
+const ToolCategories = lazy(() => import('@/components/sections/ToolCategories'));
+const FeaturedTools = lazy(() => import('@/components/sections/FeaturedTools'));
+const WhyCounter = lazy(() => import('@/components/sections/WhyCounter'));
+const BlogSection = lazy(() => import('@/components/sections/BlogSection'));
+const PeopleAlsoAsk = lazy(() => import('@/components/sections/PeopleAlsoAsk'));
+const WordCountConversions = lazy(() => import('@/components/sections/WordCountConversions'));
+const NewsletterSignup = lazy(() => import('@/components/sections/NewsletterSignup'));
+function SectionSkeleton({ minHeight }: { minHeight: string }) {
+  return (
+    <div className={`w-full ${minHeight} my-6 flex flex-col justify-center items-center p-8 bg-card/40 rounded-xl border border-border/30 animate-pulse`}>
+      <div className="h-6 w-48 bg-muted/30 rounded mb-4" />
+      <div className="h-4 w-72 bg-muted/20 rounded" />
+    </div>
+  );
+}
 
 export default function Home() {
   return (
@@ -75,37 +84,55 @@ export default function Home() {
         </div>
 
         {/* Social Media Limits */}
-        <SocialMediaLimits />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[380px]" />}>
+          <SocialMediaLimits />
+        </Suspense>
 
         {/* Tool Categories */}
         <div className="container mx-auto px-4 max-w-6xl">
-          <ToolCategories />
+          <Suspense fallback={<SectionSkeleton minHeight="min-h-[420px]" />}>
+            <ToolCategories />
+          </Suspense>
         </div>
 
         {/* Featured Tools */}
-        <FeaturedTools />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[480px]" />}>
+          <FeaturedTools />
+        </Suspense>
 
         {/* Why Counter */}
-        <WhyCounter />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[380px]" />}>
+          <WhyCounter />
+        </Suspense>
 
         {/* Blog */}
-        <BlogSection />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[440px]" />}>
+          <BlogSection />
+        </Suspense>
 
         {/* Testimonials */}
         {/* <Testimonials /> */}
 
         {/* People Also Ask */}
-        <PeopleAlsoAsk />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[400px]" />}>
+          <PeopleAlsoAsk />
+        </Suspense>
 
         {/* Word Count Conversions */}
-        <WordCountConversions />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[320px]" />}>
+          <WordCountConversions />
+        </Suspense>
 
         {/* Newsletter */}
-        <NewsletterSignup />
+        <Suspense fallback={<SectionSkeleton minHeight="min-h-[260px]" />}>
+          <NewsletterSignup />
+        </Suspense>
 
         {/* FAQ */}
         <div className="container mx-auto px-4 max-w-6xl">
-          <FAQ />
+          <Suspense fallback={<SectionSkeleton minHeight="min-h-[500px]" />}>
+            <FAQ />
+          </Suspense>
         </div>
       </main>
 

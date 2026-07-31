@@ -7,6 +7,7 @@ import Editor from '@/components/editor/Editor';
 import { StatsPanel } from '@/components/stats';
 import ToolsSection from '@/components/ToolsSection';
 import Footer from '@/components/Footer';
+import { WORDS_TO_PAGES, SPEECH_TIMES, SOCIAL_MEDIA_LIMITS } from '@/data/seoData';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -72,15 +73,9 @@ export default function ToolPage({ slug }: { slug: string }) {
     );
   }
 
-  const CONVERSIONS = [
-    { words: 100, pages: 0.2 },
-    { words: 500, pages: 1 },
-    { words: 1000, pages: 2 },
-    { words: 1500, pages: 3 },
-    { words: 2000, pages: 4 },
-    { words: 3000, pages: 6 },
-    { words: 5000, pages: 10 },
-  ];
+  // Show speech/social links only on relevant tool pages
+  const showSpeechLinks = slug === 'speaking-time-calculator' || slug === 'reading-time-calculator';
+  const showSocialLinks = slug === 'character-counter' || slug === 'letter-counter';
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -223,13 +218,13 @@ export default function ToolPage({ slug }: { slug: string }) {
             </div>
           </div>
 
-          {/* Popular conversions */}
+          {/* Popular conversions — all 13 */}
           <div className="mb-12">
             <h2 className="font-serif text-2xl font-bold text-foreground mb-4">
-              Popular Word Count Conversions
+              Word Count to Page Conversions
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {CONVERSIONS.map((c) => (
+              {WORDS_TO_PAGES.map((c) => (
                 <Link key={c.words} href={`/${c.words}-words-is-how-many-pages`}>
                   <div className="p-3 rounded-lg border border-border bg-card hover:border-primary/40 text-center text-sm font-sans hover:bg-muted/30 transition-all cursor-pointer">
                     <div className="font-mono font-bold text-foreground">
@@ -243,6 +238,44 @@ export default function ToolPage({ slug }: { slug: string }) {
               ))}
             </div>
           </div>
+
+          {/* Speech duration guides — shown on speaking/reading time tools */}
+          {showSpeechLinks && (
+            <div className="mb-12">
+              <h2 className="font-serif text-2xl font-bold text-foreground mb-4">
+                Speech Duration Guides
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {SPEECH_TIMES.map((s) => (
+                  <Link key={s.minutes} href={`/${s.minutes}-minute-speech-word-count`}>
+                    <div className="p-3 rounded-lg border border-border bg-card hover:border-primary/40 text-center text-sm font-sans hover:bg-muted/30 transition-all cursor-pointer">
+                      <div className="font-mono font-bold text-foreground">{s.minutes} min</div>
+                      <div className="text-muted-foreground text-xs">~{s.words.toLocaleString()} words</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Social media character limits — shown on character/letter counter */}
+          {showSocialLinks && (
+            <div className="mb-12">
+              <h2 className="font-serif text-2xl font-bold text-foreground mb-4">
+                Platform Character Limits
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {SOCIAL_MEDIA_LIMITS.map((l) => (
+                  <Link key={l.slug} href={`/${l.slug}`}>
+                    <div className="p-3 rounded-lg border border-border bg-card hover:border-primary/40 text-center text-sm font-sans hover:bg-muted/30 transition-all cursor-pointer">
+                      <div className="font-sans font-bold text-foreground text-sm">{l.platform}</div>
+                      <div className="text-muted-foreground text-xs font-mono">{l.limit.toLocaleString()} chars</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Related tools */}
           {relatedTools.length > 0 && (

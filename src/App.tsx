@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -20,51 +20,60 @@ import {
   COMPARISON_SLUGS,
 } from '@/config/routes';
 
-// Pages
+// Eagerly load Home for instant initial landing
 import Home from '@/pages/Home';
-import NotFound from '@/pages/not-found';
-import ToolsPage from '@/pages/ToolsPage';
-import ToolPage from '@/pages/ToolPage';
-import BlogPage from '@/pages/BlogPage';
-import BlogPostPage from '@/pages/BlogPostPage';
-import GuidesPage from '@/pages/GuidesPage';
-import GuideDetailPage from '@/pages/GuideDetailPage';
-import AboutPage from '@/pages/AboutPage';
-import ResourcesPage from '@/pages/ResourcesPage';
-import ContactPage from '@/pages/ContactPage';
-import PrivacyPage from '@/pages/PrivacyPage';
-import TermsPage from '@/pages/TermsPage';
-import WordsToPagesPage from '@/pages/WordsToPagesPage';
-import SpeechWordCountPage from '@/pages/SpeechWordCountPage';
-import SocialMediaLimitPage from '@/pages/SocialMediaLimitPage';
-import LandingPage from '@/pages/LandingPage';
-import ComparisonPage from '@/pages/ComparisonPage';
-import MetaDescriptionGeneratorPage from '@/pages/MetaDescriptionGeneratorPage';
+
+// Lazy-load all secondary pages to enable route-based code splitting
+const NotFound = lazy(() => import('@/pages/not-found'));
+const ToolsPage = lazy(() => import('@/pages/ToolsPage'));
+const ToolPage = lazy(() => import('@/pages/ToolPage'));
+const BlogPage = lazy(() => import('@/pages/BlogPage'));
+const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'));
+const GuidesPage = lazy(() => import('@/pages/GuidesPage'));
+const GuideDetailPage = lazy(() => import('@/pages/GuideDetailPage'));
+const AboutPage = lazy(() => import('@/pages/AboutPage'));
+const ResourcesPage = lazy(() => import('@/pages/ResourcesPage'));
+const ContactPage = lazy(() => import('@/pages/ContactPage'));
+const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'));
+const TermsPage = lazy(() => import('@/pages/TermsPage'));
+const WordsToPagesPage = lazy(() => import('@/pages/WordsToPagesPage'));
+const SpeechWordCountPage = lazy(() => import('@/pages/SpeechWordCountPage'));
+const SocialMediaLimitPage = lazy(() => import('@/pages/SocialMediaLimitPage'));
+const LandingPage = lazy(() => import('@/pages/LandingPage'));
+const ComparisonPage = lazy(() => import('@/pages/ComparisonPage'));
+const MetaDescriptionGeneratorPage = lazy(() => import('@/pages/MetaDescriptionGeneratorPage'));
 
 const queryClient = new QueryClient();
 
+const PageFallback = () => (
+  <div className="min-h-[60vh] flex items-center justify-center bg-background text-foreground">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+      <span className="text-xs font-sans text-muted-foreground">Loading page...</span>
+    </div>
+  </div>
+);
+
 /**
- * Wraps a component with an error boundary for graceful error handling.
- * @param Component The component to wrap
- * @returns A function that returns the wrapped component (suitable for wouter's component prop)
+ * Wraps a component with an error boundary and suspense for graceful loading.
  */
 const withErrorBoundary = (Component: React.ComponentType<any>) => {
-  return () => (
+  return (props: any) => (
     <ErrorBoundary fallback={({ error, resetError }) => <ErrorFallback
         error={error}
         resetError={resetError}
         title="Page Error"
         description="Something went wrong while loading this page. Please try going back to the homepage."
       />}>
-      <Component />
+      <Suspense fallback={<PageFallback />}>
+        <Component {...props} />
+      </Suspense>
     </ErrorBoundary>
   );
 };
 
 /**
- * Wraps a function component (that returns JSX) with an error boundary.
- * @param ComponentFn A function that returns JSX
- * @returns A function that returns the wrapped component (suitable for wouter's component prop)
+ * Wraps a function component with an error boundary and suspense.
  */
 const withErrorBoundaryFn = (ComponentFn: (props: any) => JSX.Element) => {
   return (props: any) => (
@@ -74,14 +83,14 @@ const withErrorBoundaryFn = (ComponentFn: (props: any) => JSX.Element) => {
         title="Page Error"
         description="Something went wrong while loading this page. Please try going back to the homepage."
       />}>
-      {ComponentFn(props)}
+      <Suspense fallback={<PageFallback />}>
+        {ComponentFn(props)}
+      </Suspense>
     </ErrorBoundary>
   );
 };
 
 // Pre-wrap page components at module level so their references are stable across renders.
-// Calling withErrorBoundary() inline in JSX creates a new component function every render,
-// which causes React to unmount/remount the entire subtree — losing textarea focus on mobile.
 const SafeHome = withErrorBoundary(Home);
 const SafeToolsPage = withErrorBoundary(ToolsPage);
 const SafeBlogPage = withErrorBoundary(BlogPage);

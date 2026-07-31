@@ -10,26 +10,40 @@ const FOOTER_LINKS = {
     { label: 'Reading Time', href: '/reading-time-calculator' },
     { label: 'All Tools →', href: '/tools' },
   ],
-  Content: [
+  'For Writers': [
+    { label: 'For Students', href: '/word-counter-for-students' },
+    { label: 'For Bloggers', href: '/word-counter-for-bloggers' },
+    { label: 'For SEO Pros', href: '/word-counter-for-seo' },
+    { label: 'For Academics', href: '/word-counter-for-academics' },
+    { label: 'For Professionals', href: '/word-counter-for-professionals' },
+    { label: 'All Audiences →', href: '/resources#audience' },
+  ],
+  'SEO & Converters': [
+    { label: '1,000 Words → Pages', href: '/1000-words-is-how-many-pages' },
+    { label: '5,000 Words → Pages', href: '/5000-words-is-how-many-pages' },
+    { label: '10-Minute Speech', href: '/10-minute-speech-word-count' },
+    { label: 'Twitter Char Limit', href: '/twitter-character-limit' },
+    { label: 'LinkedIn Char Limit', href: '/linkedin-character-limit' },
+    { label: 'Meta Description Limit', href: '/meta-description-limit' },
+  ],
+  'Compare & Learn': [
+    { label: 'Word vs Character Counter', href: '/word-counter-vs-character-counter' },
+    { label: 'Reading vs Speaking Time', href: '/reading-time-vs-speaking-time' },
+    { label: 'Meta Description Generator', href: '/meta-description-generator' },
+    { label: 'All Comparisons →', href: '/resources#comparisons' },
     { label: 'Blog', href: '/blog' },
     { label: 'Guides', href: '/guides' },
-    { label: 'Resources', href: '/resources' },
-    { label: 'Templates', href: '/resources' },
-    { label: 'Checklists', href: '/resources' },
   ],
-  'SEO Pages': [
-    { label: '1000 Words → Pages', href: '/1000-words-is-how-many-pages' },
-    { label: '5-Min Speech Words', href: '/5-minute-speech-word-count' },
-    { label: 'Twitter Char Limit', href: '/twitter-character-limit' },
-    { label: 'Meta Description Limit', href: '/meta-description-limit' },
-    { label: 'Instagram Char Limit', href: '/instagram-character-limit' },
+  Content: [
+    { label: 'Resources Hub', href: '/resources' },
+    { label: 'Templates', href: '/resources#templates' },
+    { label: 'Checklists', href: '/resources#checklists' },
   ],
   Company: [
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
     { label: 'Privacy Policy', href: '/privacy' },
     { label: 'Terms of Service', href: '/terms' },
-    { label: 'Resources', href: '/resources' },
   ],
 };
 

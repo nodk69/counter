@@ -6,9 +6,6 @@
  * so they can never drift out of sync.
  */
 
-import { BLOG_POSTS } from '../data/blog';
-import { GUIDES } from '../data/guides';
-
 /** 20 individual tool slugs (must match src/data/tools.ts) */
 export const TOOL_SLUGS = [
   'word-counter', 'character-counter', 'sentence-counter', 'paragraph-counter',
@@ -59,12 +56,6 @@ export const COMPARISON_SLUGS = [
   'flesch-score-vs-fk-grade',          'word-counter-vs-sentence-counter',
   'paragraph-counter-vs-line-counter',
 ] as const;
-
-/** Blog post slugs — derived from src/data/blog.ts */
-export const BLOG_SLUGS = BLOG_POSTS.map(p => p.slug);
-
-/** Guide slugs — derived from src/data/guides.ts */
-export const GUIDE_SLUGS = GUIDES.map(g => g.slug);
 
 /** Static page paths for sitemap and SEO */
 export const STATIC_PATHS = [

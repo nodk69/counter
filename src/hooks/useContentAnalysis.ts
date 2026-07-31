@@ -1,9 +1,6 @@
-import { useMemo } from 'react';
-import nlp from 'compromise';
-import writeGood from 'write-good';
-import readability from 'text-readability';
+import { useMemo, useState, useEffect } from 'react';
+import { getNlpLibs, loadNlpLibs } from '@/lib/nlp/nlpLoader';
 import readingTimeLib from 'reading-time';
-import Sentiment from 'sentiment';
 
 const PARAGRAPH_SPLIT_RE = /\n\s*\n+/;
 
@@ -226,94 +223,206 @@ function getWeaselWords(text: string): Array<{ reason: string }> {
   return suggestions;
 }
 
+function countSyllables(word: string): number {
+  word = word.toLowerCase().replace(/[^a-z]/g, '');
+  if (word.length <= 3) return 1;
+  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+  word = word.replace(/^y/, '');
+  const vowels = word.match(/[aeiouy]{1,2}/g);
+  return vowels ? vowels.length : 1;
+}
+
 export function useContentAnalysis(text: string, mode: WritingMode = 'general'): ContentAnalysis {
+  const [nlpLoaded, setNlpLoaded] = useState(false);
+
+  // Lazy-load NLP libs in background after first render
+  useEffect(() => {
+    const libs = getNlpLibs();
+    if (libs) {
+      setNlpLoaded(true);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      loadNlpLibs().then(() => {
+        setNlpLoaded(true);
+      });
+    }, 1500);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return useMemo(() => {
     const safeText = typeof text === 'string' ? text : '';
     const cfg = MODE_CONFIGS[mode];
-    const doc = nlp(safeText);
-    const sentenceObjects = doc.sentences().json() as SentenceObject[];
-    const rawTerms = doc.terms().out('array') as string[];
+    const nlpLibs = getNlpLibs();
+
+    // 1. Core parsing & count metrics (Always Synchronous & Eager)
+    const rawTerms = safeText
+      .split(/[\s,.;:!?()"[\]]+/)
+      .filter(Boolean);
     const normalizedTerms = rawTerms
       .map(term => term.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, ''))
       .filter(Boolean)
       .map(term => term.toLowerCase());
 
     const words = normalizedTerms.length;
-    const sentences = sentenceObjects.length;
     const paragraphs = Math.max(1, safeText.split(PARAGRAPH_SPLIT_RE).filter(part => part.trim()).length);
     const uniqueWords = new Set(normalizedTerms).size;
 
-    const sentenceWordCounts = sentenceObjects.map((sentence: SentenceObject) => {
-      const sentenceTerms = (sentence.terms ?? [])
-        .map((term: { text?: string }) => term.text ?? '')
-        .map((term: string) => term.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, ''))
-        .filter(Boolean);
-      return sentenceTerms.length;
-    });
+    // Split sentences using a basic regex fallback or compromise NLP
+    let sentences = 0;
+    let sentenceObjects: SentenceObject[] = [];
+    let sentenceWordCounts: number[] = [];
 
-    const passiveCount = sentenceObjects.filter((sentence: SentenceObject) => (sentence.terms ?? []).some((term: { tags?: string[] }) => term.tags?.includes('Passive'))).length;
+    if (nlpLibs) {
+      const doc = nlpLibs.nlp(safeText);
+      sentenceObjects = doc.sentences().json() as SentenceObject[];
+      sentences = sentenceObjects.length;
+      sentenceWordCounts = sentenceObjects.map((sentence: SentenceObject) => {
+        const sentenceTerms = (sentence.terms ?? [])
+          .map((term: { text?: string }) => term.text ?? '')
+          .map((term: string) => term.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, ''))
+          .filter(Boolean);
+        return sentenceTerms.length;
+      });
+    } else {
+      const splitSentences = safeText
+        .split(/[.!?]+(?:\s|$)/)
+        .map(s => s.trim())
+        .filter(Boolean);
+      sentences = Math.max(1, splitSentences.length);
+      sentenceObjects = splitSentences.map(text => ({ text }));
+      sentenceWordCounts = splitSentences.map(s => s.split(/\s+/).filter(Boolean).length);
+    }
+
     const shortSentences = sentenceWordCounts.filter((count: number) => count < 10).length;
     const mediumSentences = sentenceWordCounts.filter((count: number) => count >= 10 && count <= 20).length;
     const longSentences = sentenceWordCounts.filter((count: number) => count > 20).length;
     const avgSentenceWords = sentences > 0 ? safeDiv(words, sentences) : 0;
 
-    const readabilityMetrics = {
-      fleschReadingEase: readability.fleschReadingEase(safeText),
-      fleschKincaidGrade: readability.fleschKincaidGrade(safeText),
-      gunningFog: readability.gunningFog(safeText),
-      smogIndex: readability.smogIndex(safeText),
-      colemanLiauIndex: readability.colemanLiauIndex(safeText),
-      automatedReadabilityIndex: readability.automatedReadabilityIndex(safeText),
-      consensusGrade: readability.textStandard(safeText, true) as number,
-    };
-
     const readTimeResult = readingTimeLib(safeText);
     const readingMinutes = readTimeResult.minutes;
     const speakingTime = safeDiv(words, 130);
 
-    const sentimentAnalyzer = new Sentiment();
-    const sentimentResult = sentimentAnalyzer.analyze(safeText);
-    const sentimentScore = sentimentResult.score;
-    const sentimentComparative = sentimentResult.comparative;
-    const sentimentLabel = sentimentScore > 0 ? 'Positive' : sentimentScore < 0 ? 'Negative' : 'Neutral';
-
-    const writeGoodResults = [
-      ...writeGood(safeText, { weasel: false, passive: false }),
-      ...getWeaselWords(safeText)
-    ] as Array<{ reason?: string }>;
-    const weaselHits = new Map<string, number>();
-    const adverbHits = new Map<string, number>();
-    const wordyHits = new Map<string, number>();
-    const clicheHits = new Map<string, number>();
-    const weakOpenerHits = new Map<string, number>();
-
-    for (const issue of writeGoodResults) {
-      const reason = typeof issue.reason === 'string' ? issue.reason.toLowerCase() : '';
-      const match = reason.match(/"([^"]+)"/);
-      const keyword = match?.[1]?.toLowerCase() ?? '';
-      if (!keyword) continue;
-      if (reason.includes('weasel') || reason.includes('weaken')) {
-        weaselHits.set(keyword, (weaselHits.get(keyword) || 0) + 1);
-      }
-      if (reason.includes('adverb') || reason.includes('ly')) {
-        adverbHits.set(keyword, (adverbHits.get(keyword) || 0) + 1);
-      }
-      if (reason.includes('wordy') || reason.includes('unneeded')) {
-        wordyHits.set(keyword, (wordyHits.get(keyword) || 0) + 1);
-      }
-      if (reason.includes('cliche') || reason.includes('overused')) {
-        clicheHits.set(keyword, (clicheHits.get(keyword) || 0) + 1);
-      }
-      if (reason.includes('opening') || reason.includes('weak')) {
-        weakOpenerHits.set(keyword, (weakOpenerHits.get(keyword) || 0) + 1);
-      }
+    // 2. Readability Metrics (Calculated via nlpLibs or simple syllables fallback)
+    let readabilityMetrics;
+    if (nlpLibs) {
+      readabilityMetrics = {
+        fleschReadingEase: nlpLibs.readability.fleschReadingEase(safeText),
+        fleschKincaidGrade: nlpLibs.readability.fleschKincaidGrade(safeText),
+        gunningFog: nlpLibs.readability.gunningFog(safeText),
+        smogIndex: nlpLibs.readability.smogIndex(safeText),
+        colemanLiauIndex: nlpLibs.readability.colemanLiauIndex(safeText),
+        automatedReadabilityIndex: nlpLibs.readability.automatedReadabilityIndex(safeText),
+        consensusGrade: nlpLibs.readability.textStandard(safeText, true) as number,
+      };
+    } else {
+      // Direct high-fidelity fallback using syllable counting formula
+      const syllables = normalizedTerms.reduce((sum, word) => sum + countSyllables(word), 0);
+      const fre = sentences > 0 && words > 0
+        ? clamp(206.835 - 1.015 * (words / sentences) - 84.6 * (syllables / words), 0, 100)
+        : 100;
+      const fkg = sentences > 0 && words > 0
+        ? clamp(0.39 * (words / sentences) + 11.8 * (syllables / words) - 15.59, 0, 20)
+        : 0;
+      readabilityMetrics = {
+        fleschReadingEase: fre,
+        fleschKincaidGrade: fkg,
+        gunningFog: fkg + 1,
+        smogIndex: fkg,
+        colemanLiauIndex: fkg,
+        automatedReadabilityIndex: fkg,
+        consensusGrade: Math.round(fkg),
+      };
     }
 
-    const weaselWords = toSortedResults(weaselHits);
-    const adverbWordHits = toSortedResults(adverbHits);
-    const wordyPhrases = toSortedResults(wordyHits);
-    const cliches = toSortedResults(clicheHits);
-    const weakOpeners = toSortedResults(weakOpenerHits);
+    // 3. NLP Metrics & Checks (Asynchronous)
+    let passiveCount = 0;
+    let sentimentScore = 0;
+    let sentimentComparative = 0;
+    let sentimentLabel = 'Neutral';
+    let weaselWords: WordCountResult[] = [];
+    let adverbWordHits: WordCountResult[] = [];
+    let wordyPhrases: WordCountResult[] = [];
+    let cliches: WordCountResult[] = [];
+    let weakOpeners: WordCountResult[] = [];
+    let posBreakdown = { nouns: 0, verbs: 0, adjectives: 0, adverbs: 0, pronouns: 0 };
+    let properNounDensity = 0;
+    let firstPersonRatio = 0;
+    let secondPersonRatio = 0;
+
+    if (nlpLibs) {
+      const doc = nlpLibs.nlp(safeText);
+      passiveCount = sentenceObjects.filter((sentence: SentenceObject) => (sentence.terms ?? []).some((term: { tags?: string[] }) => term.tags?.includes('Passive'))).length;
+
+      const sentimentAnalyzer = new nlpLibs.sentiment();
+      const sentimentResult = sentimentAnalyzer.analyze(safeText);
+      sentimentScore = sentimentResult.score;
+      sentimentComparative = sentimentResult.comparative;
+      sentimentLabel = sentimentScore > 0 ? 'Positive' : sentimentScore < 0 ? 'Negative' : 'Neutral';
+
+      const writeGoodResults = [
+        ...nlpLibs.writeGood(safeText, { weasel: false, passive: false }),
+        ...getWeaselWords(safeText)
+      ] as Array<{ reason?: string }>;
+
+      const weaselHits = new Map<string, number>();
+      const adverbHits = new Map<string, number>();
+      const wordyHits = new Map<string, number>();
+      const clicheHits = new Map<string, number>();
+      const weakOpenerHits = new Map<string, number>();
+
+      for (const issue of writeGoodResults) {
+        const reason = typeof issue.reason === 'string' ? issue.reason.toLowerCase() : '';
+        const match = reason.match(/"([^"]+)"/);
+        const keyword = match?.[1]?.toLowerCase() ?? '';
+        if (!keyword) continue;
+        if (reason.includes('weasel') || reason.includes('weaken')) {
+          weaselHits.set(keyword, (weaselHits.get(keyword) || 0) + 1);
+        }
+        if (reason.includes('adverb') || reason.includes('ly')) {
+          adverbHits.set(keyword, (adverbHits.get(keyword) || 0) + 1);
+        }
+        if (reason.includes('wordy') || reason.includes('unneeded')) {
+          wordyHits.set(keyword, (wordyHits.get(keyword) || 0) + 1);
+        }
+        if (reason.includes('cliche') || reason.includes('overused')) {
+          clicheHits.set(keyword, (clicheHits.get(keyword) || 0) + 1);
+        }
+        if (reason.includes('opening') || reason.includes('weak')) {
+          weakOpenerHits.set(keyword, (weakOpenerHits.get(keyword) || 0) + 1);
+        }
+      }
+
+      weaselWords = toSortedResults(weaselHits);
+      adverbWordHits = toSortedResults(adverbHits);
+      wordyPhrases = toSortedResults(wordyHits);
+      cliches = toSortedResults(clicheHits);
+      weakOpeners = toSortedResults(weakOpenerHits);
+
+      posBreakdown = {
+        nouns: doc.nouns().out('array').length,
+        verbs: doc.verbs().out('array').length,
+        adjectives: doc.adjectives().out('array').length,
+        adverbs: doc.adverbs().out('array').length,
+        pronouns: doc.pronouns().out('array').length,
+      };
+
+      const properNounTerms = [
+        ...doc.people().out('array'),
+        ...doc.places().out('array'),
+        ...doc.organizations().out('array'),
+      ];
+      properNounDensity = words > 0 ? safeDiv(properNounTerms.length, words) * 100 : 0;
+
+      const pronounsArr = doc.pronouns().out('array') as string[];
+      const firstPersonPronouns = pronounsArr.filter((term: string) => ['i','we','my','our','me','us','mine','ours'].includes(term.toLowerCase()));
+      const secondPersonPronouns = pronounsArr.filter((term: string) => ['you','your','yours','yourself','yourselves'].includes(term.toLowerCase()));
+      firstPersonRatio = safeDiv(firstPersonPronouns.length, Math.max(1, pronounsArr.length)) * 100;
+      secondPersonRatio = safeDiv(secondPersonPronouns.length, Math.max(1, pronounsArr.length)) * 100;
+    }
+
     const weaselDensity = safeDiv(weaselWords.reduce((sum, item) => sum + item.count, 0), words) * 100;
     const adverbDensity = safeDiv(adverbWordHits.reduce((sum, item) => sum + item.count, 0), words) * 100;
 
@@ -327,29 +436,8 @@ export function useContentAnalysis(text: string, mode: WritingMode = 'general'):
     const ttr = words > 0 ? clamp(uniqueWords / words, 0, 1) : 0;
     const ttrLabel = ttrToLabel(ttr);
 
-    const posBreakdown = {
-      nouns: doc.nouns().out('array').length,
-      verbs: doc.verbs().out('array').length,
-      adjectives: doc.adjectives().out('array').length,
-      adverbs: doc.adverbs().out('array').length,
-      pronouns: doc.pronouns().out('array').length,
-    };
-
-    const properNounTerms = [
-      ...doc.people().out('array'),
-      ...doc.places().out('array'),
-      ...doc.organizations().out('array'),
-    ];
-    const properNounDensity = words > 0 ? safeDiv(properNounTerms.length, words) * 100 : 0;
-
     const questionCount = sentenceObjects.filter((sentence: SentenceObject) => /[?]$/.test((sentence.text ?? '').trim())).length;
     const exclamationCount = sentenceObjects.filter((sentence: SentenceObject) => /[!]$/.test((sentence.text ?? '').trim())).length;
-
-    const pronouns = doc.pronouns().out('array') as string[];
-    const firstPersonPronouns = pronouns.filter((term: string) => ['i','we','my','our','me','us','mine','ours'].includes(term.toLowerCase()));
-    const secondPersonPronouns = pronouns.filter((term: string) => ['you','your','yours','yourself','yourselves'].includes(term.toLowerCase()));
-    const firstPersonRatio = safeDiv(firstPersonPronouns.length, Math.max(1, pronouns.length)) * 100;
-    const secondPersonRatio = safeDiv(secondPersonPronouns.length, Math.max(1, pronouns.length)) * 100;
 
     const sentenceVarietyScoreValue = clamp(100 - getStdDev(sentenceWordCounts) * 10, 0, 100);
     const sentenceVarietyLabel = sentenceVarietyToLabel(sentenceVarietyScoreValue);
@@ -503,5 +591,5 @@ export function useContentAnalysis(text: string, mode: WritingMode = 'general'):
       audienceLabel: audience.label,
       audienceNote: audience.note,
     };
-  }, [text, mode]);
+  }, [text, mode, nlpLoaded]);
 }
