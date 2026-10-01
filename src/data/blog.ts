@@ -52,7 +52,16 @@ export const BLOG_POSTS: BlogPost[] = [
     readTime: 8,
     category: 'SEO',
     tags: ['SEO', 'Content Writing', 'Keyword Research'],
-    featured: true,
+    featured: true,    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating how to write seo content that ranks concepts and benchmarks',
+        fileName: 'how-to-write-seo-content-that-ranks-hero.svg',
+        altText: 'how to write seo content that ranks editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how to write seo content that ranks.'
+      }
+    ],
+
     content: `
 ## What Makes Content Rank in 2026?
 
@@ -95,7 +104,16 @@ SEO content success in 2026 comes down to serving the reader first, then the alg
     date: 'June 25, 2026',
     readTime: 6,
     category: 'Writing',
-    tags: ['Grammar', 'Writing Tips', 'Editing'],
+    tags: ['Grammar', 'Writing Tips', 'Editing'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating 10 common grammar mistakes concepts and benchmarks',
+        fileName: '10-common-grammar-mistakes-hero.svg',
+        altText: '10 common grammar mistakes editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for 10 common grammar mistakes.'
+      }
+    ],
+
     content: `
 ## The Grammar Mistakes That Undermine Your Credibility
 
@@ -141,7 +159,16 @@ Long sentences aren't wrong — unconnected clauses are. Use punctuation correct
     date: 'June 18, 2026',
     readTime: 7,
     category: 'Writing',
-    tags: ['Readability', 'Cognitive Science', 'Writing Psychology'],
+    tags: ['Readability', 'Cognitive Science', 'Writing Psychology'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating the science of readability concepts and benchmarks',
+        fileName: 'the-science-of-readability-hero.svg',
+        altText: 'the science of readability editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for the science of readability.'
+      }
+    ],
+
     content: `
 ## Why Your Brain Loves (or Hates) Certain Writing
 
@@ -177,7 +204,16 @@ The best writers aren't just creative — they're cognitively considerate. Write
     date: 'June 10, 2026',
     readTime: 5,
     category: 'SEO',
-    tags: ['Keyword Density', 'SEO', 'Content Optimization'],
+    tags: ['Keyword Density', 'SEO', 'Content Optimization'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating keyword density guide concepts and benchmarks',
+        fileName: 'keyword-density-guide-hero.svg',
+        altText: 'keyword density guide editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for keyword density guide.'
+      }
+    ],
+
     content: `
 ## Keyword Density: Still Relevant in 2026?
 
@@ -218,7 +254,16 @@ Use our [Keyword Density Checker](/keyword-density-checker) to analyze your text
     date: 'May 30, 2026',
     readTime: 6,
     category: 'Productivity',
-    tags: ['Writing Goals', 'Productivity', 'Writing Habits'],
+    tags: ['Writing Goals', 'Productivity', 'Writing Habits'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating writing goals productivity concepts and benchmarks',
+        fileName: 'writing-goals-productivity-hero.svg',
+        altText: 'writing goals productivity editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for writing goals productivity.'
+      }
+    ],
+
     content: `
 ## The Power of a Writing Goal
 
@@ -256,7 +301,16 @@ All three have their place. Word count limits prevent the "editing vortex" that 
     date: 'May 22, 2026',
     readTime: 5,
     category: 'Blogging',
-    tags: ['Blog Posts', 'Content Length', 'SEO', 'Writing'],
+    tags: ['Blog Posts', 'Content Length', 'SEO', 'Writing'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating perfect blog post length concepts and benchmarks',
+        fileName: 'perfect-blog-post-length-hero.svg',
+        altText: 'perfect blog post length editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for perfect blog post length.'
+      }
+    ],
+
     content: `
 ## The Data on Blog Post Length
 
@@ -293,7 +347,16 @@ Breaking news, opinion pieces, and highly niche content can rank with under 500 
     date: 'May 15, 2026',
     readTime: 4,
     category: 'Social Media',
-    tags: ['Character Limits', 'Social Media', 'Twitter', 'Instagram'],
+    tags: ['Character Limits', 'Social Media', 'Twitter', 'Instagram'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating social media character limits guide concepts and benchmarks',
+        fileName: 'social-media-character-limits-guide-hero.svg',
+        altText: 'social media character limits guide editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for social media character limits guide.'
+      }
+    ],
+
     content: `
 ## Social Media Character Limits: The 2026 Guide
 
@@ -333,7 +396,16 @@ Use our [Character Counter](/character-counter) to check your text against these
     date: 'May 8, 2026',
     readTime: 6,
     category: 'Writing',
-    tags: ['Readability', 'Flesch-Kincaid', 'Writing Grade Level'],
+    tags: ['Readability', 'Flesch-Kincaid', 'Writing Grade Level'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating flesch kincaid explained concepts and benchmarks',
+        fileName: 'flesch-kincaid-explained-hero.svg',
+        altText: 'flesch kincaid explained editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for flesch kincaid explained.'
+      }
+    ],
+
     content: `
 ## The Flesch-Kincaid Formula: 70 Years and Still Relevant
 
@@ -378,7 +450,16 @@ Check your score instantly with our [Readability Checker](/readability-checker).
     date: 'April 28, 2026',
     readTime: 4,
     category: 'Tools',
-    tags: ['Auto-Save', 'Writing Tools', 'Productivity'],
+    tags: ['Auto-Save', 'Writing Tools', 'Productivity'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating auto save writing workflow concepts and benchmarks',
+        fileName: 'auto-save-writing-workflow-hero.svg',
+        altText: 'auto save writing workflow editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for auto save writing workflow.'
+      }
+    ],
+
     content: `
 ## The Terror of "Did I Save That?"
 
@@ -419,7 +500,16 @@ Start writing at [counter](/word-counter) and never lose a word again.
     date: 'April 20, 2026',
     readTime: 5,
     category: 'Writing',
-    tags: ['Web Writing', 'Print Writing', 'Content Strategy'],
+    tags: ['Web Writing', 'Print Writing', 'Content Strategy'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating writing for web vs print concepts and benchmarks',
+        fileName: 'writing-for-web-vs-print-hero.svg',
+        altText: 'writing for web vs print editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for writing for web vs print.'
+      }
+    ],
+
     content: `
 ## Two Mediums, Two Different Rules
 
@@ -460,7 +550,16 @@ Track your web writing metrics with our [Word Counter](/word-counter) and [Reada
     date: 'April 12, 2026',
     readTime: 5,
     category: 'Writing',
-    tags: ['Word Count', 'Writing Formats', 'Content Strategy'],
+    tags: ['Word Count', 'Writing Formats', 'Content Strategy'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating word count for every format concepts and benchmarks',
+        fileName: 'word-count-for-every-format-hero.svg',
+        altText: 'word count for every format editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for word count for every format.'
+      }
+    ],
+
     content: `
 ## Word Count Reference: Every Format Covered
 
@@ -520,7 +619,16 @@ Use our [Word Counter](/word-counter) to track your progress against any of thes
         question: 'How do ATS scanners evaluate resume length?',
         answer: 'ATS scanners do not penalize length directly, but they rank resumes based on keyword density and search query relevance. Denser, well-focused resumes naturally score higher than wordy ones.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating ideal word count resume 2026 concepts and benchmarks',
+        fileName: 'ideal-word-count-resume-2026-hero.svg',
+        altText: 'ideal word count resume 2026 editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for ideal word count resume 2026.'
+      }
     ],
+
     content: `
 ## Why Resume Word Count Matters More Than Ever
 
@@ -593,7 +701,16 @@ A premium resume balances completeness with brevity. Keep your word count under 
         question: 'Does Google Docs word count count words in footnotes?',
         answer: 'No, Google Docs excludes footnotes, headers, and footers from the main document count. If you need a complete audit, copy all text into counter.io.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating how to count words in google docs concepts and benchmarks',
+        fileName: 'how-to-count-words-in-google-docs-hero.svg',
+        altText: 'how to count words in google docs editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how to count words in google docs.'
+      }
     ],
+
     content: `
 ## Tracking Word Limits in Google Docs
 
@@ -664,7 +781,16 @@ For a professional edit, copy and paste your document directly into our [Word Co
         question: 'Does sentence length affect the readability score?',
         answer: 'Yes, sentence length is one of the two primary variables in the formula. Shortening your sentences is the fastest way to raise your score.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating what is good flesch reading ease score concepts and benchmarks',
+        fileName: 'what-is-good-flesch-reading-ease-score-hero.svg',
+        altText: 'what is good flesch reading ease score editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for what is good flesch reading ease score.'
+      }
     ],
+
     content: `
 ## Demystifying Readability Scores
 
@@ -739,7 +865,16 @@ Aim for a Flesch Reading Ease score of 60-70 for general content marketing. Simp
         question: 'How does word count relate to backlinks?',
         answer: 'Data shows that longer posts (2,000+ words) tend to receive 77% more backlinks than short posts, as they serve as high-authority reference resources.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating ideal blog post length seo concepts and benchmarks',
+        fileName: 'ideal-blog-post-length-seo-hero.svg',
+        altText: 'ideal blog post length seo editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for ideal blog post length seo.'
+      }
     ],
+
     content: `
 ## How Word Count Impacts Google Rankings
 
@@ -813,7 +948,16 @@ Make intent matching your primary focus, then adjust your word count to match. U
         question: 'How do you create clean line breaks in Instagram captions?',
         answer: 'Use a standard text editor to draft your post with clean line returns, or use counter.io to count characters and format spacing before publishing to avoid layout wrapping issues.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating instagram caption length guide concepts and benchmarks',
+        fileName: 'instagram-caption-length-guide-hero.svg',
+        altText: 'instagram caption length guide editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for instagram caption length guide.'
+      }
     ],
+
     content: `
 ## Crafting Captions for the Instagram Feed
 
@@ -883,7 +1027,16 @@ Vary your caption lengths based on your goal: use short captions for high-energy
         question: 'When should I keep passive voice?',
         answer: 'Keep passive voice when the actor is unknown, when the object of action is the main focus (e.g., "The cure was discovered"), or in formal scientific methods.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating how to reduce passive voice writing concepts and benchmarks',
+        fileName: 'how-to-reduce-passive-voice-writing-hero.svg',
+        altText: 'how to reduce passive voice writing editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how to reduce passive voice writing.'
+      }
     ],
+
     content: `
 ## Active vs. Passive Voice
 
@@ -961,7 +1114,16 @@ Aim for less than 10% passive voice in your final draft. Check your work, look f
         question: 'Which tool is better for SEO writing?',
         answer: 'counter.io is optimized for SEO content creation as it provides real-time keyword density, readability analyses, and character limits that Google Docs lacks.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating counter io vs google docs word count concepts and benchmarks',
+        fileName: 'counter-io-vs-google-docs-word-count-hero.svg',
+        altText: 'counter io vs google docs word count editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for counter io vs google docs word count.'
+      }
     ],
+
     content: `
 ## Resolving the Word Count Discrepancy
 
@@ -1033,7 +1195,16 @@ Use Google Docs for document formatting and editing, but run your final optimiza
         question: 'Should I write out my speech word-for-word?',
         answer: 'While writing a full draft helps organize thoughts, using bulleted notes prevents you from reading off the page, leading to a more natural delivery.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating how many words is 5 minute speech concepts and benchmarks',
+        fileName: 'how-many-words-is-5-minute-speech-hero.svg',
+        altText: 'how many words is 5 minute speech editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how many words is 5 minute speech.'
+      }
     ],
+
     content: `
 ## Preparing a Speech Word Count
 
@@ -1095,7 +1266,16 @@ Aim for 700 words for a 5-minute speech. Write clearly, test your draft aloud, a
         question: 'Should I edit my draft during NaNoWriMo?',
         answer: 'No. Editing kills creative momentum. The goal of NaNoWriMo is to get the raw story down on the page; you can refine and correct grammar in December.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating nanowrimo word count strategy concepts and benchmarks',
+        fileName: 'nanowrimo-word-count-strategy-hero.svg',
+        altText: 'nanowrimo word count strategy editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for nanowrimo word count strategy.'
+      }
     ],
+
     content: `
 ## Tackling the 50,000-Word Challenge
 
@@ -1158,7 +1338,16 @@ Hit 1,667 words a day, silence your inner critic, and build a consistent routine
         question: 'Does the title page count toward the word count?',
         answer: 'Usually no. Academic instructions generally count only the body paragraphs, starting from the introduction to the conclusion.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating word count rules college essays concepts and benchmarks',
+        fileName: 'word-count-rules-college-essays-hero.svg',
+        altText: 'word count rules college essays editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for word count rules college essays.'
+      }
     ],
+
     content: `
 ## Structuring Academic Essays
 
@@ -1223,7 +1412,16 @@ Allocate your paragraphs systematically, track citation inclusions, and edit fil
         question: 'Does the algorithm favor long posts over short posts?',
         answer: 'The algorithm prioritizes "dwell time" (how long users spend looking at your post). Well-written, long posts naturally capture more dwell time, leading to wider reach.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating linkedin post length guide concepts and benchmarks',
+        fileName: 'linkedin-post-length-guide-hero.svg',
+        altText: 'linkedin post length guide editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for linkedin post length guide.'
+      }
     ],
+
     content: `
 ## Maximizing Professional Visibility
 
@@ -1287,7 +1485,16 @@ Aim for 1,200 characters for high-value stories. Format with clean line breaks, 
         question: 'Does Microsoft Word analyze passive voice?',
         answer: 'Yes, it provides a passive sentence percentage metric. However, it does not highlight specific passive phrases as clearly as dedicated online tools.'
       }
+    ],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating how to check readability score word concepts and benchmarks',
+        fileName: 'how-to-check-readability-score-word-hero.svg',
+        altText: 'how to check readability score word editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how to check readability score word.'
+      }
     ],
+
     content: `
 ## Setting Up Readability in MS Word
 
@@ -1341,7 +1548,16 @@ Enable Word's built-in options to run final checks, but use counter.io for real-
     date: 'April 5, 2026',
     readTime: 4,
     category: 'Writing',
-    tags: ['Grammar', 'Passive Voice', 'Writing Style'],
+    tags: ['Grammar', 'Passive Voice', 'Writing Style'],    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern visual header illustration illustrating passive voice guide concepts and benchmarks',
+        fileName: 'passive-voice-guide-hero.svg',
+        altText: 'passive voice guide editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for passive voice guide.'
+      }
+    ],
+
     content: `
 ## Passive Voice: The Nuanced Truth
  
@@ -1409,20 +1625,16 @@ Check your writing's readability (passive voice affects it) with our [Readabilit
         answer: 'Podcasts typically range from 140 to 160 WPM to maintain casual conversational energy. Audiobooks, by contrast, are narrated at a measured 150 to 160 WPM with clear diction for long listening sessions.'
       }
     ],
-    images: [
+        images: [
       {
         position: 'Top / Hero Header',
-        brief: 'Modern minimalist illustration showing a speaker with audio waveforms and pacing speedometers indicating words per minute tiers.',
-        fileName: 'words-per-minute-speaking-pacing-hero.webp',
-        altText: 'Words per minute speaking speed tiers chart showing average speech pacing ranges',
-        caption: 'Matching your words per minute speaking speed to your venue and audience.'
+        brief: 'Modern visual header illustration illustrating how many words per minute do people speak concepts and benchmarks',
+        fileName: 'how-many-words-per-minute-do-people-speak-hero.svg',
+        altText: 'how many words per minute do people speak editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how many words per minute do people speak.'
       }
     ],
-    relatedSlugs: [
-      'how-many-words-is-5-minute-speech',
-      'word-count-for-every-format',
-      'the-science-of-readability'
-    ],
+
     content: `## Why Speaking Rate Dictates Audience Retention
 
 Public speaking is a battle for attention. Whether you are delivering a keynote, pitching investors, or recording a video, **your words per minute speaking rate** directly controls how well your audience absorbs and remembers your message.
@@ -1536,20 +1748,16 @@ Take the guesswork out of presentation timing. Paste your draft into the [Speaki
         answer: 'Yes. Dense technical prose, unfamiliar vocabulary, and low readability scores reduce reading speeds from 250 WPM down to 100-150 WPM due to frequent re-reading.'
       }
     ],
-    images: [
+        images: [
       {
         position: 'Top / Hero Header',
-        brief: 'Clean editorial chart comparing silent reading speed versus aloud speaking time for 1000 words.',
-        fileName: 'how-long-to-read-1000-words-time-chart.webp',
-        altText: 'Reading time chart comparing silent reading and spoken speed for 1000 words',
-        caption: 'Silent reading speed (4-5 minutes) compared to aloud speaking time (7-8 minutes).'
+        brief: 'Modern visual header illustration illustrating how long does it take to read 1000 words concepts and benchmarks',
+        fileName: 'how-long-does-it-take-to-read-1000-words-hero.svg',
+        altText: 'how long does it take to read 1000 words editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for how long does it take to read 1000 words.'
       }
     ],
-    relatedSlugs: [
-      'the-science-of-readability',
-      'word-count-for-every-format',
-      'flesch-kincaid-explained'
-    ],
+
     content: `## The Quick Answer: How Long to Read 1,000 Words?
 
 For the average adult reader, **it takes between 4 and 5 minutes to read 1,000 words silently**.
@@ -1647,20 +1855,16 @@ Writing a blog post, essay, or presentation? Paste your text into the [Reading T
         answer: 'Keyword density measures the raw percentage of a specific keyword, while TF-IDF (Term Frequency-Inverse Document Frequency) measures how statistically important related topical terms are across high-ranking pages.'
       }
     ],
-    images: [
+        images: [
       {
         position: 'Top / Hero Header',
-        brief: 'Vector diagram showing the keyword density sweet spot gauge with safe green zone between 1% and 2%.',
-        fileName: 'keyword-density-2026-seo-sweet-spot.webp',
-        altText: 'Keyword density sweet spot chart showing 1-2% safe target zone',
-        caption: 'The keyword density sweet spot: keeping primary terms between 1% and 2% while expanding semantic coverage.'
+        brief: 'Modern visual header illustration illustrating keyword density in 2026 seo guide concepts and benchmarks',
+        fileName: 'keyword-density-in-2026-seo-guide-hero.svg',
+        altText: 'keyword density in 2026 seo guide editorial benchmark guide illustration',
+        caption: 'Visual overview and core metrics for keyword density in 2026 seo guide.'
       }
     ],
-    relatedSlugs: [
-      'how-to-write-seo-content-that-ranks',
-      'ideal-blog-post-length-seo',
-      'keyword-density-guide'
-    ],
+
     content: `## Does Keyword Density Still Matter for SEO in 2026?
 
 With Google's transition to AI-driven search models like MUM and Gemini, many writers ask: **does keyword density still matter for SEO in 2026?**
