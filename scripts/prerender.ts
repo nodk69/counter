@@ -254,40 +254,54 @@ async function run() {
       const slug = routePath.replace('/blog/', '');
       const post = BLOG_POSTS.find(p => p.slug === slug);
       if (post) {
+        const schemas: object[] = [
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            author: { '@type': 'Person', name: post.author },
+            publisher: {
+              '@type': 'Organization',
+              name: SITE_NAME,
+              logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` }
+            },
+            datePublished: new Date(post.date).toISOString(),
+            dateModified: new Date(post.date).toISOString(),
+            url: canonicalUrl,
+            mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+            description: post.metaDescription || post.excerpt,
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+              { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+              { '@type': 'ListItem', position: 3, name: post.title, item: canonicalUrl },
+            ]
+          }
+        ];
+
+        if (post.faq && post.faq.length > 0) {
+          schemas.push({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: post.faq.map(f => ({
+              '@type': 'Question',
+              name: f.question,
+              acceptedAnswer: { '@type': 'Answer', text: f.answer },
+            })),
+          });
+        }
+
         pageMeta = {
-          title: post.title,
-          description: post.excerpt,
+          title: post.titleTag || post.title,
+          description: post.metaDescription || post.excerpt,
           url: canonicalUrl,
           type: 'article',
           publishedTime: new Date(post.date).toISOString(),
           author: post.author,
-          schemas: [
-            {
-              '@context': 'https://schema.org',
-              '@type': 'Article',
-              headline: post.title,
-              author: { '@type': 'Person', name: post.author },
-              publisher: {
-                '@type': 'Organization',
-                name: SITE_NAME,
-                logo: { '@type': 'ImageObject', url: `${SITE_URL}/favicon.svg` }
-              },
-              datePublished: new Date(post.date).toISOString(),
-              dateModified: new Date(post.date).toISOString(),
-              url: canonicalUrl,
-              mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
-              description: post.excerpt,
-            },
-            {
-              '@context': 'https://schema.org',
-              '@type': 'BreadcrumbList',
-              itemListElement: [
-                { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-                { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
-                { '@type': 'ListItem', position: 3, name: post.title, item: canonicalUrl },
-              ]
-            }
-          ]
+          schemas,
         };
       }
     }

@@ -1176,7 +1176,7 @@ For a standard 5-paragraph or longer college essay, divide your word count using
 - **Body Paragraphs (70% - 80%)**: Build out your arguments, cite evidence, and evaluate references.
 - **Conclusion (10% - 15%)**: Summarize key findings, restate thesis values, and provide a final takeaway.
 
-To track page conversions as you write, check our [Page Counter](/page-counter) or look at specific metrics on our [Sentence Counter](/sentence-counter).
+To track page conversions as you write, check our [Words to Pages](/words-to-pages) or look at specific metrics on our [Sentence Counter](/sentence-counter).
 
 ### Citation Inclusions: APA vs. MLA Guidelines
 
