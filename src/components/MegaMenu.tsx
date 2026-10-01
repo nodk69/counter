@@ -57,6 +57,14 @@ export interface MegaMenuProps {
   getIconForSlug?: (slug: string) => LucideIcon;
 }
 
+// Static Tailwind grid classes lookup to guarantee JIT compilation
+const GRID_COLS_MAP: Record<number, string> = {
+  1: 'lg:grid-cols-1',
+  2: 'lg:grid-cols-2',
+  3: 'lg:grid-cols-3',
+  4: 'lg:grid-cols-4',
+};
+
 export const MegaMenu: React.FC<MegaMenuProps> = ({
   id,
   isOpen,
@@ -72,6 +80,8 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
   const panelRef = useRef<HTMLDivElement>(null);
 
   if (!isOpen) return null;
+
+  const lgColsClass = GRID_COLS_MAP[Math.min(categories.length, 4)] || 'lg:grid-cols-4';
 
   return (
     <>
@@ -139,9 +149,9 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
         }
       `}</style>
 
-      {/* Backdrop Dim Layer */}
+      {/* Backdrop Dim Layer (positioned below the 64px navbar) */}
       <div
-        className="mega-backdrop-animate fixed inset-0 top-16 bg-slate-900/10 dark:bg-black/35 backdrop-blur-[1px] pointer-events-none z-40"
+        className="mega-backdrop-animate fixed inset-0 top-[64px] bg-slate-900/10 dark:bg-black/35 backdrop-blur-[1px] pointer-events-none z-40"
         aria-hidden="true"
       />
 
@@ -157,12 +167,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({
       >
         <div className="container mx-auto px-4 py-6 max-w-7xl">
           {/* Category Columns Grid */}
-          <div
-            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${Math.min(
-              categories.length,
-              4
-            )} gap-6 xl:gap-8`}
-          >
+          <div className={`grid grid-cols-1 md:grid-cols-2 ${lgColsClass} gap-6 xl:gap-8`}>
             {categories.map((category, colIdx) => {
               const CategoryIcon = category.icon;
               return (

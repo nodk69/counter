@@ -59,12 +59,14 @@ export function ThemeProvider({
 
     const applyTheme = (t: Theme) => {
       root.classList.remove("light", "dark");
+      let activeTheme: "light" | "dark";
       if (t === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        root.classList.add(systemTheme);
+        activeTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       } else {
-        root.classList.add(t);
+        activeTheme = t;
       }
+      root.classList.add(activeTheme);
+      root.style.colorScheme = activeTheme;
     };
 
     applyTheme(theme);
