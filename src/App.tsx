@@ -1,5 +1,6 @@
 import { useMemo, useState, lazy, Suspense } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Analytics } from '@vercel/analytics/react';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
@@ -242,6 +243,7 @@ function App() {
             description="An unexpected error occurred in the application. Please try again or contact support if the problem persists."
           />}>
           <AppContent />
+          <Analytics />
         </ErrorBoundary>
       </QueryClientProvider>
     </ThemeProvider>
