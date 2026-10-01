@@ -25,17 +25,49 @@ function TableOfContents({ content }: { content: string }) {
   );
 }
 
-function ContentRenderer({ content }: { content: string }) {
+function ContentRenderer({ content, images = [] }: { content: string; images?: BlogPost['images'] }) {
   const lines = content.trim().split('\n');
   const elements: React.ReactElement[] = [];
   let i = 0;
+  let h2Count = 0;
+  const inContentImages = (images || []).slice(1); // skip hero (index 0)
 
   while (i < lines.length) {
     const line = lines[i];
     if (line.startsWith('## ')) {
-      elements.push(<h2 key={i} className="font-serif text-2xl font-bold text-foreground mt-8 mb-4">{line.replace('## ', '')}</h2>);
+      h2Count++;
+      elements.push(<h2 key={`h2-${i}`} className="font-serif text-2xl font-bold text-foreground mt-8 mb-4">{line.replace('## ', '')}</h2>);
+      
+      // Auto-inject in-content image after 2nd and subsequent H2 headings if defined in post.images and not already in markdown
+      const imageIndex = h2Count - 2;
+      if (imageIndex >= 0 && imageIndex < inContentImages.length && inContentImages[imageIndex]?.fileName) {
+        const imgSpec = inContentImages[imageIndex];
+        const nextFewLines = lines.slice(i, i + 5).join('\n');
+        if (!nextFewLines.includes('![')) {
+          elements.push(
+            <figure key={`injected-img-${i}`} className="my-8">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-border bg-muted/30">
+                <img
+                  src={`/blog/images/${imgSpec.fileName}`}
+                  alt={imgSpec.altText || 'Article diagram'}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.parentElement?.classList.add('hidden');
+                  }}
+                />
+              </div>
+              {imgSpec.caption && (
+                <figcaption className="text-xs text-center text-muted-foreground mt-2 font-sans">
+                  {imgSpec.caption}
+                </figcaption>
+              )}
+            </figure>
+          );
+        }
+      }
     } else if (line.startsWith('### ')) {
-      elements.push(<h3 key={i} className="font-serif text-xl font-semibold text-foreground mt-6 mb-3">{line.replace('### ', '')}</h3>);
+      elements.push(<h3 key={`h3-${i}`} className="font-serif text-xl font-semibold text-foreground mt-6 mb-3">{line.replace('### ', '')}</h3>);
     } else if (line.startsWith('- ')) {
       const items: string[] = [];
       while (i < lines.length && lines[i].startsWith('- ')) {
@@ -104,16 +136,32 @@ function ContentRenderer({ content }: { content: string }) {
           const alt = match[1];
           const src = match[2];
           elements.push(
-            <div key={i} className="my-6">
-              <img src={src} alt={alt} className="rounded-xl border border-border w-full aspect-[16/9] object-cover" />
-            </div>
+            <figure key={`fig-${i}`} className="my-8">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden border border-border bg-muted/20">
+                <img
+                  src={src}
+                  alt={alt}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    e.currentTarget.parentElement?.classList.add('hidden');
+                  }}
+                />
+              </div>
+              {alt && (
+                <figcaption className="text-xs text-center text-muted-foreground mt-2 font-sans italic">
+                  {alt}
+                </figcaption>
+              )}
+            </figure>
           );
           i++;
           continue;
         }
       }
       elements.push(
-        <p key={i} className="text-foreground/80 font-sans text-base leading-relaxed mb-4"
+        <p key={`p-${i}`} className="text-foreground/80 font-sans text-base leading-relaxed mb-4"
           dangerouslySetInnerHTML={{ __html: renderInline(line) }}
         />
       );
@@ -155,11 +203,14 @@ export default function BlogPostPage({ slug }: { slug: string }) {
     );
   }
 
+  const heroImage = post.images && post.images.length > 0 ? post.images[0] : null;
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <MetaTags
         title={post.titleTag || post.title}
         description={post.metaDescription || post.excerpt}
+        image={heroImage?.fileName ? `/blog/images/${heroImage.fileName}` : undefined}
         type="article"
         publishedTime={post.date}
         author={post.author}
@@ -235,19 +286,47 @@ export default function BlogPostPage({ slug }: { slug: string }) {
             </div>
           </div>
 
-          {/* Hero image placeholder */}
-          <div className="aspect-[16/8] rounded-xl bg-gradient-to-br from-primary/10 via-muted to-muted/40 mb-8 flex items-center justify-center">
-            <span className="text-6xl opacity-20 select-none">
-              {post.category === 'SEO' ? '🔍' : post.category === 'Writing' ? '✍️' : '📝'}
-            </span>
-          </div>
+          {/* Hero Image / Banner */}
+          {heroImage?.fileName ? (
+            <figure className="mb-8">
+              <div className="aspect-[16/8] rounded-xl overflow-hidden border border-border bg-gradient-to-br from-primary/10 via-muted to-muted/40 relative flex items-center justify-center">
+                <img
+                  src={`/blog/images/${heroImage.fileName}`}
+                  alt={heroImage.altText || post.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Graceful fallback to styled category icon banner if image is not on disk
+                    e.currentTarget.style.display = 'none';
+                    const parent = e.currentTarget.parentElement;
+                    if (parent && !parent.querySelector('.hero-fallback-icon')) {
+                      const span = document.createElement('span');
+                      span.className = 'hero-fallback-icon text-6xl opacity-25 select-none';
+                      span.innerText = post.category === 'SEO' ? '🔍' : post.category === 'Writing' ? '✍️' : post.category === 'Social Media' ? '📱' : post.category === 'Readability' ? '📖' : '📝';
+                      parent.appendChild(span);
+                    }
+                  }}
+                />
+              </div>
+              {heroImage.caption && (
+                <figcaption className="text-xs text-center text-muted-foreground mt-2 font-sans">
+                  {heroImage.caption}
+                </figcaption>
+              )}
+            </figure>
+          ) : (
+            <div className="aspect-[16/8] rounded-xl bg-gradient-to-br from-primary/10 via-muted to-muted/40 mb-8 flex items-center justify-center">
+              <span className="text-6xl opacity-20 select-none">
+                {post.category === 'SEO' ? '🔍' : post.category === 'Writing' ? '✍️' : post.category === 'Social Media' ? '📱' : post.category === 'Readability' ? '📖' : '📝'}
+              </span>
+            </div>
+          )}
 
           {/* ToC */}
           <TableOfContents content={post.content} />
 
           {/* Content */}
           <div className="mb-12">
-            <ContentRenderer content={post.content} />
+            <ContentRenderer content={post.content} images={post.images} />
           </div>
 
           {/* FAQ Section */}
