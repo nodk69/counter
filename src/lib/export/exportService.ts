@@ -459,60 +459,155 @@ export async function exportDocument({
     }
 
     case 'pdf': {
-      // Lazy-load html2pdf.js
-      const html2pdfModule = await import('html2pdf.js');
-      const html2pdf = html2pdfModule.default || html2pdfModule;
-      if (typeof html2pdf !== 'function') {
-        throw new Error('Failed to load html2pdf.js library.');
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const margin = 18;
+      const contentWidth = pageWidth - margin * 2;
+      let y = margin;
+
+      // Extract plain text from html
+      let plainText = '';
+      if (typeof document !== 'undefined') {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        plainText = (tempDiv.innerText || tempDiv.textContent || '').trim();
       }
 
-      const fullHtml = buildHtmlTemplate(title, html, stats, 'pdf');
+      // ── Top Brand Header Accent ──────────────────────────────────
+      doc.setFillColor(124, 58, 237); // Primary brand purple #7c3aed
+      doc.rect(margin, y, contentWidth, 2, 'F');
+      y += 8;
 
-      // Create isolated offscreen container positioned at valid origin coordinates
-      const container = document.createElement('div');
-      container.style.position = 'fixed';
-      container.style.top = '0';
-      container.style.left = '0';
-      container.style.width = '800px';
-      container.style.zIndex = '-9999';
-      container.style.opacity = '0';
-      container.style.pointerEvents = 'none';
-      container.style.background = '#ffffff';
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(124, 58, 237);
+      doc.text('COUNTER.IO', margin, y);
 
-      // Parse HTML to avoid nesting doctype/html inside a div
-      const parser = new DOMParser();
-      const parsedDoc = parser.parseFromString(fullHtml, 'text/html');
-      container.innerHTML = parsedDoc.body.innerHTML;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8.5);
+      doc.setTextColor(107, 114, 128); // Gray 500
+      const dateStr = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      doc.text(`Generated on ${dateStr}`, pageWidth - margin, y, { align: 'right' });
+      y += 10;
 
-      // Extract and append all styles
-      const styles = parsedDoc.querySelectorAll('style');
-      styles.forEach((st) => container.appendChild(st.cloneNode(true)));
+      // ── Document Title ───────────────────────────────────────────
+      const docTitle = title || 'Document Statistics Report';
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(17);
+      doc.setTextColor(17, 24, 39); // Gray 900
+      const titleLines = doc.splitTextToSize(docTitle, contentWidth);
+      doc.text(titleLines, margin, y);
+      y += titleLines.length * 6.5 + 4;
 
-      document.body.appendChild(container);
+      // Subtle separator line
+      doc.setDrawColor(229, 231, 235); // Gray 200
+      doc.setLineWidth(0.4);
+      doc.line(margin, y, pageWidth - margin, y);
+      y += 8;
 
-      try {
-        await html2pdf()
-          .set({
-            margin: [12, 12, 12, 12],
-            filename: `${fileBasename}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-              scale: 2,
-              useCORS: true,
-              logging: false,
-              scrollX: 0,
-              scrollY: 0,
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-          } as any)
-          .from(container)
-          .save();
-      } finally {
-        if (container.parentNode) {
-          container.parentNode.removeChild(container);
+      // ── Section Title: Document Statistics ───────────────────────
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(31, 41, 55); // Gray 800
+      doc.text('DOCUMENT STATISTICS', margin, y);
+      y += 6;
+
+      // ── Stat Cards Grid (2 columns) ──────────────────────────────
+      const statItems = [
+        { label: 'Total Words', value: String(stats.words.toLocaleString()) },
+        { label: 'Total Characters', value: String(stats.characters.toLocaleString()) },
+        { label: 'Characters (No Spaces)', value: String(stats.charactersNoSpaces.toLocaleString()) },
+        { label: 'Sentences', value: String(stats.sentences.toLocaleString()) },
+        { label: 'Paragraphs', value: String(stats.paragraphs.toLocaleString()) },
+        { label: 'Est. Reading Time', value: `${stats.readingTime} min` },
+        { label: 'Est. Speaking Time', value: `${stats.speakingTime} min` },
+      ];
+
+      const cardWidth = (contentWidth - 6) / 2;
+      const cardHeight = 13.5;
+
+      statItems.forEach((item, idx) => {
+        const col = idx % 2;
+        const row = Math.floor(idx / 2);
+        const cardX = margin + col * (cardWidth + 6);
+        const cardY = y + row * (cardHeight + 3.5);
+
+        // Card background & border
+        doc.setFillColor(249, 250, 251); // Gray 50
+        doc.setDrawColor(229, 231, 235); // Gray 200
+        doc.roundedRect(cardX, cardY, cardWidth, cardHeight, 1.5, 1.5, 'FD');
+
+        // Label
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(107, 114, 128); // Gray 500
+        doc.text(item.label.toUpperCase(), cardX + 3.5, cardY + 4.5);
+
+        // Value
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.setTextColor(17, 24, 39); // Gray 900
+        doc.text(item.value, cardX + 3.5, cardY + 10.5);
+      });
+
+      const numRows = Math.ceil(statItems.length / 2);
+      y += numRows * (cardHeight + 3.5) + 8;
+
+      // ── Document Content / Excerpt Section ────────────────────────
+      if (plainText.length > 0) {
+        if (y > pageHeight - 40) {
+          doc.addPage();
+          y = margin;
+        }
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(31, 41, 55);
+        doc.text('DOCUMENT CONTENT', margin, y);
+        y += 6;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9.5);
+        doc.setTextColor(55, 65, 81); // Gray 700
+
+        const contentLines = doc.splitTextToSize(plainText, contentWidth);
+        const lineHeight = 5;
+
+        for (let i = 0; i < contentLines.length; i++) {
+          if (y > pageHeight - margin - 12) {
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(contentLines[i], margin, y);
+          y += lineHeight;
         }
       }
+
+      // ── Page numbering on all pages ──────────────────────────────
+      const totalPages = (doc as any).internal.getNumberOfPages();
+      for (let p = 1; p <= totalPages; p++) {
+        doc.setPage(p);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(156, 163, 175); // Gray 400
+        doc.text(`counter.io • Privacy-First Writing Tools`, margin, pageHeight - 8);
+        doc.text(`Page ${p} of ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+      }
+
+      doc.save(`${fileBasename}.pdf`);
       break;
     }
 

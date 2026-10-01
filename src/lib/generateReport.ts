@@ -264,21 +264,181 @@ ${text.trim().length > 0 ? `
 </html>`;
 }
 
-export function exportToPdf(
+export async function exportToPdf(
   text: string,
   stats: TextStats,
   analysis: ContentAnalysis,
   mode: string
-): void {
-  const html = generateReportHTML(text, stats, analysis, mode);
-  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `writing-analysis-report-${Date.now()}.html`;
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
+): Promise<void> {
+  const { jsPDF } = await import('jspdf');
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+  });
+
+  const pageWidth = 210;
+  const pageHeight = 297;
+  const margin = 18;
+  const contentWidth = pageWidth - margin * 2;
+  let y = margin;
+
+  // Header accent bar
+  doc.setFillColor(124, 58, 237);
+  doc.rect(margin, y, contentWidth, 2, 'F');
+  y += 8;
+
+  // Brand
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.setTextColor(124, 58, 237);
+  doc.text('COUNTER.IO', margin, y);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(107, 114, 128);
+  const dateStr = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+  doc.text(`Analysis Report • ${dateStr}`, pageWidth - margin, y, { align: 'right' });
+  y += 10;
+
+  // Title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(17);
+  doc.setTextColor(17, 24, 39);
+  doc.text('Writing Analysis & Statistics Report', margin, y);
+  y += 10;
+
+  // Overall Score & Mode Banner
+  doc.setFillColor(245, 243, 255); // Purple 50
+  doc.setDrawColor(221, 214, 254); // Purple 200
+  doc.roundedRect(margin, y, contentWidth, 20, 2, 2, 'FD');
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(12.5);
+  doc.setTextColor(109, 40, 217);
+  doc.text(`Overall Content Score: ${analysis.contentScore}/100 (${analysis.scoreLabel})`, margin + 6, y + 8);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(107, 114, 128);
+  const fleschVal = typeof stats.fleschKincaid === 'number' ? stats.fleschKincaid.toFixed(1) : '-';
+  doc.text(`Writing Mode: ${mode.toUpperCase()} • Flesch Reading Score: ${fleschVal}`, margin + 6, y + 15);
+  y += 26;
+
+  // Document Statistics
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.setTextColor(31, 41, 55);
+  doc.text('DOCUMENT STATISTICS', margin, y);
+  y += 6;
+
+  const statItems = [
+    { label: 'Total Words', value: String(stats.words.toLocaleString()) },
+    { label: 'Total Characters', value: String(stats.charWithSpaces.toLocaleString()) },
+    { label: 'Characters (No Spaces)', value: String(stats.charNoSpaces.toLocaleString()) },
+    { label: 'Sentences', value: String(stats.sentences.toLocaleString()) },
+    { label: 'Paragraphs', value: String(stats.paragraphs.toLocaleString()) },
+    { label: 'Est. Reading Time', value: `${stats.readingTime} min` },
+    { label: 'Est. Speaking Time', value: `${stats.speakingTime} min` },
+    { label: 'Avg Word Length', value: `${stats.avgWordLength} chars` },
+  ];
+
+  const cardWidth = (contentWidth - 6) / 2;
+  const cardHeight = 13.5;
+
+  statItems.forEach((item, idx) => {
+    const col = idx % 2;
+    const row = Math.floor(idx / 2);
+    const cardX = margin + col * (cardWidth + 6);
+    const cardY = y + row * (cardHeight + 3.5);
+
+    doc.setFillColor(249, 250, 251);
+    doc.setDrawColor(229, 231, 235);
+    doc.roundedRect(cardX, cardY, cardWidth, cardHeight, 1.5, 1.5, 'FD');
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7.5);
+    doc.setTextColor(107, 114, 128);
+    doc.text(item.label.toUpperCase(), cardX + 3.5, cardY + 4.5);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10.5);
+    doc.setTextColor(17, 24, 39);
+    doc.text(item.value, cardX + 3.5, cardY + 10.5);
+  });
+
+  const numRows = Math.ceil(statItems.length / 2);
+  y += numRows * (cardHeight + 3.5) + 8;
+
+  // Analysis Dimensions Breakdown
+  if (analysis.dimensions && analysis.dimensions.length > 0) {
+    if (y > pageHeight - 45) {
+      doc.addPage();
+      y = margin;
+    }
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(31, 41, 55);
+    doc.text('SCORE BREAKDOWN', margin, y);
+    y += 6;
+
+    analysis.dimensions.forEach((d) => {
+      if (y > pageHeight - 20) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(8.5);
+      doc.setTextColor(17, 24, 39);
+      doc.text(`${d.label}: ${d.score}/100`, margin, y);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(107, 114, 128);
+      const tipLines = doc.splitTextToSize(d.tip, contentWidth - 45);
+      doc.text(tipLines, margin + 45, y);
+      y += Math.max(tipLines.length * 4.5, 6);
+    });
+    y += 4;
+  }
+
+  // Text Excerpt
+  const trimmed = text.trim();
+  if (trimmed.length > 0) {
+    if (y > pageHeight - 35) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.setTextColor(31, 41, 55);
+    doc.text('TEXT EXCERPT', margin, y);
+    y += 6;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(55, 65, 81);
+    const excerpt = trimmed.length > 300 ? `${trimmed.slice(0, 300)}…` : trimmed;
+    const excerptLines = doc.splitTextToSize(`"${excerpt}"`, contentWidth);
+    doc.text(excerptLines, margin, y);
+    y += excerptLines.length * 4.5 + 4;
+  }
+
+  // Footer page numbers
+  const totalPages = (doc as any).internal.getNumberOfPages();
+  for (let p = 1; p <= totalPages; p++) {
+    doc.setPage(p);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(156, 163, 175);
+    doc.text(`counter.io • Writing Analysis Report`, margin, pageHeight - 8);
+    doc.text(`Page ${p} of ${totalPages}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+  }
+
+  doc.save(`writing-analysis-report-${Date.now()}.pdf`);
 }

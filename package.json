@@ -108,6 +108,7 @@
     "file-saver": "^2.0.5",
     "html-to-docx": "^1.8.0",
     "html2pdf.js": "^0.14.0",
+    "jspdf": "^4.2.1",
     "mammoth": "^1.12.0",
     "reading-time": "^1.5.0",
     "sentiment": "^5.0.2",
