@@ -19,6 +19,7 @@ import { ArrowRight, Wrench, FileText, BookOpen } from 'lucide-react';
 import { TOOLS } from '@/data/tools';
 import { BLOG_POSTS } from '@/data/blog';
 import { GUIDES } from '@/data/guides';
+import { getToolIcon } from '@/data/icons';
 import type { ToolCategory } from '@/data/tools';
 
 interface RelatedContentProps {
@@ -100,25 +101,30 @@ export default function RelatedContent({
                 <Wrench className="w-3.5 h-3.5" aria-hidden /> Related Tools
               </h3>
               <ul className="space-y-2" aria-label="Related tools">
-                {relatedTools.map(t => (
-                  <li key={t.slug}>
-                    <Link
-                      href={`/${t.slug}`}
-                      className="flex items-center gap-2.5 p-2.5 rounded-lg border border-border hover:border-primary/30 hover:bg-muted/30 transition-colors group"
-                    >
-                      <span className="text-xl flex-shrink-0" aria-hidden>{t.icon}</span>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium text-foreground font-sans group-hover:text-primary transition-colors">
-                          {t.name}
+                {relatedTools.map(t => {
+                  const ToolIcon = getToolIcon(t.slug);
+                  return (
+                    <li key={t.slug}>
+                      <Link
+                        href={`/${t.slug}`}
+                        className="flex items-center gap-2.5 p-2.5 rounded-lg border border-border hover:border-primary/30 hover:bg-muted/30 transition-colors group"
+                      >
+                        <div className="w-7 h-7 rounded-md bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors" aria-hidden>
+                          <ToolIcon className="w-4 h-4" />
                         </div>
-                        <div className="text-xs text-muted-foreground font-sans truncate">
-                          {t.shortDesc}
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-medium text-foreground font-sans group-hover:text-primary transition-colors">
+                            {t.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground font-sans truncate">
+                            {t.shortDesc}
+                          </div>
                         </div>
-                      </div>
-                      <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" aria-hidden />
-                    </Link>
-                  </li>
-                ))}
+                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0" aria-hidden />
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

@@ -1,6 +1,29 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Download, FileText, CheckSquare, List, BookOpen, Calculator, Users, ArrowRightLeft } from 'lucide-react';
+import {
+  Download,
+  FileText,
+  CheckSquare,
+  List,
+  BookOpen,
+  Calculator,
+  Users,
+  ArrowRightLeft,
+  FileEdit,
+  FileCode,
+  FileSpreadsheet,
+  Mail,
+  CheckCircle2,
+  ListChecks,
+  ClipboardCheck,
+  FileCheck2,
+  KeyRound,
+  PenTool,
+  Compass,
+  Clock,
+  Mic,
+  Timer,
+} from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { LANDING_PAGES, COMPARISON_PAGES } from '@/data/seoData';
@@ -18,33 +41,33 @@ const COMPARISON_ENTRIES = Object.entries(COMPARISON_PAGES).map(([slug, data]) =
 }));
 
 const TEMPLATES = [
-  { icon: '📄', title: 'Blog Post Template', desc: 'Standard structure for SEO-optimized blog posts with H1, intro, body sections, and CTA.', type: 'TXT', free: true },
-  { icon: '📄', title: 'SEO Content Brief', desc: 'Complete brief template for assigning SEO content to writers, with keyword targets and requirements.', type: 'TXT', free: true },
-  { icon: '📄', title: 'Essay Outline Template', desc: 'Academic essay structure with intro, thesis, body paragraphs, and conclusion framework.', type: 'TXT', free: true },
-  { icon: '📄', title: 'Product Description Template', desc: 'Conversion-focused product copy template with features, benefits, and social proof sections.', type: 'TXT', free: true },
-  { icon: '📄', title: 'Press Release Template', desc: 'Standard press release format with dateline, lead, boilerplate, and contact information.', type: 'TXT', free: true },
-  { icon: '📄', title: 'Email Newsletter Template', desc: 'Subject line formula, preview text, content blocks, and CTA structure for newsletters.', type: 'TXT', free: true },
+  { icon: FileText, title: 'Blog Post Template', desc: 'Standard structure for SEO-optimized blog posts with H1, intro, body sections, and CTA.', type: 'TXT', free: true },
+  { icon: FileCode, title: 'SEO Content Brief', desc: 'Complete brief template for assigning SEO content to writers, with keyword targets and requirements.', type: 'TXT', free: true },
+  { icon: FileEdit, title: 'Essay Outline Template', desc: 'Academic essay structure with intro, thesis, body paragraphs, and conclusion framework.', type: 'TXT', free: true },
+  { icon: FileSpreadsheet, title: 'Product Description Template', desc: 'Conversion-focused product copy template with features, benefits, and social proof sections.', type: 'TXT', free: true },
+  { icon: FileText, title: 'Press Release Template', desc: 'Standard press release format with dateline, lead, boilerplate, and contact information.', type: 'TXT', free: true },
+  { icon: Mail, title: 'Email Newsletter Template', desc: 'Subject line formula, preview text, content blocks, and CTA structure for newsletters.', type: 'TXT', free: true },
 ];
 
 const CHECKLISTS = [
-  { icon: '✅', title: 'SEO Optimization Checklist', desc: '50-point checklist covering on-page SEO, meta tags, content structure, and technical requirements.', items: 50 },
-  { icon: '✅', title: 'Blog Post Checklist', desc: 'Pre-publish checklist for blog posts: research, structure, readability, images, and SEO.', items: 30 },
-  { icon: '✅', title: 'Content Editing Checklist', desc: 'Comprehensive editing checklist covering grammar, style, clarity, and fact-checking.', items: 25 },
-  { icon: '✅', title: 'Social Media Post Checklist', desc: 'Platform-specific checklists for Twitter, LinkedIn, Instagram, and Facebook posts.', items: 20 },
+  { icon: CheckCircle2, title: 'SEO Optimization Checklist', desc: '50-point checklist covering on-page SEO, meta tags, content structure, and technical requirements.', items: 50 },
+  { icon: ListChecks, title: 'Blog Post Checklist', desc: 'Pre-publish checklist for blog posts: research, structure, readability, images, and SEO.', items: 30 },
+  { icon: ClipboardCheck, title: 'Content Editing Checklist', desc: 'Comprehensive editing checklist covering grammar, style, clarity, and fact-checking.', items: 25 },
+  { icon: FileCheck2, title: 'Social Media Post Checklist', desc: 'Platform-specific checklists for Twitter, LinkedIn, Instagram, and Facebook posts.', items: 20 },
 ];
 
 const CHEATSHEETS = [
-  { icon: '📋', title: 'Grammar Cheatsheet', desc: 'Quick reference for the most common grammar rules, punctuation, and style decisions.', color: 'border-blue-200 bg-blue-50 dark:bg-blue-950/40' },
-  { icon: '📋', title: 'SEO Keyword Cheatsheet', desc: 'Keyword types, density guidelines, placement rules, and intent mapping reference.', color: 'border-green-200 bg-green-50 dark:bg-green-950/40' },
-  { icon: '📋', title: 'Writing Style Guide', desc: 'AP vs Chicago vs APA — quick reference for citation styles and writing conventions.', color: 'border-amber-200 bg-amber-50 dark:bg-amber-950/40' },
-  { icon: '📋', title: 'Character Limits Cheatsheet', desc: 'All major platform character limits at a glance — Twitter, Instagram, LinkedIn, and more.', color: 'border-purple-200 bg-purple-50 dark:bg-purple-950/40' },
+  { icon: BookOpen, title: 'Grammar Cheatsheet', desc: 'Quick reference for the most common grammar rules, punctuation, and style decisions.', color: 'border-blue-200 bg-blue-50 dark:bg-blue-950/40' },
+  { icon: KeyRound, title: 'SEO Keyword Cheatsheet', desc: 'Keyword types, density guidelines, placement rules, and intent mapping reference.', color: 'border-green-200 bg-green-50 dark:bg-green-950/40' },
+  { icon: PenTool, title: 'Writing Style Guide', desc: 'AP vs Chicago vs APA — quick reference for citation styles and writing conventions.', color: 'border-amber-200 bg-amber-50 dark:bg-amber-950/40' },
+  { icon: Compass, title: 'Character Limits Cheatsheet', desc: 'All major platform character limits at a glance — Twitter, Instagram, LinkedIn, and more.', color: 'border-purple-200 bg-purple-50 dark:bg-purple-950/40' },
 ];
 
 const CALCULATORS = [
-  { icon: '🧮', title: 'Blog Post Length Calculator', desc: 'Input your topic type and target keyword to get a recommended word count range.', href: '/tools' },
-  { icon: '🧮', title: 'Reading Time Calculator', desc: 'Paste any text or enter a word count to calculate exact reading time at multiple speeds.', href: '/reading-time-calculator' },
-  { icon: '🧮', title: 'Speaking Time Calculator', desc: 'Calculate speech duration from word count at normal, slow, and fast speaking rates.', href: '/speaking-time-calculator' },
-  { icon: '🧮', title: 'Word Count Converter', desc: 'Convert word counts to pages, paragraphs, reading time, and speaking time instantly.', href: '/1000-words-is-how-many-pages' },
+  { icon: Calculator, title: 'Blog Post Length Calculator', desc: 'Input your topic type and target keyword to get a recommended word count range.', href: '/tools' },
+  { icon: Clock, title: 'Reading Time Calculator', desc: 'Paste any text or enter a word count to calculate exact reading time at multiple speeds.', href: '/reading-time-calculator' },
+  { icon: Mic, title: 'Speaking Time Calculator', desc: 'Calculate speech duration from word count at normal, slow, and fast speaking rates.', href: '/speaking-time-calculator' },
+  { icon: Timer, title: 'Word Count Converter', desc: 'Convert word counts to pages, paragraphs, reading time, and speaking time instantly.', href: '/1000-words-is-how-many-pages' },
 ];
 
 function DownloadButton({ label = 'Download Free' }: { label?: string }) {
@@ -60,7 +83,7 @@ function DownloadButton({ label = 'Download Free' }: { label?: string }) {
 const VALID_CATEGORIES = ['templates', 'checklists', 'cheatsheets', 'calculators'] as const;
 type Category = typeof VALID_CATEGORIES[number];
 
-// ✅ Add props interface
+// Props interface
 interface ResourcesPageProps {
   category?: string;  // Optional category from route param
 }
@@ -71,21 +94,17 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
   // Handle both hash-based navigation (e.g., /resources#templates)
   // and path-based navigation (e.g., /resources/templates)
   useEffect(() => {
-    // Determine which category to scroll to
     let targetCategory: string | null = null;
 
-    // 1. Check if category prop was passed from route
     if (category && VALID_CATEGORIES.includes(category as Category)) {
       targetCategory = category;
     }
 
-    // 2. Check for hash in URL (overrides category prop)
     const hash = location.split('#')[1];
     if (hash && VALID_CATEGORIES.includes(hash as Category)) {
       targetCategory = hash;
     }
 
-    // 3. If no hash, check if the path contains a category
     if (!targetCategory) {
       const pathSegments = location.split('/').filter(Boolean);
       const lastSegment = pathSegments[pathSegments.length - 1];
@@ -94,7 +113,6 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
       }
     }
 
-    // Scroll to the target category if found
     if (targetCategory) {
       const element = document.getElementById(targetCategory);
       if (element) {
@@ -172,21 +190,26 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {TEMPLATES.map(t => (
-                <div key={t.title} className="p-5 rounded-xl border border-border bg-card flex flex-col">
-                  <div className="flex items-start gap-3 mb-3">
-                    <span className="text-xl">{t.icon}</span>
-                    <div className="flex-1">
-                      <h3 className="font-serif font-semibold text-foreground text-sm mb-1">{t.title}</h3>
-                      <p className="text-xs text-muted-foreground font-sans leading-relaxed">{t.desc}</p>
+              {TEMPLATES.map(t => {
+                const IconComponent = t.icon;
+                return (
+                  <div key={t.title} className="p-5 rounded-xl border border-border bg-card flex flex-col">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+                        <IconComponent className="w-5 h-5" strokeWidth={2} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-serif font-semibold text-foreground text-sm mb-1">{t.title}</h3>
+                        <p className="text-xs text-muted-foreground font-sans leading-relaxed">{t.desc}</p>
+                      </div>
+                    </div>
+                    <div className="mt-auto pt-3 flex items-center justify-between">
+                      <span className="text-xs font-sans px-2 py-0.5 rounded-md bg-muted text-muted-foreground">{t.type}</span>
+                      <DownloadButton />
                     </div>
                   </div>
-                  <div className="mt-auto pt-3 flex items-center justify-between">
-                    <span className="text-xs font-sans px-2 py-0.5 rounded-md bg-muted text-muted-foreground">{t.type}</span>
-                    <DownloadButton />
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
@@ -200,19 +223,24 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {CHECKLISTS.map(c => (
-                <div key={c.title} className="p-5 rounded-xl border border-border bg-card flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3 flex-1">
-                    <span className="text-xl">{c.icon}</span>
-                    <div>
-                      <h3 className="font-serif font-semibold text-foreground text-sm mb-1">{c.title}</h3>
-                      <p className="text-xs text-muted-foreground font-sans leading-relaxed mb-2">{c.desc}</p>
-                      <span className="text-xs font-sans text-muted-foreground">{c.items} items</span>
+              {CHECKLISTS.map(c => {
+                const IconComponent = c.icon;
+                return (
+                  <div key={c.title} className="p-5 rounded-xl border border-border bg-card flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="p-2 rounded-lg bg-green-100 dark:bg-green-950 text-green-700 dark:text-green-400 shrink-0">
+                        <IconComponent className="w-5 h-5" strokeWidth={2} />
+                      </div>
+                      <div>
+                        <h3 className="font-serif font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+                        <p className="text-xs text-muted-foreground font-sans leading-relaxed mb-2">{c.desc}</p>
+                        <span className="text-xs font-sans text-muted-foreground">{c.items} items</span>
+                      </div>
                     </div>
+                    <DownloadButton label="Get PDF" />
                   </div>
-                  <DownloadButton label="Get PDF" />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
@@ -226,18 +254,23 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {CHEATSHEETS.map(c => (
-                <div key={c.title} className={`p-5 rounded-xl border-2 ${c.color} flex items-start justify-between gap-4`}>
-                  <div className="flex items-start gap-3 flex-1">
-                    <span className="text-xl">{c.icon}</span>
-                    <div>
-                      <h3 className="font-serif font-semibold text-foreground text-sm mb-1">{c.title}</h3>
-                      <p className="text-xs text-muted-foreground font-sans leading-relaxed">{c.desc}</p>
+              {CHEATSHEETS.map(c => {
+                const IconComponent = c.icon;
+                return (
+                  <div key={c.title} className={`p-5 rounded-xl border-2 ${c.color} flex items-start justify-between gap-4`}>
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className="p-2 rounded-lg bg-amber-100/60 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 shrink-0">
+                        <IconComponent className="w-5 h-5" strokeWidth={2} />
+                      </div>
+                      <div>
+                        <h3 className="font-serif font-semibold text-foreground text-sm mb-1">{c.title}</h3>
+                        <p className="text-xs text-muted-foreground font-sans leading-relaxed">{c.desc}</p>
+                      </div>
                     </div>
+                    <DownloadButton />
                   </div>
-                  <DownloadButton />
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
 
@@ -251,22 +284,27 @@ export default function ResourcesPage({ category }: ResourcesPageProps) {
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {CALCULATORS.map(c => (
-                <Link key={c.title} href={c.href}>
-                  <div className="group p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl">{c.icon}</span>
-                      <div>
-                        <h3 className="font-serif font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">{c.title}</h3>
-                        <p className="text-xs text-muted-foreground font-sans leading-relaxed">{c.desc}</p>
+              {CALCULATORS.map(c => {
+                const IconComponent = c.icon;
+                return (
+                  <Link key={c.title} href={c.href}>
+                    <div className="group p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-400 shrink-0 group-hover:bg-primary group-hover:text-white transition-colors">
+                          <IconComponent className="w-5 h-5" strokeWidth={2} />
+                        </div>
+                        <div>
+                          <h3 className="font-serif font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">{c.title}</h3>
+                          <p className="text-xs text-muted-foreground font-sans leading-relaxed">{c.desc}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 text-xs text-primary font-medium font-sans opacity-0 group-hover:opacity-100 transition-opacity">
+                        Open calculator →
                       </div>
                     </div>
-                    <div className="mt-3 text-xs text-primary font-medium font-sans opacity-0 group-hover:opacity-100 transition-opacity">
-                      Open calculator →
-                    </div>
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </section>
 

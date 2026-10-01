@@ -1,64 +1,73 @@
 import { Link } from 'wouter';
 import { getToolsByCategory } from '@/data/tools';
+import type { LucideIcon } from 'lucide-react';
+import { Type, BarChart3, Clock, Cpu, Target, Smartphone } from 'lucide-react';
 
 interface Category {
   id: string;
-  icon: string;
+  icon: LucideIcon;
   title: string;
   description: string;
   color: string;
   iconBg: string;
+  iconColor: string;
   disabled?: boolean;
 }
 
 const CATEGORIES: Category[] = [
   {
     id: 'counting',
-    icon: '📊',
+    icon: Type,
     title: 'Counting Tools',
     description: 'Word, character, sentence, paragraph, line & page counters',
     color: 'border-blue-200 hover:border-blue-400 dark:border-blue-900 dark:hover:border-blue-600',
     iconBg: 'bg-blue-50 dark:bg-blue-950',
+    iconColor: 'text-blue-600 dark:text-blue-400',
   },
   {
     id: 'analysis',
-    icon: '📈',
+    icon: BarChart3,
     title: 'Analysis Tools',
     description: 'Readability, keyword density, frequency & uniqueness analysis',
     color: 'border-green-200 hover:border-green-400 dark:border-green-900 dark:hover:border-green-600',
     iconBg: 'bg-green-50 dark:bg-green-950',
+    iconColor: 'text-green-600 dark:text-green-400',
   },
   {
     id: 'time',
-    icon: '⏱️',
+    icon: Clock,
     title: 'Time Tools',
     description: 'Reading time, speaking time & syllable counting',
     color: 'border-amber-200 hover:border-amber-400 dark:border-amber-900 dark:hover:border-amber-600',
     iconBg: 'bg-amber-50 dark:bg-amber-950',
+    iconColor: 'text-amber-600 dark:text-amber-400',
   },
   {
     id: 'advanced',
-    icon: '✏️',
+    icon: Cpu,
     title: 'Advanced Tools',
     description: 'Text summarizer, complexity analyzer & density mapping',
     color: 'border-purple-200 hover:border-purple-400 dark:border-purple-900 dark:hover:border-purple-600',
     iconBg: 'bg-purple-50 dark:bg-purple-950',
+    iconColor: 'text-purple-600 dark:text-purple-400',
   },
   {
     id: 'seo',
-    icon: '🎯',
+    icon: Target,
     title: 'SEO Pages',
     description: 'Character limits, word-to-page conversions & speech times',
     color: 'border-rose-200 hover:border-rose-400 dark:border-rose-900 dark:hover:border-rose-600',
     iconBg: 'bg-rose-50 dark:bg-rose-950',
+    iconColor: 'text-rose-600 dark:text-rose-400',
   },
   {
     id: 'mobile',
-    icon: '📱',
+    icon: Smartphone,
     title: 'Mobile Apps',
     description: 'Native iOS & Android apps — coming soon',
     color: 'border-slate-200 hover:border-slate-300 dark:border-slate-700',
     iconBg: 'bg-slate-50 dark:bg-slate-900',
+    iconColor: 'text-slate-500',
     disabled: true,
   },
 ];
@@ -96,6 +105,7 @@ export default function ToolCategories() {
 
             const href = cat.disabled ? undefined : (CATEGORY_LINKS[cat.id] || '/tools');
 
+            const CatIcon = cat.icon;
             const inner = (
               <div
                 className={`group p-6 rounded-xl border-2 bg-card transition-all duration-200 ${cat.color} ${
@@ -103,8 +113,8 @@ export default function ToolCategories() {
                 }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className={`text-2xl p-2 rounded-lg ${cat.iconBg} flex-shrink-0`}>
-                    {cat.icon}
+                  <div className={`p-2.5 rounded-lg ${cat.iconBg} ${cat.iconColor} flex-shrink-0 group-hover:scale-105 transition-transform`}>
+                    <CatIcon className="w-6 h-6" strokeWidth={2} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

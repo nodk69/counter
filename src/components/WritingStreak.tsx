@@ -26,16 +26,17 @@ export default function WritingStreak() {
         </div>
       </TooltipTrigger>
       <TooltipContent side="bottom">
-        <div className="text-center">
-          <div className="font-semibold">🔥 {streak}-day writing streak!</div>
-          {longestStreak > streak && (
-            <div className="text-xs text-muted-foreground mt-0.5">Best: {longestStreak} days</div>
-          )}
-          {longestStreak === streak && streak > 1 && (
-            <div className="text-xs text-muted-foreground mt-0.5">Personal best!</div>
-          )}
-          <div className="text-xs text-muted-foreground mt-0.5">Write daily to keep it going</div>
+        <div className="font-semibold flex items-center justify-center gap-1">
+          <Flame className="w-3.5 h-3.5 text-orange-500" />
+          <span>{streak}-day writing streak!</span>
         </div>
+        {longestStreak > streak && (
+          <div className="text-xs text-muted-foreground mt-0.5">Best: {longestStreak} days</div>
+        )}
+        {longestStreak === streak && streak > 1 && (
+          <div className="text-xs text-muted-foreground mt-0.5">Personal best!</div>
+        )}
+        <div className="text-xs text-muted-foreground mt-0.5">Write daily to keep it going</div>
       </TooltipContent>
     </Tooltip>
   );

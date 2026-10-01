@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
-import { Check } from 'lucide-react';
+import { Check, CheckCircle2, Eye, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
@@ -74,18 +74,21 @@ export default function SocialMediaLimitPage({ slug }: { slug: string }) {
               <div>
                 <h2 className="font-serif text-2xl font-bold text-foreground mb-2">{platform} Character Limit</h2>
                 {'optimalLimit' in data && data.optimalLimit && (
-                  <p className="text-muted-foreground font-sans text-sm mb-2">
-                    ✅ Optimal length: <strong className="text-foreground">{(data as any).optimalLimit.toLocaleString()} characters</strong>
+                  <p className="text-muted-foreground font-sans text-sm mb-2 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+                    <span>Optimal length: <strong className="text-foreground">{(data as any).optimalLimit.toLocaleString()} characters</strong></span>
                   </p>
                 )}
                 {'foldLimit' in data && (data as any).foldLimit && (
-                  <p className="text-muted-foreground font-sans text-sm mb-2">
-                    👁 Visible without clicking "More": <strong className="text-foreground">{(data as any).foldLimit.toLocaleString()} characters</strong>
+                  <p className="text-muted-foreground font-sans text-sm mb-2 flex items-center gap-1.5">
+                    <Eye className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span>Visible without clicking &ldquo;More&rdquo;: <strong className="text-foreground">{(data as any).foldLimit.toLocaleString()} characters</strong></span>
                   </p>
                 )}
                 {'extendedLimit' in data && (data as any).extendedLimit && (
-                  <p className="text-muted-foreground font-sans text-sm">
-                    ⭐ Premium: <strong className="text-foreground">{((data as any).extendedLimit as number).toLocaleString()} characters</strong> — {(data as any).extendedNote}
+                  <p className="text-muted-foreground font-sans text-sm flex items-center gap-1.5">
+                    <Star className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>Premium: <strong className="text-foreground">{((data as any).extendedLimit as number).toLocaleString()} characters</strong> — {(data as any).extendedNote}</span>
                   </p>
                 )}
               </div>

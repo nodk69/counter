@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
-import { Clock, Calendar, Twitter, Linkedin, Facebook, ArrowLeft } from 'lucide-react';
+import { Clock, Calendar, Twitter, Linkedin, Facebook, ArrowLeft, Search, PenTool, Smartphone, BookOpen, FileText } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
@@ -299,10 +299,10 @@ export default function BlogPostPage({ slug }: { slug: string }) {
                     e.currentTarget.style.display = 'none';
                     const parent = e.currentTarget.parentElement;
                     if (parent && !parent.querySelector('.hero-fallback-icon')) {
-                      const span = document.createElement('span');
-                      span.className = 'hero-fallback-icon text-6xl opacity-25 select-none';
-                      span.innerText = post.category === 'SEO' ? '🔍' : post.category === 'Writing' ? '✍️' : post.category === 'Social Media' ? '📱' : post.category === 'Readability' ? '📖' : '📝';
-                      parent.appendChild(span);
+                      const iconContainer = document.createElement('div');
+                      iconContainer.className = 'hero-fallback-icon p-6 rounded-3xl bg-primary/10 text-primary flex items-center justify-center';
+                      iconContainer.innerHTML = `<svg class="w-16 h-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+                      parent.appendChild(iconContainer);
                     }
                   }}
                 />
@@ -315,9 +315,19 @@ export default function BlogPostPage({ slug }: { slug: string }) {
             </figure>
           ) : (
             <div className="aspect-[16/8] rounded-xl bg-gradient-to-br from-primary/10 via-muted to-muted/40 mb-8 flex items-center justify-center">
-              <span className="text-6xl opacity-20 select-none">
-                {post.category === 'SEO' ? '🔍' : post.category === 'Writing' ? '✍️' : post.category === 'Social Media' ? '📱' : post.category === 'Readability' ? '📖' : '📝'}
-              </span>
+              <div className="p-6 rounded-3xl bg-background/60 text-primary/40">
+                {post.category === 'SEO' ? (
+                  <Search className="w-16 h-16" strokeWidth={1.5} />
+                ) : post.category === 'Writing' ? (
+                  <PenTool className="w-16 h-16" strokeWidth={1.5} />
+                ) : post.category === 'Social Media' ? (
+                  <Smartphone className="w-16 h-16" strokeWidth={1.5} />
+                ) : post.category === 'Readability' ? (
+                  <BookOpen className="w-16 h-16" strokeWidth={1.5} />
+                ) : (
+                  <FileText className="w-16 h-16" strokeWidth={1.5} />
+                )}
+              </div>
             </div>
           )}
 

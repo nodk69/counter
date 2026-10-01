@@ -1,4 +1,4 @@
-import { Github, Twitter, Youtube, Linkedin } from 'lucide-react';
+import { Github, Twitter, Youtube, Linkedin, Coffee } from 'lucide-react';
 import { Link } from 'wouter';
 
 const FOOTER_LINKS = {
@@ -78,8 +78,8 @@ export default function Footer() {
         <div className="border-t border-background/15 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <span className="font-serif text-xl font-bold text-primary">counter</span>
-            <p className="text-sm text-background/50 font-sans">
-              © 2026 counter. Made with ☕
+            <p className="text-sm text-background/50 font-sans flex items-center gap-1">
+              © 2026 counter. Made with <Coffee className="w-3.5 h-3.5 text-amber-500" strokeWidth={2} /> for writers
             </p>
           </div>
 

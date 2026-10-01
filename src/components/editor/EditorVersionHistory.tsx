@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Clock, RotateCcw, Trash2 } from 'lucide-react';
+import { Clock, RotateCcw, Trash2, X } from 'lucide-react';
 import type { VersionEntry } from '@/hooks/useEditorState';
 
 interface EditorVersionHistoryProps {
@@ -28,7 +28,9 @@ function EditorVersionHistory({ versions, onRestore, onClear, onClose }: EditorV
           <span className="text-xs font-semibold text-foreground font-sans flex items-center gap-1.5">
             <Clock className="w-3 h-3" /> Version History
           </span>
-          <button onClick={onClose} className="text-xs text-muted-foreground hover:text-foreground">✕</button>
+          <button onClick={onClose} aria-label="Close" className="text-xs text-muted-foreground hover:text-foreground">
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
         <div className="px-4 py-6 text-center text-xs text-muted-foreground font-sans">
           No saved versions yet.<br />Versions are saved automatically as you type.
@@ -50,7 +52,9 @@ function EditorVersionHistory({ versions, onRestore, onClear, onClose }: EditorV
           >
             <Trash2 className="w-3 h-3" /> Clear
           </button>
-          <button onClick={onClose} className="text-xs text-muted-foreground hover:text-foreground">✕</button>
+          <button onClick={onClose} aria-label="Close" className="text-xs text-muted-foreground hover:text-foreground">
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import { Link } from 'wouter';
 import { TrendingUp } from 'lucide-react';
 import { TOOLS } from '@/data/tools';
+import { getToolIcon } from '@/data/icons';
 
 const FEATURED_SLUGS = [
   'word-counter',
@@ -49,20 +50,24 @@ export default function FeaturedTools() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {featured.map((tool, index) => (
-            <Link key={tool!.slug} href={`/${tool!.slug}`}>
-              <div className="group p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all duration-200 cursor-pointer h-full">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="text-2xl">{tool!.icon}</div>
-                  {index === 0 && (
-                    <span className="text-xs font-sans px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
-                      #1 Tool
-                    </span>
-                  )}
-                </div>
-                <h3 className="font-serif text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                  {tool!.name}
-                </h3>
+          {featured.map((tool, index) => {
+            const ToolIcon = getToolIcon(tool!.slug);
+            return (
+              <Link key={tool!.slug} href={`/${tool!.slug}`}>
+                <div className="group p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all duration-200 cursor-pointer h-full">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <ToolIcon className="w-5 h-5" />
+                    </div>
+                    {index === 0 && (
+                      <span className="text-xs font-sans px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                        #1 Tool
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="font-serif text-lg font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                    {tool!.name}
+                  </h3>
                 <p className="text-sm text-muted-foreground font-sans mb-3 leading-snug">
                   {tool!.shortDesc}
                 </p>
@@ -79,7 +84,8 @@ export default function FeaturedTools() {
                 </div>
               </div>
             </Link>
-          ))}
+          );
+        })}
         </div>
 
         <div className="mt-8 text-center">

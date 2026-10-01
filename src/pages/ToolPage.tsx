@@ -17,6 +17,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { getToolBySlug, getRelatedTools } from '@/data/tools';
+import { getToolIcon } from '@/data/icons';
 import { useTextContext } from '@/context/TextContext';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
@@ -284,21 +285,26 @@ export default function ToolPage({ slug }: { slug: string }) {
                 Related Tools
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {relatedTools.map((related) => (
-                  <Link key={related.slug} href={`/${related.slug}`}>
-                    <div className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
-                      <span className="text-2xl">{related.icon}</span>
-                      <div>
-                        <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors">
-                          {related.name}
+                {relatedTools.map((related) => {
+                  const RelatedIcon = getToolIcon(related.slug);
+                  return (
+                    <Link key={related.slug} href={`/${related.slug}`}>
+                      <div className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
+                        <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                          <RelatedIcon className="w-5 h-5" />
                         </div>
-                        <div className="text-xs text-muted-foreground font-sans">
-                          {related.shortDesc}
+                        <div>
+                          <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors">
+                            {related.name}
+                          </div>
+                          <div className="text-xs text-muted-foreground font-sans">
+                            {related.shortDesc}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}

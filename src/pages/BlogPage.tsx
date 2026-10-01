@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Link } from 'wouter';
-import { Clock, User, ArrowRight, Copy, Check } from 'lucide-react';
+import { Clock, User, ArrowRight, Copy, Check, Search, PenTool, Smartphone, Wrench, FileText, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
@@ -48,15 +48,26 @@ function RssSubscribeRow({ size = 'sm' }: { size?: 'sm' | 'md' }) {
   );
 }
 
+function getBlogCategoryIcon(category: string) {
+  switch (category) {
+    case 'SEO': return Search;
+    case 'Writing': return PenTool;
+    case 'Social Media': return Smartphone;
+    case 'Tools': return Wrench;
+    default: return FileText;
+  }
+}
+
 function PostCard({ post }: { post: typeof BLOG_POSTS[0] }) {
+  const CatIcon = getBlogCategoryIcon(post.category);
   return (
     <Link href={`/blog/${post.slug}`}>
       <div className="group border border-border rounded-xl bg-card overflow-hidden hover:shadow-md hover:border-primary/30 transition-all cursor-pointer h-full flex flex-col">
         {/* Placeholder image */}
         <div className="aspect-[16/9] bg-gradient-to-br from-primary/10 via-muted to-muted/50 flex items-center justify-center">
-          <span className="text-4xl opacity-30 select-none">
-            {post.category === 'SEO' ? '🔍' : post.category === 'Writing' ? '✍️' : post.category === 'Social Media' ? '📱' : post.category === 'Tools' ? '🛠️' : '📝'}
-          </span>
+          <div className="p-4 rounded-2xl bg-background/50 text-primary/40 group-hover:text-primary transition-colors">
+            <CatIcon className="w-10 h-10" strokeWidth={1.5} />
+          </div>
         </div>
         <div className="p-5 flex flex-col flex-1">
           <div className="flex items-center gap-3 mb-3">
@@ -132,12 +143,15 @@ export default function BlogPage() {
               <div className="group mb-10 border border-border rounded-2xl bg-card overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all cursor-pointer">
                 <div className="md:grid md:grid-cols-2">
                   <div className="aspect-[16/9] md:aspect-auto bg-gradient-to-br from-primary/15 via-muted to-muted/60 flex items-center justify-center min-h-[200px]">
-                    <span className="text-6xl opacity-20 select-none">🔍</span>
+                    <div className="p-6 rounded-3xl bg-background/60 text-primary/40 group-hover:text-primary transition-colors">
+                      <Search className="w-16 h-16" strokeWidth={1.5} />
+                    </div>
                   </div>
                   <div className="p-8 flex flex-col justify-center">
                     <div className="flex items-center gap-3 mb-4">
-                      <span className="text-xs font-sans px-2.5 py-1 rounded-full bg-primary text-white font-medium">
-                        🔥 Featured
+                      <span className="text-xs font-sans px-2.5 py-1 rounded-full bg-primary text-white font-medium flex items-center gap-1">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                        Featured
                       </span>
                       <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
                         {featured.category}

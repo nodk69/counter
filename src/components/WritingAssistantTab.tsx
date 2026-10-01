@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp, Target, Check } from 'lucide-react';
 import {
   useContentAnalysis,
   WritingMode,
@@ -354,8 +354,10 @@ export default function WritingAssistantTab({ mode, setMode, stats: statsProp, a
       {!empty && (
         <Section title="Reading Audience">
           <div className="space-y-2">
-            <div className="flex items-start gap-2">
-              <span className="text-lg" aria-hidden="true">🎯</span>
+            <div className="flex items-start gap-2.5">
+              <div className="p-1.5 rounded-lg bg-primary/10 text-primary shrink-0 mt-0.5">
+                <Target className="w-4 h-4" strokeWidth={2} />
+              </div>
               <div>
                 <div className="font-sans font-semibold text-sm text-foreground">{analysis.audienceLabel}</div>
                 <div className="text-xs text-muted-foreground font-sans">{analysis.audienceNote}</div>
@@ -375,8 +377,9 @@ export default function WritingAssistantTab({ mode, setMode, stats: statsProp, a
               </p>
               <div className="flex flex-wrap gap-1.5">
                 {analysis.matchingBenchmarks.map(b => (
-                  <span key={b} className="px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-sans font-medium border border-primary/20">
-                    ✓ {b}
+                  <span key={b} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/10 text-primary text-xs font-sans font-medium border border-primary/20">
+                    <Check className="w-3 h-3" />
+                    <span>{b}</span>
                   </span>
                 ))}
               </div>

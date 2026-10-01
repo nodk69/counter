@@ -2,13 +2,13 @@ import { useMemo } from 'react';
 import { Link } from 'wouter';
 import { ArrowRight } from 'lucide-react';
 import { TOOLS } from '@/data/tools';
+import { getToolIcon } from '@/data/icons';
 import type { ContentAnalysis, WritingMode } from '@/hooks/useContentAnalysis';
 import type { TextStats } from '@/hooks/useTextStats';
 
 interface Rec {
   slug: string;
   name: string;
-  icon: string;
   reason: string;
 }
 
@@ -42,7 +42,7 @@ function getRecommendations(
       return;
     }
     used.add(slug);
-    recs.push({ slug, name: tool.name, icon: tool.icon, reason });
+    recs.push({ slug, name: tool.name, reason });
   }
 
   // No text yet — show universally useful starters
@@ -150,24 +150,29 @@ export default function ToolRecommendations({
         <p className="text-xs text-muted-foreground font-sans mb-3">
           Based on your analysis, these tools can help next:
         </p>
-        {recs.map(rec => (
-          <Link
-            key={rec.slug}
-            href={`/${rec.slug}`}
-            className="flex items-start gap-3 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-muted/30 transition-colors group cursor-pointer"
-          >
-            <span className="text-lg flex-shrink-0 mt-0.5">{rec.icon}</span>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-foreground font-sans group-hover:text-primary transition-colors">
-                {rec.name}
+        {recs.map(rec => {
+          const RecIcon = getToolIcon(rec.slug);
+          return (
+            <Link
+              key={rec.slug}
+              href={`/${rec.slug}`}
+              className="flex items-start gap-3 p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-muted/30 transition-colors group cursor-pointer"
+            >
+              <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-primary/20 transition-colors">
+                <RecIcon className="w-4 h-4" />
               </div>
-              <div className="text-xs text-muted-foreground font-sans mt-0.5 leading-relaxed">
-                {rec.reason}
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-foreground font-sans group-hover:text-primary transition-colors">
+                  {rec.name}
+                </div>
+                <div className="text-xs text-muted-foreground font-sans mt-0.5 leading-relaxed">
+                  {rec.reason}
+                </div>
               </div>
-            </div>
-            <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-0.5" />
-          </Link>
-        ))}
+              <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-1" />
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

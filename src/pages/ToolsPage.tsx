@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import { TOOLS, TOOL_CATEGORIES, type ToolCategory } from '@/data/tools';
+import { getToolIcon } from '@/data/icons';
 
 const CATEGORY_FILTERS: { id: string; label: string }[] = [
   { id: 'all', label: 'All Tools' },
@@ -95,30 +96,35 @@ export default function ToolsPage() {
 
           {/* Tools grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-12">
-            {filtered.map((tool, i) => (
-              <Link key={tool.slug} href={`/${tool.slug}`}>
-                <div className="group p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer h-full flex flex-col">
-                  <div className="flex items-start justify-between mb-3">
-                    <span className="text-2xl">{tool.icon}</span>
-                    <StarRating n={i < 4 ? 5 : i < 10 ? 4 : 3} />
+            {filtered.map((tool, i) => {
+              const ToolIcon = getToolIcon(tool.slug);
+              return (
+                <Link key={tool.slug} href={`/${tool.slug}`}>
+                  <div className="group p-5 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer h-full flex flex-col">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                        <ToolIcon className="w-5 h-5" strokeWidth={2} />
+                      </div>
+                      <StarRating n={i < 4 ? 5 : i < 10 ? 4 : 3} />
+                    </div>
+                    <h2 className="font-serif text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                      {tool.name}
+                    </h2>
+                    <p className="text-xs text-muted-foreground font-sans mb-3 leading-snug flex-1">
+                      {tool.shortDesc}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-sans px-2 py-0.5 rounded-md bg-muted text-muted-foreground capitalize">
+                        {TOOL_CATEGORIES[tool.category as ToolCategory].label}
+                      </span>
+                      <span className="text-xs font-medium text-primary font-sans opacity-0 group-hover:opacity-100 transition-opacity">
+                        Launch →
+                      </span>
+                    </div>
                   </div>
-                  <h2 className="font-serif text-base font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                    {tool.name}
-                  </h2>
-                  <p className="text-xs text-muted-foreground font-sans mb-3 leading-snug flex-1">
-                    {tool.shortDesc}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-sans px-2 py-0.5 rounded-md bg-muted text-muted-foreground capitalize">
-                      {TOOL_CATEGORIES[tool.category as ToolCategory].label}
-                    </span>
-                    <span className="text-xs font-medium text-primary font-sans opacity-0 group-hover:opacity-100 transition-opacity">
-                      Launch →
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Comparison table */}
@@ -137,27 +143,30 @@ export default function ToolsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
-                  {TOOLS.slice(0,10).map((tool, i) => (
-                    <tr key={tool.slug} className="hover:bg-muted/20 transition-colors">
-                      <td className="py-3 px-4">
-                        <Link href={`/${tool.slug}`} className="flex items-center gap-2 hover:text-primary transition-colors">
-                          <span>{tool.icon}</span>
-                          <span className="font-medium text-foreground">{tool.name}</span>
-                        </Link>
-                      </td>
-                      <td className="py-3 px-4 text-muted-foreground">{tool.shortDesc}</td>
-                      <td className="py-3 px-4">
-                        <span className="text-xs px-2 py-0.5 rounded-md bg-muted text-muted-foreground capitalize">
-                          {TOOL_CATEGORIES[tool.category as ToolCategory].label}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex justify-center">
-                          <StarRating n={i < 2 ? 5 : i < 6 ? 4 : 3} />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {TOOLS.slice(0,10).map((tool, i) => {
+                    const ToolIcon = getToolIcon(tool.slug);
+                    return (
+                      <tr key={tool.slug} className="hover:bg-muted/20 transition-colors">
+                        <td className="py-3 px-4">
+                          <Link href={`/${tool.slug}`} className="flex items-center gap-2 hover:text-primary transition-colors">
+                            <ToolIcon className="w-4 h-4 text-primary shrink-0" strokeWidth={2} />
+                            <span className="font-medium text-foreground">{tool.name}</span>
+                          </Link>
+                        </td>
+                        <td className="py-3 px-4 text-muted-foreground">{tool.shortDesc}</td>
+                        <td className="py-3 px-4">
+                          <span className="text-xs px-2 py-0.5 rounded-md bg-muted text-muted-foreground capitalize">
+                            {TOOL_CATEGORIES[tool.category as ToolCategory].label}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex justify-center">
+                            <StarRating n={i < 2 ? 5 : i < 6 ? 4 : 3} />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -1,7 +1,21 @@
+import type { LucideIcon } from 'lucide-react';
+import {
+  FileText,
+  CheckSquare,
+  ClipboardList,
+  Calculator,
+  BookOpen,
+  Home,
+  Wrench,
+  Newspaper,
+  FolderKanban,
+  Info,
+} from 'lucide-react';
+
 export interface NavLink {
   href:     string;
   label:    string;
-  icon?:    string;
+  icon?:    LucideIcon | string;
   external?: boolean;
 }
 
@@ -22,21 +36,21 @@ export const MAIN_NAV: NavLink[] = [
  * rather than all pointing at the bare /resources URL.
  */
 export const RESOURCES_LINKS: NavLink[] = [
-  { href: '/resources#templates',   label: 'Templates',   icon: '📄' },
-  { href: '/resources#checklists',  label: 'Checklists',  icon: '✅' },
-  { href: '/resources#cheatsheets', label: 'Cheatsheets', icon: '📋' },
-  { href: '/resources#calculators', label: 'Calculators', icon: '🧮' },
-  { href: '/guides',                label: 'Guides',      icon: '📖' },
+  { href: '/resources#templates',   label: 'Templates',   icon: FileText },
+  { href: '/resources#checklists',  label: 'Checklists',  icon: CheckSquare },
+  { href: '/resources#cheatsheets', label: 'Cheatsheets', icon: ClipboardList },
+  { href: '/resources#calculators', label: 'Calculators', icon: Calculator },
+  { href: '/guides',                label: 'Guides',      icon: BookOpen },
 ];
 
 /** Mobile navigation links */
 export const MOBILE_NAV: NavLink[] = [
-  { href: '/',          label: 'Home',         icon: '🏠' },
-  { href: '/tools',     label: 'All Tools',    icon: '🛠️' },
-  { href: '/blog',      label: 'Blog',         icon: '📝' },
-  { href: '/guides',    label: 'Guides',       icon: '📖' },
-  { href: '/resources', label: 'Resources',    icon: '📚' },
-  { href: '/about',     label: 'About',        icon: '' },
+  { href: '/',          label: 'Home',         icon: Home },
+  { href: '/tools',     label: 'All Tools',    icon: Wrench },
+  { href: '/blog',      label: 'Blog',         icon: Newspaper },
+  { href: '/guides',    label: 'Guides',       icon: BookOpen },
+  { href: '/resources', label: 'Resources',    icon: FolderKanban },
+  { href: '/about',     label: 'About',        icon: Info },
 ];
 
 /** Footer navigation grouped by section */

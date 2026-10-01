@@ -1,16 +1,17 @@
 import { Link } from 'wouter';
-import { Smartphone } from 'lucide-react';
+import { Smartphone, Twitter, Search, Tag, Instagram, Linkedin, Youtube, Video, Facebook } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { SOCIAL_MEDIA_LIMITS } from '@/data/seoData';
 
-const ICON_MAP: Record<string, string> = {
-  'twitter-character-limit': '𝕏',
-  'meta-description-limit': '🔍',
-  'seo-title-tag-limit': '🏷️',
-  'instagram-character-limit': '📷',
-  'linkedin-character-limit': 'in',
-  'youtube-description-limit': '▶',
-  'tiktok-character-limit': '♪',
-  'facebook-character-limit': 'f',
+const ICON_MAP: Record<string, LucideIcon> = {
+  'twitter-character-limit': Twitter,
+  'meta-description-limit': Search,
+  'seo-title-tag-limit': Tag,
+  'instagram-character-limit': Instagram,
+  'linkedin-character-limit': Linkedin,
+  'youtube-description-limit': Youtube,
+  'tiktok-character-limit': Video,
+  'facebook-character-limit': Facebook,
 };
 
 const COLOR_MAP: Record<string, string> = {
@@ -62,16 +63,18 @@ export default function SocialMediaLimits() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {limits.map((limit) => (
-                <tr key={limit!.slug} className="hover:bg-muted/30 transition-colors group">
-                  <td className="py-3 pr-4">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold flex-shrink-0 ${COLOR_MAP[limit!.slug]}`}>
-                        {ICON_MAP[limit!.slug]}
+              {limits.map((limit) => {
+                const IconComponent = ICON_MAP[limit!.slug] || Smartphone;
+                return (
+                  <tr key={limit!.slug} className="hover:bg-muted/30 transition-colors group">
+                    <td className="py-3 pr-4">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-md flex items-center justify-center text-xs font-bold flex-shrink-0 ${COLOR_MAP[limit!.slug]}`}>
+                          <IconComponent className="w-4 h-4" strokeWidth={2} />
+                        </div>
+                        <span className="font-medium text-foreground">{limit!.platform}</span>
                       </div>
-                      <span className="font-medium text-foreground">{limit!.platform}</span>
-                    </div>
-                  </td>
+                    </td>
                   <td className="py-3 px-4 text-right">
                     <span className="font-mono font-semibold text-primary">
                       {limit!.limit.toLocaleString()}
@@ -94,8 +97,9 @@ export default function SocialMediaLimits() {
                     </Link>
                   </td>
                 </tr>
-              ))}
-            </tbody>
+              );
+            })}
+          </tbody>
           </table>
         </div>
 

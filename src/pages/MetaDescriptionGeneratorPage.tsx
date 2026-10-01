@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check, RefreshCw, ChevronRight } from 'lucide-react';
+import { Copy, Check, RefreshCw, ChevronRight, Search, Lightbulb, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'wouter';
@@ -166,9 +166,14 @@ export default function MetaDescriptionGeneratorPage() {
 
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-3 font-sans">
-              🔍 Meta Description Generator
-            </h1>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                <Search className="w-6 h-6" strokeWidth={2} />
+              </div>
+              <h1 className="text-3xl font-bold text-foreground font-sans">
+                Meta Description Generator
+              </h1>
+            </div>
             <p className="text-muted-foreground font-sans text-lg leading-relaxed max-w-2xl">
               Generate 5 optimized meta descriptions for any page. Each variant is scored for keyword usage, length, and click-through potential.
             </p>
@@ -235,7 +240,7 @@ export default function MetaDescriptionGeneratorPage() {
                 disabled={!keyword.trim()}
                 className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 font-sans font-medium text-sm transition-colors"
               >
-                {generated ? <RefreshCw className="w-4 h-4" /> : '✦'}
+                {generated ? <RefreshCw className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />}
                 {generated ? 'Regenerate' : 'Generate Meta Descriptions'}
               </button>
             </div>
@@ -278,8 +283,9 @@ export default function MetaDescriptionGeneratorPage() {
                 </div>
               ))}
 
-              <p className="text-xs text-muted-foreground font-sans mt-1">
-                💡 <strong>Tip:</strong> Choose the variant closest to 160 chars with your keyword in the first half.
+              <p className="text-xs text-muted-foreground font-sans mt-1 flex items-center gap-1.5">
+                <Lightbulb className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span><strong>Tip:</strong> Choose the variant closest to 160 chars with your keyword in the first half.</span>
               </p>
             </div>
           )}
@@ -289,7 +295,9 @@ export default function MetaDescriptionGeneratorPage() {
             <h2 className="text-xl font-bold text-foreground font-sans mb-4">How to Write the Perfect Meta Description</h2>
             <div className="grid sm:grid-cols-2 gap-6 text-sm text-foreground font-sans">
               <div>
-                <h3 className="font-semibold mb-2">✅ Best Practices</h3>
+                <h3 className="font-semibold mb-2 flex items-center gap-1.5 text-green-700 dark:text-green-400">
+                  <CheckCircle2 className="w-4 h-4" /> Best Practices
+                </h3>
                 <ul className="space-y-1.5 text-muted-foreground">
                   <li>• Keep it between <strong className="text-foreground">150–160 characters</strong></li>
                   <li>• Include your <strong className="text-foreground">focus keyword</strong> naturally</li>
@@ -299,12 +307,14 @@ export default function MetaDescriptionGeneratorPage() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">❌ Common Mistakes</h3>
+                <h3 className="font-semibold mb-2 flex items-center gap-1.5 text-red-600 dark:text-red-400">
+                  <XCircle className="w-4 h-4" /> Common Mistakes
+                </h3>
                 <ul className="space-y-1.5 text-muted-foreground">
                   <li>• Going over 160 chars (gets cut off)</li>
                   <li>• Keyword stuffing</li>
                   <li>• Duplicate descriptions across pages</li>
-                  <li>• Generic descriptions ("Welcome to our site")</li>
+                  <li>• Generic descriptions (&ldquo;Welcome to our site&rdquo;)</li>
                   <li>• Leaving meta descriptions blank</li>
                 </ul>
               </div>

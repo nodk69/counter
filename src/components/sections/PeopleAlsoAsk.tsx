@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'wouter';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Search } from 'lucide-react';
 
 const PAA_ITEMS = [
   {
@@ -51,8 +51,10 @@ export default function PeopleAlsoAsk() {
   return (
     <section className="py-16 bg-card border-y border-border">
       <div className="container mx-auto px-4 max-w-3xl">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-xl">🔍</span>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-2 rounded-lg bg-primary/10 text-primary">
+            <Search className="w-5 h-5" strokeWidth={2} />
+          </div>
           <h2 className="font-serif text-3xl font-bold text-foreground">People Also Ask</h2>
         </div>
         <p className="text-muted-foreground font-sans text-sm mb-8">Common questions about word counting & writing</p>

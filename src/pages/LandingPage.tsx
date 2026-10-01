@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Link } from 'wouter';
-import { Check, ArrowRight } from 'lucide-react';
+import { Check, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import MetaTags from '@/components/MetaTags';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import { LANDING_PAGES } from '@/data/seoData';
 import { TOOLS } from '@/data/tools';
+import { getToolIcon } from '@/data/icons';
 
 export default function LandingPage({ slug }: { slug: string }) {
   const data = LANDING_PAGES[slug];
@@ -74,15 +75,16 @@ export default function LandingPage({ slug }: { slug: string }) {
             <h2 className="font-serif text-3xl font-bold text-foreground mb-6">Sound Familiar?</h2>
             <div className="space-y-3">
               {painPoints.map(p => (
-                <div key={p} className="flex gap-3 p-4 rounded-xl border border-border bg-card">
-                  <span className="text-muted-foreground font-sans text-2xl leading-none flex-shrink-0">😔</span>
+                <div key={p} className="flex items-start gap-3 p-4 rounded-xl border border-border bg-card">
+                  <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" strokeWidth={2} />
                   <p className="text-foreground font-sans">{p}</p>
                 </div>
               ))}
             </div>
             <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/20">
-              <p className="text-primary font-sans text-sm font-medium">
-                ✅ counter solves all of this — for free, instantly, without signing up.
+              <p className="text-primary font-sans text-sm font-medium flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
+                <span>counter solves all of this — for free, instantly, without signing up.</span>
               </p>
             </div>
           </section>
@@ -116,18 +118,23 @@ export default function LandingPage({ slug }: { slug: string }) {
           <section>
             <h2 className="font-serif text-3xl font-bold text-foreground mb-6">Tools You'll Love</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {relatedTools.map(tool => (
-                <Link key={tool.slug} href={`/${tool.slug}`}>
-                  <div className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
-                    <span className="text-2xl">{tool.icon}</span>
-                    <div>
-                      <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors">{tool.name}</div>
-                      <div className="text-xs text-muted-foreground font-sans">{tool.shortDesc}</div>
+              {relatedTools.map(tool => {
+                const ToolIcon = getToolIcon(tool.slug);
+                return (
+                  <Link key={tool.slug} href={`/${tool.slug}`}>
+                    <div className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
+                        <ToolIcon className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors">{tool.name}</div>
+                        <div className="text-xs text-muted-foreground font-sans">{tool.shortDesc}</div>
+                      </div>
+                      <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <ArrowRight className="w-4 h-4 text-muted-foreground ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                </Link>
-              ))}
+                  </Link>
+                );
+              })}
             </div>
           </section>
 

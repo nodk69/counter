@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search, X, ArrowRight, FileText, BookOpen, Wrench } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { Link } from 'wouter';
 import { TOOLS } from '@/data/tools';
 import { BLOG_POSTS } from '@/data/blog';
 import { GUIDES } from '@/data/guides';
+import { getToolIcon } from '@/data/icons';
 import { useCommandPalette } from '@/context/CommandPaletteContext';
 
 // ─── Search index ─────────────────────────────────────────────────────────────
@@ -15,7 +17,7 @@ interface SearchItem {
   title:       string;
   description: string;
   href:        string;
-  icon?:       string;
+  icon?:       LucideIcon;
   category?:   string;
 }
 
@@ -25,7 +27,7 @@ const INDEX: SearchItem[] = [
     title:       t.name,
     description: t.shortDesc,
     href:        `/${t.slug}`,
-    icon:        t.icon,
+    icon:        getToolIcon(t.slug),
     category:    t.category,
   })),
   ...BLOG_POSTS.map(p => ({
@@ -198,10 +200,11 @@ export default function CommandPalette() {
                     }`}
                   >
                     <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-muted/50">
-                      {item.icon
-                        ? <span className="text-lg leading-none">{item.icon}</span>
-                        : <Icon className={`w-4 h-4 ${color}`} />
-                      }
+                      {item.icon ? (
+                        <item.icon className={`w-4 h-4 ${color}`} />
+                      ) : (
+                        <Icon className={`w-4 h-4 ${color}`} />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-sm font-medium text-foreground font-sans truncate">
