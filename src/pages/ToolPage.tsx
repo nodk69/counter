@@ -20,7 +20,7 @@ import { getToolBySlug, getRelatedTools } from '@/data/tools';
 import { getToolIcon } from '@/data/icons';
 import { useTextContext } from '@/context/TextContext';
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Sparkles } from 'lucide-react';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ErrorFallback from '@/components/ErrorFallback';
 
@@ -131,10 +131,35 @@ export default function ToolPage({ slug }: { slug: string }) {
           </div>
         </div>
 
+        {/* Try with Example Text Bar — Positioned prominently directly above the Editor */}
+        {tool.exampleText && (
+          <div className="container mx-auto px-4 max-w-6xl pt-2 pb-0">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 sm:px-4 sm:py-2.5 rounded-xl border border-primary/20 bg-primary/5 dark:bg-primary/10 hover:border-primary/30 transition-all">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                <span className="flex-shrink-0 p-1.5 rounded-lg bg-primary/10 text-primary">
+                  <Sparkles className="w-4 h-4" />
+                </span>
+                <div className="text-xs sm:text-sm font-sans min-w-0 truncate">
+                  <span className="font-semibold text-foreground mr-1.5">Try with example text:</span>
+                  <span className="text-muted-foreground italic">&ldquo;{tool.exampleText}&rdquo;</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => reset(tool.exampleText)}
+                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer active:scale-95"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Load example
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Editor */}
         <div className="container mx-auto px-4 max-w-6xl py-6">
           <div className="grid lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-8 h-[65vh] min-h-[460px]">
+            <div className="lg:col-span-8 h-[500px] lg:h-[65vh] lg:min-h-[460px]">
               <ErrorBoundary
                 fallback={({ error, resetError }) => (
                   <ErrorFallback
@@ -148,7 +173,7 @@ export default function ToolPage({ slug }: { slug: string }) {
                 <Editor />
               </ErrorBoundary>
             </div>
-            <div className="lg:col-span-4 h-[65vh] min-h-[460px] overflow-hidden">
+            <div className="lg:col-span-4 h-auto lg:h-[65vh] lg:min-h-[460px] overflow-hidden">
               <ErrorBoundary
                 fallback={({ error, resetError }) => (
                   <ErrorFallback
@@ -168,28 +193,8 @@ export default function ToolPage({ slug }: { slug: string }) {
           </div>
         </div>
 
-        {/* Try example + About section */}
+        {/* About section */}
         <div className="container mx-auto px-4 max-w-4xl pb-12">
-          {/* Example text */}
-          {tool.exampleText && (
-            <div className="mb-10 p-5 rounded-xl border border-dashed border-border bg-muted/20">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="font-sans text-sm font-semibold text-foreground">
-                  Try with example text
-                </h3>
-                <button
-                  onClick={() => reset(tool.exampleText)}
-                  className="text-xs px-3 py-1.5 rounded-md bg-primary text-white hover:bg-primary/90 transition-colors font-sans"
-                >
-                  Load example
-                </button>
-              </div>
-              <p className="text-sm text-muted-foreground font-sans italic leading-relaxed line-clamp-2">
-                {tool.exampleText}
-              </p>
-            </div>
-          )}
-
           {/* About this tool */}
           <div className="mb-12">
             <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
