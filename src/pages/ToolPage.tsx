@@ -18,9 +18,8 @@ import {
 } from '@/components/ui/breadcrumb';
 import { getToolBySlug, getRelatedTools } from '@/data/tools';
 import { getToolIcon } from '@/data/icons';
-import { useTextContext } from '@/context/TextContext';
 import { useState } from 'react';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ErrorFallback from '@/components/ErrorFallback';
 
@@ -51,7 +50,6 @@ function FAQAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
 export default function ToolPage({ slug }: { slug: string }) {
   const tool = getToolBySlug(slug);
   const relatedTools = getRelatedTools(slug);
-  const { reset } = useTextContext();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -130,31 +128,6 @@ export default function ToolPage({ slug }: { slug: string }) {
             </p>
           </div>
         </div>
-
-        {/* Try with Example Text Bar — Positioned prominently directly above the Editor */}
-        {tool.exampleText && (
-          <div className="container mx-auto px-4 max-w-6xl pt-2 pb-0">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 sm:px-4 sm:py-2.5 rounded-xl border border-primary/20 bg-primary/5 dark:bg-primary/10 hover:border-primary/30 transition-all">
-              <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                <span className="flex-shrink-0 p-1.5 rounded-lg bg-primary/10 text-primary">
-                  <Sparkles className="w-4 h-4" />
-                </span>
-                <div className="text-xs sm:text-sm font-sans min-w-0 truncate">
-                  <span className="font-semibold text-foreground mr-1.5">Try with example text:</span>
-                  <span className="text-muted-foreground italic">&ldquo;{tool.exampleText}&rdquo;</span>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => reset(tool.exampleText)}
-                className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold hover:bg-primary/90 transition-all shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer active:scale-95"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                Load example
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Editor */}
         <div className="container mx-auto px-4 max-w-6xl py-6">

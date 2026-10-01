@@ -49,36 +49,34 @@ function EditorFooter({ saveStatus }: EditorFooterProps) {
           <span className={`editor-save-dot ${saveStatus}`} />
           {STATUS_LABEL[saveStatus]}
         </span>
-        <div className="flex-1 min-w-0 flex items-center gap-3 sm:gap-4 overflow-x-auto no-scrollbar">
+        <div className="flex-1 min-w-0">
           <WritingGoal />
-          <span className="hidden sm:inline-block w-1 h-1 rounded-full bg-border flex-shrink-0" />
-          <button
-            type="button"
-            onClick={handleLoadExample}
-            title="Load sample example text into editor"
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-sans cursor-pointer flex-shrink-0 active:scale-95"
-          >
-            {justLoaded ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-green-500" />
-                <span className="text-green-600 dark:text-green-400 font-medium">Loaded!</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-3.5 h-3.5 text-primary/80" />
-                <span>Load example</span>
-              </>
-            )}
-          </button>
         </div>
       </div> 
-      <div className="flex items-center gap-1.5 text-primary/80 font-medium flex-shrink-0 text-xs font-sans">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary/80 inline-block" />
-        100% ad-free
+      <div className="flex items-center flex-shrink-0">
+        <button
+          type="button"
+          onClick={handleLoadExample}
+          title="Load sample example text into editor"
+          className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors font-sans cursor-pointer active:scale-95 px-2 py-0.5 rounded-md hover:bg-primary/5 dark:hover:bg-primary/10 border border-transparent hover:border-primary/20"
+        >
+          {justLoaded ? (
+            <>
+              <Check className="w-3.5 h-3.5 text-green-500" />
+              <span className="text-green-600 dark:text-green-400 font-medium">Loaded!</span>
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
+              <span className="font-medium text-foreground hover:text-primary">Load example</span>
+            </>
+          )}
+        </button>
       </div>
     </div>
   );
 }
 
 export default memo(EditorFooter);
+
 
