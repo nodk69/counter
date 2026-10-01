@@ -290,43 +290,115 @@ export default function MetaDescriptionGeneratorPage() {
             </div>
           )}
 
-          {/* Guide */}
-          <div className="bg-muted/30 border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-bold text-foreground font-sans mb-4">How to Write the Perfect Meta Description</h2>
-            <div className="grid sm:grid-cols-2 gap-6 text-sm text-foreground font-sans">
-              <div>
-                <h3 className="font-semibold mb-2 flex items-center gap-1.5 text-green-700 dark:text-green-400">
-                  <CheckCircle2 className="w-4 h-4" /> Best Practices
-                </h3>
-                <ul className="space-y-1.5 text-muted-foreground">
-                  <li>• Keep it between <strong className="text-foreground">150–160 characters</strong></li>
-                  <li>• Include your <strong className="text-foreground">focus keyword</strong> naturally</li>
-                  <li>• Add a <strong className="text-foreground">call-to-action</strong> (try free, learn more)</li>
-                  <li>• Match the <strong className="text-foreground">search intent</strong> of the page</li>
-                  <li>• Make every page description <strong className="text-foreground">unique</strong></li>
-                </ul>
+          {/* About this tool */}
+          <div className="mb-10 p-6 sm:p-8 rounded-2xl border border-border bg-card shadow-xs">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <Sparkles className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="font-semibold mb-2 flex items-center gap-1.5 text-red-600 dark:text-red-400">
-                  <XCircle className="w-4 h-4" /> Common Mistakes
-                </h3>
-                <ul className="space-y-1.5 text-muted-foreground">
-                  <li>• Going over 160 chars (gets cut off)</li>
-                  <li>• Keyword stuffing</li>
-                  <li>• Duplicate descriptions across pages</li>
-                  <li>• Generic descriptions (&ldquo;Welcome to our site&rdquo;)</li>
-                  <li>• Leaving meta descriptions blank</li>
-                </ul>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+                  About Meta Description Generator
+                </h2>
+                <span className="text-xs font-sans text-muted-foreground uppercase tracking-wider font-semibold">
+                  SEO Utility · Real-Time Scoring · 100% Free
+                </span>
+              </div>
+            </div>
+
+            <p className="text-base text-foreground/80 font-sans leading-relaxed mb-6">
+              Search engines display up to 160 characters in search results. Our Meta Description Generator creates 5 high-converting, character-counted variants scored for focus keyword density, power words, and click-through appeal.
+            </p>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground font-sans mb-3 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-primary" /> Perfect for
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {['SEO Specialists', 'Content Marketers', 'Bloggers & Publishers', 'E-commerce Stores', 'Agency Copywriters'].map((use) => (
+                  <span
+                    key={use}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/60 text-foreground font-sans text-xs font-medium border border-border/50 hover:border-primary/30 transition-colors"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
+                    {use}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
 
+          {/* Structured Step-by-Step Guide */}
+          <section className="my-10" aria-labelledby="meta-gen-guide-heading">
+            <div className="mb-6">
+              <h2 id="meta-gen-guide-heading" className="font-serif text-2xl sm:text-3xl font-bold text-foreground mb-1">
+                How to Generate High-CTR Meta Descriptions
+              </h2>
+              <p className="text-sm text-muted-foreground font-sans">
+                Follow these 4 steps to maximize your organic search click-through rate.
+              </p>
+            </div>
+
+            <ol className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6" aria-label="Step-by-step generator guide">
+              {[
+                { title: '1. Enter Focus Keyword', desc: 'Input the primary target keyword you want to rank for on Google.' },
+                { title: '2. Add Page Benefit / Topic', desc: 'Provide a brief summary of the value your page delivers to searchers.' },
+                { title: '3. Select Tone & Audience', desc: 'Customize the voice from informational to persuasive or professional.' },
+                { title: '4. Pick the 150–160 Sweet Spot', desc: 'Choose the variant closest to 155 characters and copy with one click.' },
+              ].map((step, idx) => (
+                <li
+                  key={step.title}
+                  className="p-5 rounded-xl border border-border bg-card hover:border-primary/30 transition-all duration-200 shadow-xs"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center font-mono">
+                      {idx + 1}
+                    </span>
+                    <h3 className="font-sans text-sm sm:text-base font-semibold text-foreground">
+                      {step.title}
+                    </h3>
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground font-sans leading-relaxed">
+                    {step.desc}
+                  </p>
+                </li>
+              ))}
+            </ol>
+
+            {/* Best practices & Common Mistakes Callouts */}
+            <div className="grid sm:grid-cols-2 gap-4 mb-10">
+              <div className="p-5 rounded-xl border border-emerald-500/20 bg-emerald-500/5 dark:bg-emerald-500/10">
+                <h3 className="font-semibold text-sm mb-3 flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-sans">
+                  <CheckCircle2 className="w-4 h-4" /> Best Practices
+                </h3>
+                <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground font-sans">
+                  <li>• Keep descriptions strictly between <strong className="text-foreground">150–160 characters</strong></li>
+                  <li>• Place your <strong className="text-foreground">focus keyword</strong> in the first 80 characters</li>
+                  <li>• Include an active <strong className="text-foreground">call to action</strong> (e.g. "Try free", "Learn how")</li>
+                  <li>• Ensure every page across your website has a <strong className="text-foreground">unique</strong> snippet</li>
+                </ul>
+              </div>
+
+              <div className="p-5 rounded-xl border border-red-500/20 bg-red-500/5 dark:bg-red-500/10">
+                <h3 className="font-semibold text-sm mb-3 flex items-center gap-1.5 text-red-600 dark:text-red-400 font-sans">
+                  <XCircle className="w-4 h-4" /> Common Mistakes
+                </h3>
+                <ul className="space-y-2 text-xs sm:text-sm text-muted-foreground font-sans">
+                  <li>• Exceeding 160 characters (causes mobile SERP truncation & ellipses)</li>
+                  <li>• Keyword stuffing (reduces reader trust and lowers CTR)</li>
+                  <li>• Using duplicate meta descriptions across multiple URLs</li>
+                  <li>• Generic boilerplate copy ("Welcome to our official website")</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
           {/* FAQ */}
           <div className="mb-10">
-            <h2 className="text-xl font-bold text-foreground font-sans mb-4">Frequently Asked Questions</h2>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
             <div className="space-y-3">
               {FAQ_ITEMS.map((f, i) => (
-                <div key={i} className="border border-border rounded-xl p-4">
+                <div key={i} className="border border-border rounded-xl p-4 bg-card">
                   <h3 className="font-semibold text-foreground font-sans text-sm mb-1">{f.q}</h3>
                   <p className="text-sm text-muted-foreground font-sans leading-relaxed">{f.a}</p>
                 </div>
@@ -335,18 +407,21 @@ export default function MetaDescriptionGeneratorPage() {
           </div>
 
           {/* Related tools */}
-          <div>
-            <h2 className="text-lg font-bold text-foreground font-sans mb-3">Related Tools</h2>
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-8">
+            <h2 className="font-serif text-2xl font-bold text-foreground mb-4">Related Writing & SEO Tools</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { href: '/keyword-density-checker',  label: 'Keyword Density Checker' },
+                { href: '/keyword-density-checker',  label: 'Keyword Density' },
                 { href: '/readability-checker',       label: 'Readability Checker' },
                 { href: '/character-counter',         label: 'Character Counter' },
                 { href: '/word-counter',              label: 'Word Counter' },
                 { href: '/seo-title-tag-limit',       label: 'SEO Title Tag Limit' },
+                { href: '/twitter-character-limit',   label: 'Twitter Char Limit' },
+                { href: '/reading-time-calculator',   label: 'Reading Time' },
+                { href: '/speaking-time-calculator',  label: 'Speaking Time' },
               ].map(t => (
-                <Link key={t.href} href={t.href} className="px-3 py-1.5 border border-border rounded-lg text-sm font-sans text-muted-foreground hover:text-foreground hover:border-primary/40 transition-colors">
-                  {t.label}
+                <Link key={t.href} href={t.href} className="p-3 border border-border rounded-xl text-center text-xs font-sans font-medium text-foreground bg-card hover:border-primary/40 hover:bg-muted/30 transition-colors">
+                  {t.label} →
                 </Link>
               ))}
             </div>

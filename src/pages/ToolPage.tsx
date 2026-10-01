@@ -172,23 +172,40 @@ export default function ToolPage({ slug }: { slug: string }) {
         {/* About section */}
         <div className="container mx-auto px-4 max-w-4xl pb-12">
           {/* About this tool */}
-          <div className="mb-10">
-            <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
-              About This Tool
-            </h2>
-            <div className="prose prose-sm max-w-none text-foreground/80 font-sans space-y-4">
-              <p className="text-base leading-relaxed">{tool.description}</p>
-              <h3 className="font-serif text-xl font-semibold text-foreground">
-                Who is this tool for?
+          <div className="mb-10 p-6 sm:p-8 rounded-2xl border border-border bg-card shadow-xs">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground">
+                  About {tool.name}
+                </h2>
+                <span className="text-xs font-sans text-muted-foreground uppercase tracking-wider font-semibold">
+                  {tool.category} Tool · 100% Free & Private
+                </span>
+              </div>
+            </div>
+
+            <p className="text-base text-foreground/80 font-sans leading-relaxed mb-6">
+              {tool.description}
+            </p>
+
+            <div>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground font-sans mb-3 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-primary" /> Perfect for
               </h3>
-              <ul className="space-y-2">
+              <div className="flex flex-wrap gap-2">
                 {tool.uses.map((use) => (
-                  <li key={use} className="flex items-center gap-2 text-sm">
+                  <span
+                    key={use}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted/60 text-foreground font-sans text-xs font-medium border border-border/50 hover:border-primary/30 transition-colors"
+                  >
                     <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0" />
                     {use}
-                  </li>
+                  </span>
                 ))}
-              </ul>
+              </div>
             </div>
           </div>
 
