@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTextContext } from '@/context/TextContext';
 import { useTextStats } from '@/hooks/useTextStats';
 import { useContentAnalysis } from '@/hooks/useContentAnalysis';
-import { Download, FileText, FileJson, FileType, Loader2 } from "lucide-react";
+import { Download, FileText, FileJson, FileType, Loader2, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 import WritingAssistantTab from '@/components/WritingAssistantTab';
 import { exportToPdf } from '@/lib/generateReport';
 import { exportJson } from '@/lib/exportFormats';
@@ -15,6 +15,26 @@ export default function ToolsSection() {
   const { text, htmlContent, mode, setMode } = useTextContext();
   const stats = useTextStats(text);
   const analysis = useContentAnalysis(text, mode);
+
+  const [isOpen, setIsOpen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('counter-tools-expanded') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleOpen = () => {
+    setIsOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('counter-tools-expanded', String(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
 
   const [pendingExport, setPendingExport] = useState<ExportKind | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
@@ -92,9 +112,69 @@ export default function ToolsSection() {
   const handleExportPdf = () => runExport('pdf', () => exportToPdf(text, stats, analysis, mode));
   const handleExportJson = () => runExport('json', () => exportJson(text, stats, analysis, mode));
 
+  if (!isOpen) {
+    return (
+      <div className="bg-card/70 hover:bg-card border border-border/80 hover:border-primary/30 rounded-xl p-3.5 sm:px-5 sm:py-3.5 transition-all duration-200 shadow-xs" id="tools">
+        <button
+          type="button"
+          onClick={toggleOpen}
+          className="w-full flex items-center justify-between gap-4 text-left group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg"
+          aria-expanded={false}
+          aria-controls="writing-tools-panel"
+        >
+          <div className="flex items-center gap-3.5 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary group-hover:text-white transition-colors duration-200">
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-semibold text-sm sm:text-base text-foreground group-hover:text-primary transition-colors">
+                  Writing Assistant & Deep Analysis
+                </span>
+                {stats.words >= 5 && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                    Score: {analysis.contentScore}/100 • {analysis.scoreLabel}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground truncate mt-0.5">
+                Content score, readability breakdown, passive voice check, keyword density & export options
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/10 group-hover:bg-primary group-hover:text-white px-3 py-1.5 rounded-lg transition-all flex-shrink-0">
+            <span>Show Analysis</span>
+            <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+          </div>
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-card rounded-lg border border-border p-6" id="tools">
-      <Tabs defaultValue="assistant" className="w-full">
+    <div className="bg-card rounded-xl border border-border p-5 sm:p-6 transition-all duration-200 shadow-xs" id="tools">
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-md bg-primary/10 text-primary flex items-center justify-center">
+            <Sparkles className="w-3.5 h-3.5" />
+          </div>
+          <h2 className="font-semibold text-sm sm:text-base text-foreground font-sans">
+            Writing Assistant & Deep Analysis
+          </h2>
+        </div>
+        <button
+          type="button"
+          onClick={toggleOpen}
+          className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground font-sans px-2.5 py-1.5 rounded-md hover:bg-muted transition-colors cursor-pointer"
+          aria-expanded={true}
+          aria-controls="writing-tools-panel"
+        >
+          <span>Hide Analysis</span>
+          <ChevronUp className="w-4 h-4" />
+        </button>
+      </div>
+
+      <Tabs defaultValue="assistant" className="w-full" id="writing-tools-panel">
         <TabsList className="w-full justify-start border-b border-border bg-transparent rounded-none p-0 h-auto mb-6 flex-wrap gap-y-0">
           <TabsTrigger value="assistant" className="data-[state=active]:bg-transparent data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none border-b-2 border-transparent px-4 py-2 font-medium">Writing Assistant</TabsTrigger>
           <TabsTrigger value="density" className="data-[state=active]:bg-transparent data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none border-b-2 border-transparent px-4 py-2 font-medium">Word Density</TabsTrigger>
