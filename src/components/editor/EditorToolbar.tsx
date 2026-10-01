@@ -104,6 +104,7 @@ const ToolbarButton = memo(function ToolbarButton({ icon, label, shortcut, onCli
       <TooltipTrigger asChild>
         <button
           type="button"
+          onMouseDown={(e) => e.preventDefault()}
           onClick={onClick}
           disabled={disabled}
           className={`editor-toolbar-btn ${isActive ? 'is-active' : ''}`}
@@ -305,6 +306,7 @@ function EditorToolbar({
             <button
               type="button"
               className="editor-toolbar-select"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => headingDropdown.setOpen(!headingDropdown.open)}
               aria-label="Heading level"
             >
@@ -317,16 +319,36 @@ function EditorToolbar({
         </Tooltip>
         {headingDropdown.open && (
           <div className="editor-dropdown">
-            <button className={`editor-dropdown-item ${editor.isActive('paragraph') ? 'is-active' : ''}`} onClick={() => { editor.chain().focus().setParagraph().run(); headingDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className={`editor-dropdown-item ${editor.isActive('paragraph') ? 'is-active' : ''}`}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { editor.chain().focus().setParagraph().run(); headingDropdown.setOpen(false); }}
+            >
               <Pilcrow className="w-4 h-4" /> Paragraph
             </button>
-            <button className={`editor-dropdown-item ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`} onClick={() => { editor.chain().focus().toggleHeading({ level: 1 }).run(); headingDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className={`editor-dropdown-item ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { editor.chain().focus().toggleHeading({ level: 1 }).run(); headingDropdown.setOpen(false); }}
+            >
               <Heading1 className="w-4 h-4" /> Heading 1
             </button>
-            <button className={`editor-dropdown-item ${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}`} onClick={() => { editor.chain().focus().toggleHeading({ level: 2 }).run(); headingDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className={`editor-dropdown-item ${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { editor.chain().focus().toggleHeading({ level: 2 }).run(); headingDropdown.setOpen(false); }}
+            >
               <Heading2 className="w-4 h-4" /> Heading 2
             </button>
-            <button className={`editor-dropdown-item ${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}`} onClick={() => { editor.chain().focus().toggleHeading({ level: 3 }).run(); headingDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className={`editor-dropdown-item ${editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}`}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { editor.chain().focus().toggleHeading({ level: 3 }).run(); headingDropdown.setOpen(false); }}
+            >
               <Heading3 className="w-4 h-4" /> Heading 3
             </button>
           </div>
@@ -417,7 +439,13 @@ function EditorToolbar({
       <div className="relative" ref={fontDropdown.ref}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button type="button" className="editor-toolbar-select" onClick={() => fontDropdown.setOpen(!fontDropdown.open)} aria-label="Font family">
+            <button
+              type="button"
+              className="editor-toolbar-select"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => fontDropdown.setOpen(!fontDropdown.open)}
+              aria-label="Font family"
+            >
               <Type className="w-3.5 h-3.5" />
               <span className="max-w-[5rem] truncate">{getCurrentFont()}</span>
               <ChevronDown className="w-3 h-3" />
@@ -430,8 +458,10 @@ function EditorToolbar({
             {FONT_FAMILIES.map((f) => (
               <button
                 key={f.value}
+                type="button"
                 className={`editor-dropdown-item ${getCurrentFont() === (f.value || 'Default') ? 'is-active' : ''}`}
                 style={{ fontFamily: f.value || 'inherit' }}
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   if (f.value) {
                     editor.chain().focus().setFontFamily(f.value).run();
@@ -452,7 +482,13 @@ function EditorToolbar({
       <div className="relative" ref={sizeDropdown.ref}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button type="button" className="editor-toolbar-select" onClick={() => sizeDropdown.setOpen(!sizeDropdown.open)} aria-label="Font size">
+            <button
+              type="button"
+              className="editor-toolbar-select"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => sizeDropdown.setOpen(!sizeDropdown.open)}
+              aria-label="Font size"
+            >
               <span>{getCurrentSize().replace('px', '')}</span>
               <ChevronDown className="w-3 h-3" />
             </button>
@@ -464,7 +500,9 @@ function EditorToolbar({
             {FONT_SIZES.map((s) => (
               <button
                 key={s.value}
+                type="button"
                 className={`editor-dropdown-item ${getCurrentSize() === s.value ? 'is-active' : ''}`}
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   editor.chain().focus().setFontSize(s.value).run();
                   sizeDropdown.setOpen(false);
@@ -481,7 +519,13 @@ function EditorToolbar({
       <div className="relative" ref={lineHeightDropdown.ref}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button type="button" className="editor-toolbar-select" onClick={() => lineHeightDropdown.setOpen(!lineHeightDropdown.open)} aria-label="Line height">
+            <button
+              type="button"
+              className="editor-toolbar-select"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => lineHeightDropdown.setOpen(!lineHeightDropdown.open)}
+              aria-label="Line height"
+            >
               <span className="text-[10px]">↕</span>
               <ChevronDown className="w-3 h-3" />
             </button>
@@ -493,7 +537,9 @@ function EditorToolbar({
             {LINE_HEIGHTS.map((lh) => (
               <button
                 key={lh.value}
+                type="button"
                 className="editor-dropdown-item"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   editor.chain().focus().setLineHeight(lh.value).run();
                   lineHeightDropdown.setOpen(false);
@@ -515,6 +561,7 @@ function EditorToolbar({
             <button
               type="button"
               className="editor-toolbar-btn"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => textColorDropdown.setOpen(!textColorDropdown.open)}
               aria-label="Text color"
             >
@@ -530,8 +577,10 @@ function EditorToolbar({
               {TEXT_COLORS.map((color) => (
                 <button
                   key={color}
+                  type="button"
                   className={`editor-color-swatch ${editor.getAttributes('textStyle')?.color === color ? 'is-active' : ''}`}
                   style={{ background: color }}
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     editor.chain().focus().setColor(color).run();
                     textColorDropdown.setOpen(false);
@@ -554,7 +603,9 @@ function EditorToolbar({
               </label>
             </div>
             <button
+              type="button"
               className="editor-dropdown-item text-xs text-muted-foreground"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
                 editor.chain().focus().unsetColor().run();
                 textColorDropdown.setOpen(false);
@@ -573,6 +624,7 @@ function EditorToolbar({
             <button
               type="button"
               className={`editor-toolbar-btn ${editor.isActive('highlight') ? 'is-active' : ''}`}
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => highlightDropdown.setOpen(!highlightDropdown.open)}
               aria-label="Highlight color"
             >
@@ -587,8 +639,10 @@ function EditorToolbar({
               {HIGHLIGHT_COLORS.map((color) => (
                 <button
                   key={color}
+                  type="button"
                   className="editor-color-swatch"
                   style={{ background: color }}
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     editor.chain().focus().toggleHighlight({ color }).run();
                     highlightDropdown.setOpen(false);
@@ -598,7 +652,9 @@ function EditorToolbar({
               ))}
             </div>
             <button
+              type="button"
               className="editor-dropdown-item text-xs text-muted-foreground"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
                 editor.chain().focus().unsetHighlight().run();
                 highlightDropdown.setOpen(false);
@@ -627,6 +683,7 @@ function EditorToolbar({
             <button
               type="button"
               className="editor-toolbar-select"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => caseDropdown.setOpen(!caseDropdown.open)}
               aria-label="Case conversion"
             >
@@ -642,7 +699,9 @@ function EditorToolbar({
             {CASE_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
+                type="button"
                 className="editor-dropdown-item"
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => handleCaseConvert(opt.value)}
               >
                 {opt.label}
@@ -672,6 +731,7 @@ function EditorToolbar({
             <button
               type="button"
               className="editor-toolbar-select"
+              onMouseDown={(e) => e.preventDefault()}
               onClick={() => exportDropdown.setOpen(!exportDropdown.open)}
               aria-label="Export"
             >
@@ -682,20 +742,45 @@ function EditorToolbar({
           <TooltipContent>Export</TooltipContent>
         </Tooltip>
         {exportDropdown.open && (
-          <div className="editor-dropdown">
-            <button className="editor-dropdown-item" onClick={() => { onExportTxt(); exportDropdown.setOpen(false); }}>
+          <div className="editor-dropdown right-0 left-auto" style={{ right: 0, left: 'auto', minWidth: '11rem' }}>
+            <button
+              type="button"
+              className="editor-dropdown-item"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onExportTxt(); exportDropdown.setOpen(false); }}
+            >
               Export as TXT
             </button>
-            <button className="editor-dropdown-item" onClick={() => { onExportHtml(); exportDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className="editor-dropdown-item"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onExportHtml(); exportDropdown.setOpen(false); }}
+            >
               Export as HTML
             </button>
-            <button className="editor-dropdown-item" onClick={() => { onExportDocx(); exportDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className="editor-dropdown-item"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onExportDocx(); exportDropdown.setOpen(false); }}
+            >
               Export as DOCX
             </button>
-            <button className="editor-dropdown-item" onClick={() => { onExportMd(); exportDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className="editor-dropdown-item"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onExportMd(); exportDropdown.setOpen(false); }}
+            >
               Export as Markdown
             </button>
-            <button className="editor-dropdown-item" onClick={() => { onExportPdf(); exportDropdown.setOpen(false); }}>
+            <button
+              type="button"
+              className="editor-dropdown-item"
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => { onExportPdf(); exportDropdown.setOpen(false); }}
+            >
               Export as PDF
             </button>
           </div>

@@ -5,41 +5,17 @@ import { useContentAnalysis } from '@/hooks/useContentAnalysis';
 import { Download, FileText, FileJson, FileType, Loader2 } from "lucide-react";
 import WritingAssistantTab from '@/components/WritingAssistantTab';
 import { exportToPdf } from '@/lib/generateReport';
-import { exportDocx, exportJson } from '@/lib/exportFormats';
+import { exportJson } from '@/lib/exportFormats';
+import { exportDocument } from '@/lib/export/exportService';
 import { useCallback, useState } from 'react';
 
 type ExportKind = 'pdf' | 'txt' | 'md' | 'docx' | 'json';
 
-// Shared file-download helper. Revoking the blob URL synchronously right
-// after `a.click()` (as the original code did) is a real cross-browser
-// footgun: `click()` only *starts* the download, it doesn't wait for it,
-// and Safari/Firefox have both been observed to cancel a download whose
-// object URL was revoked before the browser finished reading it. Firefox
-// also generally requires the anchor to be attached to the DOM to reliably
-// dispatch the synthetic click. Both are fixed here.
-function downloadBlob(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.style.display = "none";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  // Give the browser a tick to actually start reading the blob before the
-  // URL is invalidated.
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 export default function ToolsSection() {
-  const { text, mode, setMode } = useTextContext();
+  const { text, htmlContent, mode, setMode } = useTextContext();
   const stats = useTextStats(text);
   const analysis = useContentAnalysis(text, mode);
 
-  // Tracks which export is currently running so buttons can show a busy
-  // state and, more importantly, can't be double-fired — exportToPdf in
-  // particular can take real time on long documents, and without this a
-  // fast double-click kicked off two concurrent PDF generations.
   const [pendingExport, setPendingExport] = useState<ExportKind | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
 
@@ -71,18 +47,49 @@ export default function ToolsSection() {
     }
   }, [pendingExport]);
 
+  const currentExportStats = {
+    words: stats.words,
+    characters: stats.charWithSpaces,
+    charactersNoSpaces: stats.charNoSpaces,
+    sentences: stats.sentences,
+    paragraphs: stats.paragraphs,
+    readingTime: stats.readingTime,
+    speakingTime: stats.speakingTime,
+  };
+
+  const currentHtml = htmlContent || `<p>${(text || '').replace(/\n/g, '<br>')}</p>`;
+
   const handleExportTxt = () => runExport('txt', () => {
-    if (stats.words === 0) return;
-    downloadBlob(new Blob([text], { type: "text/plain" }), "counter-export.txt");
+    if (stats.words === 0 && !text) return;
+    return exportDocument({
+      format: 'txt',
+      title: 'counter-export',
+      html: currentHtml,
+      stats: currentExportStats,
+    });
   });
 
   const handleExportMd = () => runExport('md', () => {
-    if (stats.words === 0) return;
-    downloadBlob(new Blob([text], { type: "text/markdown" }), "counter-export.md");
+    if (stats.words === 0 && !text) return;
+    return exportDocument({
+      format: 'markdown',
+      title: 'counter-export',
+      html: currentHtml,
+      stats: currentExportStats,
+    });
+  });
+
+  const handleExportDocx = () => runExport('docx', () => {
+    if (stats.words === 0 && !text) return;
+    return exportDocument({
+      format: 'docx',
+      title: 'counter-export',
+      html: currentHtml,
+      stats: currentExportStats,
+    });
   });
 
   const handleExportPdf = () => runExport('pdf', () => exportToPdf(text, stats, analysis, mode));
-  const handleExportDocx = () => runExport('docx', () => exportDocx(text));
   const handleExportJson = () => runExport('json', () => exportJson(text, stats, analysis, mode));
 
   return (
