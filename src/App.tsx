@@ -1,4 +1,5 @@
-import { useMemo, useState, lazy, Suspense } from 'react';
+import { useMemo, useState, useEffect, lazy, Suspense } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -105,6 +106,15 @@ const SafeNotFound = withErrorBoundary(NotFound);
 
 function GlobalMeta() {
   const [location] = useLocation();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+      (window as any).gtag('config', 'G-DS54Q060CQ', {
+        page_path: location,
+      });
+    }
+  }, [location]);
+
   return (
     <>
       <CanonicalTag path={location} />
@@ -226,6 +236,7 @@ function AppContent() {
           <Router />
         </WouterRouter>
         <Toaster />
+        <Analytics />
       </TooltipProvider>
     </TextContext.Provider>
   );

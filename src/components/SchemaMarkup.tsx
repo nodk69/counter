@@ -1,4 +1,5 @@
 import { TOOLS } from '@/data/tools';
+import { BLOG_POSTS } from '@/data/blog';
 import { SITE_CONFIG } from '@/config/site';
 
 const SITE_URL  = SITE_CONFIG.url.replace(/\/$/, '');

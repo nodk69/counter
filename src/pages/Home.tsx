@@ -20,6 +20,7 @@ const BlogSection = lazy(() => import('@/components/sections/BlogSection'));
 const PeopleAlsoAsk = lazy(() => import('@/components/sections/PeopleAlsoAsk'));
 const WordCountConversions = lazy(() => import('@/components/sections/WordCountConversions'));
 const NewsletterSignup = lazy(() => import('@/components/sections/NewsletterSignup'));
+const FAQ = lazy(() => import('@/components/sections/FAQ'));
 function SectionSkeleton({ minHeight }: { minHeight: string }) {
   return (
     <div className={`w-full ${minHeight} my-6 flex flex-col justify-center items-center p-8 bg-card/40 rounded-xl border border-border/30 animate-pulse`}>
