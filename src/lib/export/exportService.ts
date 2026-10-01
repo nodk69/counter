@@ -95,6 +95,10 @@ export function buildHtmlTemplate(
         </div>
       </div>`;
 
+  const fontImport = format === 'html'
+    ? `@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,11 +106,10 @@ export function buildHtmlTemplate(
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${displayTitle}</title>
   <style>
-    /* Google Fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+    ${fontImport}
 
     body {
-      font-family: 'Lora', 'Georgia', serif;
+      font-family: ${format === 'html' ? "'Lora', 'Georgia', serif" : "Georgia, Cambria, 'Times New Roman', serif"};
       font-size: 16px;
       line-height: 1.7;
       color: #1f2937;
@@ -118,7 +121,7 @@ export function buildHtmlTemplate(
     }
 
     h1, h2, h3, h4, h5, h6 {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: ${format === 'html' ? "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"};
       color: #111827;
       font-weight: 700;
       margin-top: 1.6em;
@@ -465,29 +468,50 @@ export async function exportDocument({
 
       const fullHtml = buildHtmlTemplate(title, html, stats, 'pdf');
 
-      // Create container offscreen
+      // Create isolated offscreen container positioned at valid origin coordinates
       const container = document.createElement('div');
-      container.style.position = 'absolute';
-      container.style.left = '-9999px';
+      container.style.position = 'fixed';
       container.style.top = '0';
+      container.style.left = '0';
       container.style.width = '800px';
-      container.innerHTML = fullHtml;
+      container.style.zIndex = '-9999';
+      container.style.opacity = '0';
+      container.style.pointerEvents = 'none';
+      container.style.background = '#ffffff';
+
+      // Parse HTML to avoid nesting doctype/html inside a div
+      const parser = new DOMParser();
+      const parsedDoc = parser.parseFromString(fullHtml, 'text/html');
+      container.innerHTML = parsedDoc.body.innerHTML;
+
+      // Extract and append all styles
+      const styles = parsedDoc.querySelectorAll('style');
+      styles.forEach((st) => container.appendChild(st.cloneNode(true)));
+
       document.body.appendChild(container);
 
       try {
         await html2pdf()
           .set({
-            margin: [15, 15, 15, 15],
+            margin: [12, 12, 12, 12],
             filename: `${fileBasename}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 3, useCORS: true, logging: false },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              logging: false,
+              scrollX: 0,
+              scrollY: 0,
+            },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
           } as any)
           .from(container)
           .save();
       } finally {
-        document.body.removeChild(container);
+        if (container.parentNode) {
+          container.parentNode.removeChild(container);
+        }
       }
       break;
     }

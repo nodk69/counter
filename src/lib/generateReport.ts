@@ -271,11 +271,14 @@ export function exportToPdf(
   mode: string
 ): void {
   const html = generateReportHTML(text, stats, analysis, mode);
-  const win = window.open('', '_blank');
-  if (!win) {
-    alert('Please allow popups for this site to download the PDF report.');
-    return;
-  }
-  win.document.write(html);
-  win.document.close();
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `writing-analysis-report-${Date.now()}.html`;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
 }

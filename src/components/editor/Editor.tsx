@@ -8,6 +8,7 @@ import EditorFooter from './EditorFooter';
 import { importFile } from '@/utils/editor/editorImport';
 import { exportDocument } from '@/lib/export/exportService';
 import { useTextStats } from '@/hooks/useTextStats';
+import { useToast } from '@/hooks/use-toast';
 import './editor.css';
 
 function Editor() {
@@ -77,101 +78,63 @@ function Editor() {
     return heading?.trim() || 'Untitled Document';
   }, [htmlContent]);
 
+  const { toast } = useToast();
+
   // ── Export handlers ────────────────────────────────────────────────
-  const handleExportTxt = useCallback(async () => {
-    if (!text) return;
-    const title = getDocTitle();
-    await exportDocument({
-      format: 'txt',
-      title,
-      html: htmlContent,
-      stats: {
-        words: stats.words,
-        characters: stats.charWithSpaces,
-        charactersNoSpaces: stats.charNoSpaces,
-        sentences: stats.sentences,
-        paragraphs: stats.paragraphs,
-        readingTime: stats.readingTime,
-        speakingTime: stats.speakingTime,
-      },
-    });
-  }, [text, htmlContent, stats, getDocTitle]);
+  const runEditorExport = useCallback(
+    async (format: 'txt' | 'html' | 'docx' | 'markdown' | 'pdf') => {
+      const hasContent = Boolean(text && text.trim());
+      if (!hasContent) {
+        const proceed = window.confirm('The editor is currently empty. Do you want to export an empty template anyway?');
+        if (!proceed) return;
+      }
 
-  const handleExportHtml = useCallback(async () => {
-    if (!htmlContent) return;
-    const title = getDocTitle();
-    await exportDocument({
-      format: 'html',
-      title,
-      html: htmlContent,
-      stats: {
-        words: stats.words,
-        characters: stats.charWithSpaces,
-        charactersNoSpaces: stats.charNoSpaces,
-        sentences: stats.sentences,
-        paragraphs: stats.paragraphs,
-        readingTime: stats.readingTime,
-        speakingTime: stats.speakingTime,
-      },
-    });
-  }, [htmlContent, stats, getDocTitle]);
+      const title = getDocTitle();
+      const formatLabels: Record<string, string> = {
+        txt: 'Plain Text (TXT)',
+        html: 'HTML Document',
+        docx: 'Word Document (DOCX)',
+        markdown: 'Markdown (MD)',
+        pdf: 'PDF Document',
+      };
 
-  const handleExportDocx = useCallback(async () => {
-    if (!htmlContent) return;
-    const title = getDocTitle();
-    await exportDocument({
-      format: 'docx',
-      title,
-      html: htmlContent,
-      stats: {
-        words: stats.words,
-        characters: stats.charWithSpaces,
-        charactersNoSpaces: stats.charNoSpaces,
-        sentences: stats.sentences,
-        paragraphs: stats.paragraphs,
-        readingTime: stats.readingTime,
-        speakingTime: stats.speakingTime,
-      },
-    });
-  }, [htmlContent, stats, getDocTitle]);
+      try {
+        await exportDocument({
+          format,
+          title,
+          html: htmlContent || `<p>${text || ''}</p>`,
+          stats: {
+            words: stats.words,
+            characters: stats.charWithSpaces,
+            charactersNoSpaces: stats.charNoSpaces,
+            sentences: stats.sentences,
+            paragraphs: stats.paragraphs,
+            readingTime: stats.readingTime,
+            speakingTime: stats.speakingTime,
+          },
+        });
 
-  const handleExportMd = useCallback(async () => {
-    if (!htmlContent) return;
-    const title = getDocTitle();
-    await exportDocument({
-      format: 'markdown',
-      title,
-      html: htmlContent,
-      stats: {
-        words: stats.words,
-        characters: stats.charWithSpaces,
-        charactersNoSpaces: stats.charNoSpaces,
-        sentences: stats.sentences,
-        paragraphs: stats.paragraphs,
-        readingTime: stats.readingTime,
-        speakingTime: stats.speakingTime,
-      },
-    });
-  }, [htmlContent, stats, getDocTitle]);
+        toast({
+          title: 'Export successful',
+          description: `Downloaded ${formatLabels[format] || format.toUpperCase()}.`,
+        });
+      } catch (err) {
+        console.error(`Export (${format}) failed:`, err);
+        toast({
+          variant: 'destructive',
+          title: 'Export failed',
+          description: `Could not export as ${format.toUpperCase()}. Please try a different format or check console.`,
+        });
+      }
+    },
+    [text, htmlContent, stats, getDocTitle, toast]
+  );
 
-  const handleExportPdf = useCallback(async () => {
-    if (!htmlContent) return;
-    const title = getDocTitle();
-    await exportDocument({
-      format: 'pdf',
-      title,
-      html: htmlContent,
-      stats: {
-        words: stats.words,
-        characters: stats.charWithSpaces,
-        charactersNoSpaces: stats.charNoSpaces,
-        sentences: stats.sentences,
-        paragraphs: stats.paragraphs,
-        readingTime: stats.readingTime,
-        speakingTime: stats.speakingTime,
-      },
-    });
-  }, [htmlContent, stats, getDocTitle]);
+  const handleExportTxt = useCallback(() => runEditorExport('txt'), [runEditorExport]);
+  const handleExportHtml = useCallback(() => runEditorExport('html'), [runEditorExport]);
+  const handleExportDocx = useCallback(() => runEditorExport('docx'), [runEditorExport]);
+  const handleExportMd = useCallback(() => runEditorExport('markdown'), [runEditorExport]);
+  const handleExportPdf = useCallback(() => runEditorExport('pdf'), [runEditorExport]);
 
   // ── Clear handler ──────────────────────────────────────────────────
   const handleClear = useCallback(() => {
