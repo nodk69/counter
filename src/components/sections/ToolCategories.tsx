@@ -60,16 +60,6 @@ const CATEGORIES: Category[] = [
     iconBg: 'bg-rose-50 dark:bg-rose-950',
     iconColor: 'text-rose-600 dark:text-rose-400',
   },
-  {
-    id: 'mobile',
-    icon: Smartphone,
-    title: 'Mobile Apps',
-    description: 'Native iOS & Android apps — coming soon',
-    color: 'border-slate-200 hover:border-slate-300 dark:border-slate-700',
-    iconBg: 'bg-slate-50 dark:bg-slate-900',
-    iconColor: 'text-slate-500',
-    disabled: true,
-  },
 ];
 
 const CATEGORY_LINKS: Record<string, string> = {

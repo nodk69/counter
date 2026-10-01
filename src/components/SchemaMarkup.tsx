@@ -99,6 +99,22 @@ export default function SchemaMarkup({ type, data = {} }: Props) {
         ],
       },
     ];
+
+    if (data.steps && data.steps.length > 0) {
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: `How to Use ${data.name}`,
+        description: data.description || `Step-by-step guide on how to use the online ${data.name.toLowerCase()}.`,
+        step: data.steps.map((s, i) => ({
+          '@type': 'HowToStep',
+          position: i + 1,
+          name: s.title,
+          text: s.content || (s as any).desc || s.title,
+        })),
+      });
+    }
+
     if (data.faqItems && data.faqItems.length > 0) {
       schemas.push({
         '@context': 'https://schema.org',

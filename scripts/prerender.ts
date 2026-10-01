@@ -6,6 +6,7 @@ import { SITE_CONFIG } from '../src/config/site';
 import { BLOG_POSTS } from '../src/data/blog';
 import { GUIDES } from '../src/data/guides';
 import { TOOLS } from '../src/data/tools';
+import { TOOL_GUIDES } from '../src/data/toolGuides';
 import {
   SOCIAL_MEDIA_LIMITS,
   LANDING_PAGES,
@@ -348,6 +349,7 @@ async function run() {
       const slug = routePath.substring(1);
       const tool = TOOLS.find(t => t.slug === slug);
       if (tool) {
+        const guide = TOOL_GUIDES[tool.slug];
         const schemas: object[] = [
           {
             '@context': 'https://schema.org',
@@ -369,6 +371,22 @@ async function run() {
             ]
           }
         ];
+
+        if (guide && guide.steps && guide.steps.length > 0) {
+          schemas.push({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: `How to Use ${tool.name}`,
+            description: tool.description,
+            step: guide.steps.map((s, i) => ({
+              '@type': 'HowToStep',
+              position: i + 1,
+              name: s.title,
+              text: s.desc,
+            }))
+          });
+        }
+
         if (tool.faqs && tool.faqs.length > 0) {
           schemas.push({
             '@context': 'https://schema.org',

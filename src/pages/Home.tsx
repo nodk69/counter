@@ -91,34 +91,29 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Social Media Limits */}
+        {/* Why Counter - Trust & Differentiators */}
         <Suspense fallback={<SectionSkeleton minHeight="min-h-[380px]" />}>
-          <SocialMediaLimits />
+          <WhyCounter />
         </Suspense>
 
-        {/* Tool Categories */}
+        {/* Tool Categories - Comprehensive Directory */}
         <div className="container mx-auto px-4 max-w-6xl">
           <Suspense fallback={<SectionSkeleton minHeight="min-h-[420px]" />}>
             <ToolCategories />
           </Suspense>
         </div>
 
-        {/* Featured Tools */}
-        <Suspense fallback={<SectionSkeleton minHeight="min-h-[480px]" />}>
-          <FeaturedTools />
-        </Suspense>
-
-        {/* Why Counter */}
+        {/* Social Media Limits - Platform Cheat Sheet */}
         <Suspense fallback={<SectionSkeleton minHeight="min-h-[380px]" />}>
-          <WhyCounter />
+          <SocialMediaLimits />
         </Suspense>
 
-        {/* Blog */}
+        {/* Blog - Editorial & Guides */}
         <Suspense fallback={<SectionSkeleton minHeight="min-h-[440px]" />}>
           <BlogSection />
         </Suspense>
 
-        {/* People Also Ask */}
+        {/* People Also Ask - Search Intent Accordion */}
         <Suspense fallback={<SectionSkeleton minHeight="min-h-[400px]" />}>
           <PeopleAlsoAsk />
         </Suspense>

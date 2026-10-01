@@ -6,6 +6,8 @@ import SchemaMarkup from '@/components/SchemaMarkup';
 import Editor from '@/components/editor/Editor';
 import { StatsPanel } from '@/components/stats';
 import ToolsSection from '@/components/ToolsSection';
+import HowToUse from '@/components/HowToUse';
+import RelatedContent from '@/components/RelatedContent';
 import Footer from '@/components/Footer';
 import { WORDS_TO_PAGES, SPEECH_TIMES, SOCIAL_MEDIA_LIMITS } from '@/data/seoData';
 import {
@@ -16,8 +18,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { getToolBySlug, getRelatedTools } from '@/data/tools';
-import { getToolIcon } from '@/data/icons';
+import { getToolBySlug } from '@/data/tools';
+import { getToolGuide } from '@/data/toolGuides';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -49,7 +51,7 @@ function FAQAccordion({ faqs }: { faqs: { q: string; a: string }[] }) {
 
 export default function ToolPage({ slug }: { slug: string }) {
   const tool = getToolBySlug(slug);
-  const relatedTools = getRelatedTools(slug);
+  const guide = getToolGuide(slug);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -89,6 +91,7 @@ export default function ToolPage({ slug }: { slug: string }) {
           description: tool.description,
           slug: tool.slug,
           faqItems: (tool.faqs || []).map(f => ({ question: f.q, answer: f.a })),
+          steps: guide?.steps.map(s => ({ title: s.title, content: s.desc })),
         }}
       />
       <Header />
@@ -130,7 +133,7 @@ export default function ToolPage({ slug }: { slug: string }) {
         </div>
 
         {/* Editor */}
-        <div className="container mx-auto px-4 max-w-6xl py-6">
+        <div id="editor" className="container mx-auto px-4 max-w-6xl py-6">
           <div className="grid lg:grid-cols-12 gap-6">
             <div className="lg:col-span-8 h-[500px] lg:h-[65vh] lg:min-h-[460px]">
               <ErrorBoundary
@@ -169,7 +172,7 @@ export default function ToolPage({ slug }: { slug: string }) {
         {/* About section */}
         <div className="container mx-auto px-4 max-w-4xl pb-12">
           {/* About this tool */}
-          <div className="mb-12">
+          <div className="mb-10">
             <h2 className="font-serif text-3xl font-bold text-foreground mb-4">
               About This Tool
             </h2>
@@ -186,16 +189,11 @@ export default function ToolPage({ slug }: { slug: string }) {
                   </li>
                 ))}
               </ul>
-              <h3 className="font-serif text-xl font-semibold text-foreground">
-                How to use the {tool.name}
-              </h3>
-              <p>
-                Simply paste or type your text into the editor above. The {tool.name.toLowerCase()} will automatically
-                calculate all statistics in real time — no need to click any buttons. All processing happens locally in
-                your browser, so your text is never sent to any server.
-              </p>
             </div>
           </div>
+
+          {/* Structured Step-by-Step How To Use Guide */}
+          {guide && <HowToUse tool={tool} guide={guide} />}
 
           {/* Popular conversions — all 13 */}
           <div className="mb-12">
@@ -256,36 +254,15 @@ export default function ToolPage({ slug }: { slug: string }) {
             </div>
           )}
 
-          {/* Related tools */}
-          {relatedTools.length > 0 && (
-            <div className="mb-12">
-              <h2 className="font-serif text-2xl font-bold text-foreground mb-4">
-                Related Tools
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {relatedTools.map((related) => {
-                  const RelatedIcon = getToolIcon(related.slug);
-                  return (
-                    <Link key={related.slug} href={`/${related.slug}`}>
-                      <div className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/40 hover:shadow-sm transition-all cursor-pointer">
-                        <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                          <RelatedIcon className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <div className="font-serif font-semibold text-foreground group-hover:text-primary transition-colors">
-                            {related.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground font-sans">
-                            {related.shortDesc}
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          {/* Related tools & articles & guides via internal linking engine */}
+          <div className="mb-12">
+            <RelatedContent
+              currentSlug={tool.slug}
+              type="tool"
+              category={tool.category}
+              relatedSlugs={tool.relatedTools}
+            />
+          </div>
 
           {/* FAQ */}
           <div>
