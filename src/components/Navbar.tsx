@@ -200,7 +200,7 @@ export const Navbar: React.FC = () => {
                 className={`w-3.5 h-3.5 transition-transform duration-200 ease-out ${
                   activeMenu === 'tools'
                     ? 'rotate-180 text-indigo-600 dark:text-indigo-400'
-                    : 'text-slate-400'
+                    : 'text-slate-500 dark:text-slate-400'
                 }`}
                 strokeWidth={2}
               />
@@ -244,7 +244,7 @@ export const Navbar: React.FC = () => {
                 className={`w-3.5 h-3.5 transition-transform duration-200 ease-out ${
                   activeMenu === 'resources'
                     ? 'rotate-180 text-indigo-600 dark:text-indigo-400'
-                    : 'text-slate-400'
+                    : 'text-slate-500 dark:text-slate-400'
                 }`}
                 strokeWidth={2}
               />

@@ -38,14 +38,19 @@ export default function NewsletterSignup() {
         </div>
 
         {submitted ? (
-          <div className="flex items-center justify-center gap-2 text-primary font-medium font-sans py-3">
+          <div role="status" aria-live="polite" className="flex items-center justify-center gap-2 text-primary font-medium font-sans py-3">
             <Check className="w-5 h-5" />
             <span>You're in! We'll keep you posted on new tools.</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <label htmlFor="newsletter-email" className="sr-only">
+              Email address
+            </label>
             <input
+              id="newsletter-email"
               type="email"
+              aria-label="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email address"

@@ -93,7 +93,7 @@ export default function FeaturedTools() {
             href="/tools"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-border bg-card text-foreground font-medium text-sm hover:border-primary/40 hover:bg-muted/40 transition-colors font-sans"
           >
-            View all 20+ tools →
+            View all {TOOLS.length} tools →
           </Link>
         </div>
       </div>

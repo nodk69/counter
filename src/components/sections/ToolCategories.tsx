@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { getToolsByCategory } from '@/data/tools';
+import { TOOLS, getToolsByCategory } from '@/data/tools';
 import type { LucideIcon } from 'lucide-react';
 import { Type, BarChart3, Clock, Cpu, Target, Smartphone } from 'lucide-react';
 
@@ -87,13 +87,13 @@ export default function ToolCategories() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="font-serif text-3xl font-bold text-foreground mb-1">Explore All Tools</h2>
-            <p className="text-muted-foreground font-sans text-sm">20+ free writing tools organized by type</p>
+            <p className="text-muted-foreground font-sans text-sm">{TOOLS.length}+ free writing tools organized by type</p>
           </div>
           <Link
             href="/tools"
             className="hidden sm:inline-flex items-center text-sm font-medium text-primary hover:underline font-sans"
           >
-            View all tools →
+            View all {TOOLS.length} tools →
           </Link>
         </div>
 
@@ -162,7 +162,7 @@ export default function ToolCategories() {
 
         <div className="mt-6 text-center sm:hidden">
           <Link href="/tools" className="text-sm font-medium text-primary hover:underline font-sans">
-            View all 20+ tools →
+            View all {TOOLS.length} tools →
           </Link>
         </div>
       </div>

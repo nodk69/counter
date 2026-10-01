@@ -24,6 +24,8 @@ if (typeof window === 'undefined' && typeof process !== 'undefined' && process.e
   throw new Error('Build-time assertion failed: VITE_SITE_URL is unset. This environment variable is required in production.');
 }
 
+import { TOOLS } from '../data/tools';
+
 const siteUrl = resolveSiteUrl();
 
 export const SITE_CONFIG = {
@@ -36,4 +38,8 @@ export const SITE_CONFIG = {
   defaultLang:    'en',
   locale:         'en_US',
   themeColor:     '#b94040',
+  toolCount:      TOOLS.length,
+  toolCountLabel: `${TOOLS.length}+`,
 } as const;
+
+export const SITE = SITE_CONFIG;

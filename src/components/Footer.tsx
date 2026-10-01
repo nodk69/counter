@@ -79,7 +79,7 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <span className="font-serif text-xl font-bold text-primary">counter</span>
             <p className="text-sm text-background/50 font-sans flex items-center gap-1">
-              © 2026 counter. Made with <Coffee className="w-3.5 h-3.5 text-amber-500" strokeWidth={2} /> for writers
+              © {new Date().getFullYear()} counter. Made with <Coffee className="w-3.5 h-3.5 text-amber-500" strokeWidth={2} /> for writers
             </p>
           </div>
 

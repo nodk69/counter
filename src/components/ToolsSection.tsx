@@ -96,7 +96,7 @@ export default function ToolsSection() {
           <TabsTrigger value="export" className="data-[state=active]:bg-transparent data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none border-b-2 border-transparent px-4 py-2 font-medium">Export</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="assistant" className="focus-visible:outline-none focus-visible:ring-0">
+        <TabsContent value="assistant" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
           {/* Pass the already-computed stats/analysis down instead of letting
               WritingAssistantTab compute its own copy from the same text.
               Previously both this component and WritingAssistantTab called
@@ -107,7 +107,7 @@ export default function ToolsSection() {
           <WritingAssistantTab mode={mode} setMode={setMode} stats={stats} analysis={analysis} />
         </TabsContent>
 
-        <TabsContent value="density" className="focus-visible:outline-none focus-visible:ring-0">
+        <TabsContent value="density" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
           <div className="space-y-3">
             {densityItems.length > 0 ? (
               densityItems.map((item, idx) => (
@@ -128,7 +128,7 @@ export default function ToolsSection() {
           </div>
         </TabsContent>
 
-        <TabsContent value="readability" className="focus-visible:outline-none focus-visible:ring-0">
+        <TabsContent value="readability" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
           <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
             <div className="flex-1 text-center md:text-left">
               <div className="font-mono text-6xl text-success font-semibold tracking-tighter mb-2">
@@ -157,7 +157,7 @@ export default function ToolsSection() {
           </div>
         </TabsContent>
 
-        <TabsContent value="advanced" className="focus-visible:outline-none focus-visible:ring-0">
+        <TabsContent value="advanced" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             <div>
               <div className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Total Syllables</div>
@@ -182,7 +182,7 @@ export default function ToolsSection() {
           </div>
         </TabsContent>
 
-        <TabsContent value="export" className="focus-visible:outline-none focus-visible:ring-0">
+        <TabsContent value="export" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-lg">
           <div className="mb-5">
             <h3 className="text-sm font-semibold text-foreground font-sans mb-1">Analysis Report</h3>
             <p className="text-xs text-muted-foreground font-sans mb-3">

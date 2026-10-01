@@ -65,11 +65,6 @@ export default function SchemaMarkup({ type, data = {} }: Props) {
             'Writing streak tracker',
             'Auto-save',
           ],
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: '4.8',
-            reviewCount: '2847',
-          },
         }} />
         <Script schema={{
           '@context': 'https://schema.org',

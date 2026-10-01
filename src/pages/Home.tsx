@@ -33,24 +33,31 @@ function SectionSkeleton({ minHeight }: { minHeight: string }) {
 export default function Home() {
   return (
     <div className="min-h-[100dvh] flex flex-col bg-background text-foreground transition-colors duration-200">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2.5 focus:bg-primary focus:text-white focus:shadow-lg focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-md font-sans text-sm font-medium"
+      >
+        Skip to content
+      </a>
+
       <MetaTags
         title="Free Word Counter Online — Count Words, Characters & More"
-        description="Free online word counter with 20+ writing tools. Count words, characters, sentences in real time. Readability analysis, content scoring, and PDF export. No signup needed."
+        description="Free online word counter with 20+ real-time writing tools. Count words, characters, and sentences instantly — plus readability analysis and PDF export."
       />
       <SchemaMarkup type="home" />
       <Header />
 
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         {/* Hero */}
         <div className="container mx-auto px-4 max-w-6xl">
           <HeroSection />
         </div>
 
-        {/* Editor + Stats - Fixed height issues */}
+        {/* Editor + Stats - Responsive layout */}
         <div id="editor" className="container mx-auto px-4 max-w-6xl pb-12">
          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Editor - takes full height */}
-            <div className="lg:col-span-8 h-[68vh] min-h-[480px]">
+            {/* Editor - responsive height */}
+            <div className="lg:col-span-8 h-[500px] lg:h-[68vh] lg:min-h-[480px]">
               <ErrorBoundary fallback={({ error, resetError }) => <ErrorFallback
                   error={error}
                   resetError={resetError}
@@ -60,8 +67,8 @@ export default function Home() {
                 <Editor />
               </ErrorBoundary>
             </div>
-            {/* Stats - matches editor height but allows scroll */}
-            <div className="lg:col-span-4 h-[68vh] min-h-[480px] overflow-hidden">
+            {/* Stats - auto height on mobile, fixed scrollable on desktop */}
+            <div className="lg:col-span-4 h-auto lg:h-[68vh] lg:min-h-[480px] overflow-hidden">
               <ErrorBoundary fallback={({ error, resetError }) => <ErrorFallback
                   error={error}
                   resetError={resetError}
@@ -110,9 +117,6 @@ export default function Home() {
         <Suspense fallback={<SectionSkeleton minHeight="min-h-[440px]" />}>
           <BlogSection />
         </Suspense>
-
-        {/* Testimonials */}
-        {/* <Testimonials /> */}
 
         {/* People Also Ask */}
         <Suspense fallback={<SectionSkeleton minHeight="min-h-[400px]" />}>
