@@ -21,7 +21,7 @@ import {
 import { getToolBySlug } from '@/data/tools';
 import { getToolGuide } from '@/data/toolGuides';
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Sparkles, CheckCircle2 } from 'lucide-react';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ErrorFallback from '@/components/ErrorFallback';
 
