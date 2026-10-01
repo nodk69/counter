@@ -1053,7 +1053,7 @@ The table below shows how different WPM speeds affect speech word counts:
 | Average (Clear / Conversational) | 140 WPM | 700 words |
 | Fast (High Energy / Animated) | 160 WPM | 800 words |
 
-You can check your speech length using our [Word Counter](/word-counter) or calculate speaking times directly using our [Reading Time Calculator](/reading-time-calculator).
+You can test your speech length using our [Speaking Time Calculator](/speaking-time-calculator), convert scripts with [Words to Minutes](/words-to-minutes), or dive deeper into [Words Per Minute Speaking Rates](/blog/how-many-words-per-minute-do-people-speak).
 
 ### Pacing Tips for Public Speaking
 
@@ -1369,9 +1369,375 @@ In passive voice, the subject receives the action rather than performing it. The
 Check your writing's readability (passive voice affects it) with our [Readability Checker](/readability-checker).
     `,
   },
+  {
+    slug: 'how-many-words-per-minute-do-people-speak',
+    title: 'How Many Words Per Minute Do People Speak? (Speech Pacing Guide)',
+    excerpt: 'Understand average speaking rates for presentations, podcasts, audiobooks, and conversations. Use our speech pacing formulas to time your scripts accurately.',
+    author: 'Sarah Mitchell',
+    authorTitle: 'Speech Coach & Content Lead',
+    date: 'October 1, 2026',
+    readTime: 7,
+    category: 'Productivity',
+    tags: ['Speaking Time', 'Public Speaking', 'Speech Pacing', 'Presentations', 'Productivity'],
+    featured: true,
+    titleTag: 'Words Per Minute Speaking: Average Speech Rate & Pacing Chart',
+    metaDescription: 'Discover how many words per minute people speak across presentations, podcasts, and talks. Calculate speech pacing and script timing accurately.',
+    primaryKeyword: 'words per minute speaking',
+    secondaryKeywords: [
+      'average speaking rate',
+      'words per minute speech',
+      'how fast do people speak',
+      'speech pacing calculator',
+      'presentation word count'
+    ],
+    schemaType: 'Article',
+    faq: [
+      {
+        question: 'What is the average words per minute speaking rate for a presentation?',
+        answer: 'The ideal presentation speaking rate is between 130 and 150 words per minute (WPM). This pacing gives your audience enough time to absorb slide data, take notes, and follow complex concepts.'
+      },
+      {
+        question: 'How many words should a 10-minute speech be?',
+        answer: 'At an average conversational pace of 130-140 WPM, a 10-minute speech should contain approximately 1,300 to 1,400 words, leaving buffer room for natural emphasis and audience reactions.'
+      },
+      {
+        question: 'Why do fast speakers lose audience engagement?',
+        answer: 'Speaking over 160 WPM overwhelms listeners with too much information at once. Without planned pauses, key takeaways get lost, and audience comprehension drops rapidly.'
+      },
+      {
+        question: 'How do podcasts and audiobooks differ in speaking speed?',
+        answer: 'Podcasts typically range from 140 to 160 WPM to maintain casual conversational energy. Audiobooks, by contrast, are narrated at a measured 150 to 160 WPM with clear diction for long listening sessions.'
+      }
+    ],
+    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Modern minimalist illustration showing a speaker with audio waveforms and pacing speedometers indicating words per minute tiers.',
+        fileName: 'words-per-minute-speaking-pacing-hero.webp',
+        altText: 'Words per minute speaking speed tiers chart showing average speech pacing ranges',
+        caption: 'Matching your words per minute speaking speed to your venue and audience.'
+      }
+    ],
+    relatedSlugs: [
+      'how-many-words-is-5-minute-speech',
+      'word-count-for-every-format',
+      'the-science-of-readability'
+    ],
+    content: `## Why Speaking Rate Dictates Audience Retention
+
+Public speaking is a battle for attention. Whether you are delivering a keynote, pitching investors, or recording a video, **your words per minute speaking rate** directly controls how well your audience absorbs and remembers your message.
+
+If you speak too quickly (above 170 WPM), your listeners experience cognitive overload. They scramble to parse your last sentence while you are already delivering the next one. If you speak too slowly (under 110 WPM), minds wander, attention drifts, and your delivery feels sluggish.
+
+Understanding exact speaking speeds lets you script and rehearse with mathematical precision. Use this guide to find the perfect cadence for any format.
+
+---
+
+## Average Words Per Minute by Speaking Format
+
+Speaking speed is not one-size-fits-all. A technical keynote demands deliberate pacing, while an exciting product demo benefits from upbeat energy.
+
+Here is how speaking rates break down across common speaking environments:
+
+| Format / Setting | Target WPM Range | Average Words (5 Min) | Optimal Delivery Style |
+| :--- | :--- | :--- | :--- |
+| **Formal Keynotes & TED Talks** | 130 – 145 WPM | 650 – 725 words | Deliberate, clear pauses for impact |
+| **Business Presentations & Pitches** | 135 – 150 WPM | 675 – 750 words | Conversational yet structured |
+| **Podcasts & Casual Interviews** | 145 – 165 WPM | 725 – 825 words | Energetic, spontaneous flow |
+| **Audiobook Narration** | 150 – 160 WPM | 750 – 800 words | Clear enunciation, rhythmic pacing |
+| **Auctioneers & Legal Disclaimers** | 220 – 350+ WPM | 1,100+ words | Rapid-fire articulation |
+
+For everyday public speaking, **130 to 140 WPM** is the gold standard. You can test your exact script length with our free [Speaking Time Calculator](/speaking-time-calculator) or convert speech duration with [Words to Minutes](/words-to-minutes).
+
+---
+
+## The Rule of Planned Pauses
+
+A common rookie mistake is treating a speech script like continuous audio. Human speech requires pauses to create emphasis, signal transitions, and let humor land.
+
+When rehearsing your presentation:
+
+1. **Micro-Pauses (0.5 – 1 second)**: Use between sentences instead of filler words like "um," "uh," or "like."
+2. **Structural Pauses (2 – 3 seconds)**: Use when changing slide topics or presenting a shocking statistic.
+3. **Audience Pauses (3 – 5 seconds)**: Essential after asking a rhetorical question or delivering a punchline.
+
+Every minute of public speaking should include roughly **10 to 15 seconds of total pause time**. If your draft is 700 words, plan on 5 minutes and 30 seconds of total stage time.
+
+For a focused breakdown on 5-minute talks, read our dedicated guide on [How Many Words is a 5-Minute Speech?](/blog/how-many-words-is-5-minute-speech).
+
+---
+
+## How to Calculate and Adjust Your Speaking Speed
+
+Want to know your natural baseline? Follow this 3-step test:
+
+### Step 1: Record a 2-Minute Natural Sample
+Open a voice recorder on your phone or computer. Read a standard news article or company update at your normal conversational pace for exactly 120 seconds.
+
+### Step 2: Count the Total Words
+Paste the transcript into our [Word Counter](/) to get your exact word count.
+
+### Step 3: Divide by Minutes
+Divide your total word count by 2. For example, if you read 290 words in two minutes, your baseline is **145 WPM**.
+
+---
+
+## 4 Pro Tips to Master Speech Pacing
+
+- **Tip 1: Mark Breathing Breaks in Your Script**: Highlight punctuation in bold or insert forward slashes ( / ) where you intend to take a breath and pause.
+- **Tip 2: Write for the Ear, Not the Eye**: Replace complex 30-word academic sentences with short, 12-word declarative statements. Inspect your sentence distribution with our [Sentence Counter](/sentence-counter).
+- **Tip 3: Don't Compress Words to Fit Time Limits**: If your presentation must fit a 15-minute slot, do not speak faster. Cut 200 words from your script instead.
+- **Tip 4: Watch Video Replays at 1.0x Speed**: Review your recordings to catch nervous acceleration during the opening 60 seconds.
+
+---
+
+## Time Your Next Speech with counter.io
+
+Take the guesswork out of presentation timing. Paste your draft into the [Speaking Time Calculator](/speaking-time-calculator) on counter.io to instantly preview your delivery time across slow, average, and fast speaking rates.
+    `
+  },
+  {
+    slug: 'how-long-does-it-take-to-read-1000-words',
+    title: 'How Long Does It Take to Read 1,000 Words? (Reading Speed Chart)',
+    excerpt: 'Find out exactly how long it takes to read 1,000 words at slow, average, and fast reading speeds. Includes silent reading vs. aloud time breakdowns.',
+    author: 'James Okonkwo',
+    authorTitle: 'Editorial Lead & Reading Researcher',
+    date: 'October 1, 2026',
+    readTime: 6,
+    category: 'Readability',
+    tags: ['Reading Time', 'Reading Speed', 'Content Strategy', 'Readability', 'Editing'],
+    featured: true,
+    titleTag: 'How Long to Read 1000 Words? (Silent vs Aloud Time Chart)',
+    metaDescription: 'Calculate how long it takes to read 1,000 words. Compare silent reading speeds (200-250 WPM) vs speaking aloud (130-150 WPM) with our easy chart.',
+    primaryKeyword: 'how long to read 1000 words',
+    secondaryKeywords: [
+      'reading time 1000 words',
+      'average reading speed wpm',
+      'how many minutes is 1000 words',
+      'reading time calculator',
+      'words to reading time'
+    ],
+    schemaType: 'Article',
+    faq: [
+      {
+        question: 'How many minutes does it take to read 1,000 words silently?',
+        answer: 'For an average adult reading silently at 200 to 250 words per minute (WPM), reading 1,000 words takes between 4 and 5 minutes.'
+      },
+      {
+        question: 'How long does it take to read 1,000 words aloud?',
+        answer: 'Reading 1,000 words out loud at a comfortable presentation pace of 130 to 140 WPM takes approximately 7 to 8 minutes.'
+      },
+      {
+        question: 'How many pages is 1,000 words?',
+        answer: '1,000 words is approximately 2 pages single-spaced or 4 pages double-spaced using standard 12pt Times New Roman or Arial formatting.'
+      },
+      {
+        question: 'Does technical or academic jargon slow down reading speed?',
+        answer: 'Yes. Dense technical prose, unfamiliar vocabulary, and low readability scores reduce reading speeds from 250 WPM down to 100-150 WPM due to frequent re-reading.'
+      }
+    ],
+    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Clean editorial chart comparing silent reading speed versus aloud speaking time for 1000 words.',
+        fileName: 'how-long-to-read-1000-words-time-chart.webp',
+        altText: 'Reading time chart comparing silent reading and spoken speed for 1000 words',
+        caption: 'Silent reading speed (4-5 minutes) compared to aloud speaking time (7-8 minutes).'
+      }
+    ],
+    relatedSlugs: [
+      'the-science-of-readability',
+      'word-count-for-every-format',
+      'flesch-kincaid-explained'
+    ],
+    content: `## The Quick Answer: How Long to Read 1,000 Words?
+
+For the average adult reader, **it takes between 4 and 5 minutes to read 1,000 words silently**.
+
+However, the exact time varies depending on whether you are reading silently, reading aloud, or skimming, as well as the complexity of the text.
+
+Here is the exact breakdown:
+
+- **Silent Reading (Average Adult, 238 WPM)**: **4.2 minutes**
+- **Silent Reading (Fast / Skimmer, 300 WPM)**: **3.3 minutes**
+- **Reading Aloud / Speech (Average, 130 WPM)**: **7.7 minutes**
+- **Technical / Academic Reading (150 WPM)**: **6.7 minutes**
+
+You can test any article or document length instantly with our free [Reading Time Calculator](/reading-time-calculator) or calculate speaking conversions using [Words to Minutes](/words-to-minutes).
+
+---
+
+## Reading Time Reference Chart by Word Count
+
+To help you plan blog post lengths, student assignments, and email newsletters, here is a reference table comparing silent reading times against spoken delivery times:
+
+| Word Count | Silent Reading Time (238 WPM) | Reading Aloud Time (130 WPM) | Typical Document Format |
+| :--- | :--- | :--- | :--- |
+| **250 words** | 1.0 min | 1.9 min | Short email, social post |
+| **500 words** | 2.1 min | 3.8 min | Op-ed, short blog post |
+| **750 words** | 3.2 min | 5.8 min | Standard article |
+| **1,000 words** | 4.2 min | 7.7 min | Long-form post, case study |
+| **1,500 words** | 6.3 min | 11.5 min | Comprehensive SEO guide |
+| **2,000 words** | 8.4 min | 15.4 min | Pillar content, white paper |
+| **3,000 words** | 12.6 min | 23.1 min | Academic essay, long report |
+
+---
+
+## 3 Factors That Dramatically Change Reading Time
+
+Why do some 1,000-word articles take 3 minutes while others take 10 minutes? Three primary variables influence reader velocity:
+
+### 1. Readability & Sentence Length
+When content has high readability (Flesch score of 65+), readers glide smoothly across the page. When prose is packed with subordinate clauses and multi-syllabic jargon, readers constantly pause to re-read sentences.
+
+Inspect your content complexity with our [Readability Checker](/readability-checker) to make sure your writing stays accessible.
+
+### 2. Visual Formatting & Scannability
+Online readers do not read every word sequentially; they scan headings and bullet points. Breaking text into short 2-3 sentence paragraphs increases reading speed and reduces cognitive fatigue.
+
+### 3. Purpose and Subject Matter
+A casual lifestyle blog post is read twice as fast as a financial contract or medical research paper.
+
+To understand reader cognitive behavior, explore our deep-dive on [The Science of Readability](/blog/the-science-of-readability).
+
+---
+
+## Calculate Your Exact Reading Time in Seconds
+
+Writing a blog post, essay, or presentation? Paste your text into the [Reading Time Calculator](/reading-time-calculator) on counter.io to see exact reading and speaking estimates, word counts, and readability scores in real time.
+    `
+  },
+  {
+    slug: 'keyword-density-in-2026-seo-guide',
+    title: 'Keyword Density in 2026: Safe Percentages & Entity SEO Guide',
+    excerpt: 'Is keyword density still relevant in 2026? Learn the ideal keyword density (1-2%), how to avoid keyword stuffing penalties, and modern semantic SEO best practices.',
+    author: 'Sarah Mitchell',
+    authorTitle: 'SEO Strategist & Content Lead',
+    date: 'October 1, 2026',
+    readTime: 7,
+    category: 'SEO',
+    tags: ['SEO', 'Keyword Density', 'On-Page SEO', 'Content Writing', 'SEO Strategy'],
+    featured: true,
+    titleTag: 'Keyword Density in 2026: Ideal Percentage & Safe SEO Targets',
+    metaDescription: 'Learn the ideal keyword density for SEO in 2026. Target safe 1-2% frequencies, avoid keyword stuffing penalties, and optimize for Google semantic search.',
+    primaryKeyword: 'keyword density in 2026',
+    secondaryKeywords: [
+      'ideal keyword density percentage',
+      'keyword density checker',
+      'how to avoid keyword stuffing',
+      'semantic seo keywords',
+      'tf-idf keyword optimization'
+    ],
+    schemaType: 'Article',
+    faq: [
+      {
+        question: 'What is the ideal keyword density for SEO in 2026?',
+        answer: 'The optimal keyword density for SEO is between 1% and 2%. For a 1,500-word article, this means mentioning your primary target phrase approximately 8 to 15 times naturally across the content.'
+      },
+      {
+        question: 'Does Google still penalize keyword stuffing?',
+        answer: 'Yes. Search engines use advanced neural matching and natural language processing to detect unnatural repetition. Densities exceeding 2.5% to 3% can trigger algorithmic demotions.'
+      },
+      {
+        question: 'Where is the most important place to include primary keywords?',
+        answer: 'The most impactful keyword placements are the title tag, H1 heading, meta description, within the first 100 words of the intro, one H2 subheading, and the conclusion.'
+      },
+      {
+        question: 'What is the difference between keyword density and TF-IDF?',
+        answer: 'Keyword density measures the raw percentage of a specific keyword, while TF-IDF (Term Frequency-Inverse Document Frequency) measures how statistically important related topical terms are across high-ranking pages.'
+      }
+    ],
+    images: [
+      {
+        position: 'Top / Hero Header',
+        brief: 'Vector diagram showing the keyword density sweet spot gauge with safe green zone between 1% and 2%.',
+        fileName: 'keyword-density-2026-seo-sweet-spot.webp',
+        altText: 'Keyword density sweet spot chart showing 1-2% safe target zone',
+        caption: 'The keyword density sweet spot: keeping primary terms between 1% and 2% while expanding semantic coverage.'
+      }
+    ],
+    relatedSlugs: [
+      'how-to-write-seo-content-that-ranks',
+      'ideal-blog-post-length-seo',
+      'keyword-density-guide'
+    ],
+    content: `## Does Keyword Density Still Matter for SEO in 2026?
+
+With Google's transition to AI-driven search models like MUM and Gemini, many writers ask: **does keyword density still matter for SEO in 2026?**
+
+The short answer is **yes, but not how it used to**.
+
+In the early days of search optimization, repeating a keyword 40 times was enough to rank. Today, modern search algorithms evaluate **topical authority, search intent, and semantic entities**. However, keyword density remains a critical baseline metric to protect your content from two extremes:
+
+1. **Under-optimization (<0.3%)**: Search engines struggle to identify the exact focus of your page.
+2. **Over-optimization / Keyword Stuffing (>2.5%)**: Triggers quality filters and degrades user experience.
+
+---
+
+## The Ideal Keyword Density Sweet Spot: 1% to 2%
+
+For standard on-page SEO, the recommended target is **1% to 2% keyword density**.
+
+Here is what that looks like in practice across different content lengths:
+
+| Article Word Count | 1% Target Frequency | 1.5% Target Frequency | 2% Maximum Frequency |
+| :--- | :--- | :--- | :--- |
+| **500 words** | 3 – 5 times | 6 – 7 times | 10 times max |
+| **1,000 words** | 7 – 10 times | 12 – 15 times | 20 times max |
+| **1,500 words** | 10 – 15 times | 18 – 22 times | 30 times max |
+| **2,000 words** | 15 – 20 times | 25 – 30 times | 40 times max |
+
+You can check your draft's single-word and two-word phrase frequencies instantly with our free [Keyword Density Checker](/keyword-density-checker) or monitor total lengths on our [Word Counter](/).
+
+---
+
+## Strategic Keyword Placements That Move the Needle
+
+Rather than scattering keywords randomly throughout body text, prioritize these high-weight HTML locations:
+
+1. **Title Tag (<title>)**: Place your primary keyword as close to the beginning as possible (under 60 characters).
+2. **Main H1 Heading**: Match or closely mirror your title tag.
+3. **First 100 Words**: State the core problem and include your primary keyword in the opening two paragraphs.
+4. **At Least One H2 Subheading**: Validates that a major section addresses the search query.
+5. **Meta Description**: Reinforces search relevance in SERP snippets.
+6. **URL Slug**: Keep it short, lowercase, and keyword-focused (e.g., \`/blog/keyword-density-in-2026\`).
+
+---
+
+## From Exact Match to Entity SEO & Semantic Coverage
+
+Modern ranking success depends on surrounding your primary keyword with **semantically related LSI keywords and entities**.
+
+For example, if your primary keyword is *"keyword density in 2026"*, Google also expects to see:
+- *On-page SEO*
+- *Search intent*
+- *Keyword stuffing penalty*
+- *TF-IDF*
+- *Meta descriptions and title tags*
+- *Readability and user experience*
+
+If your content includes rich semantic depth, Google can rank your article for hundreds of long-tail variations even if you only mention the exact keyword a handful of times.
+
+To master modern content architecture, read our comprehensive guide on [How to Write SEO Content That Actually Ranks](/blog/how-to-write-seo-content-that-ranks) and calibrate post depth with [Ideal Blog Post Length for SEO](/blog/ideal-blog-post-length-seo).
+
+---
+
+## Common Keyword Density Mistakes to Avoid
+
+- **Mistake 1: Forcing Unnatural Grammar**: Never sacrifice readability for an exact-match phrase (e.g., writing *"best word counter online free use"* instead of *"use the best free online word counter"*).
+- **Mistake 2: Ignoring 2-Word and 3-Word Phrases**: Many tools only count single words. Ensure multi-word keyphrases are tracked collectively.
+- **Mistake 3: Stuffing Alt Text and Image Names**: Keep image descriptions accessible and natural.
+
+---
+
+## Audit Your Keyword Density with counter.io
+
+Ready to optimize your content? Paste your draft into the [Keyword Density Checker](/keyword-density-checker) on counter.io to view real-time frequency tables, percentage breakdowns, and readability metrics before hitting publish.
+    `
+  },
 ];
 
-export const BLOG_CATEGORIES = ['All', 'SEO', 'Writing', 'Blogging', 'Productivity', 'Social Media', 'Tools'];
+export const BLOG_CATEGORIES = ['All', 'SEO', 'Writing', 'Blogging', 'Productivity', 'Social Media', 'Tools', 'Readability'];
 
 export function getBlogBySlug(slug: string): BlogPost | undefined {
   return BLOG_POSTS.find(p => p.slug === slug);
